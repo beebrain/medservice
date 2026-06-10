@@ -46,8 +46,8 @@ class AiController extends Controller
                 ->setJSON(['error' => 'No input data provided']);
         }
 
-        // API Configuration — overridable via .env (n8n.predictURL)
-        $apiURL = env('n8n.predictURL', 'http://n8n:5678/webhook/predict-relay');
+        // API Configuration — required from .env (n8n.predictURL)
+        $apiURL = env('n8n.predictURL') ?: throw new \RuntimeException('n8n.predictURL not set in .env');
 
         // Log request
         log_message('info', 'Predict Request - URL: ' . $apiURL);
