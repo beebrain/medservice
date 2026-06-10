@@ -46,8 +46,8 @@ class AiController extends Controller
                 ->setJSON(['error' => 'No input data provided']);
         }
 
-        // API Configuration - Use internal docker network
-        $apiURL = 'http://n8n:5678/webhook/predict-relay';
+        // API Configuration — overridable via .env (n8n.predictURL)
+        $apiURL = env('n8n.predictURL', 'http://n8n:5678/webhook/predict-relay');
 
         // Log request
         log_message('info', 'Predict Request - URL: ' . $apiURL);
