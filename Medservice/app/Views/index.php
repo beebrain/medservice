@@ -989,8 +989,9 @@
                     $("body").css("overflow", "auto"); // Restore background scroll
                 }
 
-                // Close modal events
-                $("#closeModal, #closeModalBtn, #modalBackdrop").click(function(e) {
+                // Close modal events — buttons always close; backdrop only when clicking the backdrop itself
+                $("#closeModal, #closeModalBtn").click(closeModal);
+                $("#modalBackdrop").click(function(e) {
                     if (e.target === this) closeModal();
                 });
 
