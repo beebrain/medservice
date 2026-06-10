@@ -1,0 +1,516 @@
+/* AI Workshop - Main Stylesheet */
+/* =================================== */
+
+:root {
+    --primary-color: #1a73e8;
+    --sidebar-width: 280px;
+    --bg-color: #f8f9fa;
+    --text-color: #202124;
+    --text-secondary: #5f6368;
+    --border-color: #e0e0e0;
+    --hover-bg: #f1f3f4;
+    --active-bg: #e8f0fe;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Sarabun', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* ===================================
+   SIDEBAR (LEFT MENU)
+   =================================== */
+.sidebar {
+    width: var(--sidebar-width);
+    background: white;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    border-right: 1px solid var(--border-color);
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.logo {
+    padding: 20px;
+    font-weight: bold;
+    font-size: 1.5em;
+    color: var(--primary-color);
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Navigation Items */
+.nav-item {
+    padding: 15px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: var(--text-secondary);
+    transition: 0.2s;
+    border-left: 4px solid transparent;
+}
+
+.nav-item:hover {
+    background-color: var(--hover-bg);
+}
+
+.nav-item.active {
+    background-color: var(--active-bg);
+    color: var(--primary-color);
+    border-left-color: var(--primary-color);
+}
+
+.nav-item i {
+    margin-right: 15px;
+    width: 20px;
+    text-align: center;
+}
+
+/* Accordion Navigation */
+.nav-group {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.nav-parent {
+    padding: 15px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--text-secondary);
+    transition: 0.2s;
+    border-left: 4px solid transparent;
+    font-weight: 500;
+}
+
+.nav-parent:hover {
+    background-color: var(--hover-bg);
+}
+
+.nav-parent.active {
+    background-color: var(--active-bg);
+    color: var(--primary-color);
+    border-left-color: var(--primary-color);
+}
+
+.nav-parent i.icon {
+    margin-right: 15px;
+    width: 20px;
+    text-align: center;
+}
+
+.nav-parent i.arrow {
+    transition: transform 0.3s ease;
+    font-size: 0.8em;
+}
+
+.nav-parent.expanded i.arrow {
+    transform: rotate(90deg);
+}
+
+.nav-children {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background-color: #fafbfc;
+}
+
+.nav-children.show {
+    max-height: 500px;
+}
+
+.nav-child {
+    padding: 10px 20px 10px 55px;
+    cursor: pointer;
+    color: #666;
+    font-size: 0.9em;
+    transition: 0.2s;
+    border-left: 4px solid transparent;
+}
+
+.nav-child:hover {
+    background-color: var(--active-bg);
+    color: var(--primary-color);
+}
+
+.nav-child.active {
+    background-color: var(--active-bg);
+    color: var(--primary-color);
+    border-left-color: var(--primary-color);
+    font-weight: 500;
+}
+
+.nav-child i {
+    margin-right: 10px;
+    width: 16px;
+    text-align: center;
+    font-size: 0.85em;
+}
+
+/* ===================================
+   MAIN CONTENT (RIGHT)
+   =================================== */
+.main-content {
+    margin-left: var(--sidebar-width);
+    min-height: 100vh;
+    padding: 40px;
+}
+
+.section-container {
+    display: none;
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.section-container.active {
+    display: block;
+}
+
+/* ===================================
+   TYPOGRAPHY
+   =================================== */
+h2 {
+    border-bottom: 2px solid var(--active-bg);
+    padding-bottom: 15px;
+    color: var(--text-color);
+    margin-top: 0;
+    font-size: 2em;
+}
+
+h3 {
+    color: var(--primary-color);
+    margin-top: 35px;
+    font-size: 1.5em;
+    border-left: 4px solid var(--primary-color);
+    padding-left: 10px;
+}
+
+h4 {
+    color: #3c4043;
+    margin-top: 25px;
+    font-size: 1.2em;
+}
+
+p {
+    color: #3c4043;
+    font-size: 1.1em;
+}
+
+/* ===================================
+   CONTENT BOXES
+   =================================== */
+.box {
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+    border-left: 5px solid;
+}
+
+.infobox {
+    background-color: #e3f2fd;
+    border-color: #1a73e8;
+}
+
+.tipbox {
+    background-color: #e8f5e9;
+    border-color: #34a853;
+}
+
+.warningbox {
+    background-color: #fff3e0;
+    border-color: #f9a825;
+}
+
+.cautionbox {
+    background-color: #ffebee;
+    border-color: #ea4335;
+}
+
+.exercisebox {
+    background-color: #e0f7fa;
+    border-color: #00acc1;
+}
+
+.box-title {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* ===================================
+   PROMPT CARDS
+   =================================== */
+.prompt-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e8f0fe 100%);
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 25px;
+    margin: 20px 0;
+    position: relative;
+}
+
+.prompt-title {
+    font-weight: bold;
+    font-size: 1.2em;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* --- Single-language prompt (no [TH]/[EN] split) --- */
+.prompt-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    font-family: 'Consolas', monospace;
+    font-size: 0.95em;
+    line-height: 1.6;
+    white-space: normal;
+    border: 1px solid #e0e0e0;
+}
+
+/* --- Bilingual prompt container --- */
+.prompt-langs {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.prompt-lang {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+}
+
+.prompt-lang:hover {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.prompt-lang.lang-th {
+    border: 1.5px solid #e6c200;
+    background: linear-gradient(135deg, #fffde7 0%, #fff9c4 100%);
+}
+
+.prompt-lang.lang-en {
+    border: 1.5px solid #90caf9;
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+}
+
+.prompt-lang-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    font-weight: 600;
+    font-size: 0.85em;
+    letter-spacing: 0.5px;
+}
+
+.prompt-lang.lang-th .prompt-lang-header {
+    background: rgba(255, 193, 7, 0.15);
+    color: #f57f17;
+}
+
+.prompt-lang.lang-en .prompt-lang-header {
+    background: rgba(33, 150, 243, 0.12);
+    color: #1565c0;
+}
+
+.prompt-lang-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.prompt-lang-badge .flag {
+    font-size: 1.1em;
+}
+
+.prompt-lang-text {
+    padding: 14px 16px;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 0.93em;
+    line-height: 1.7;
+    white-space: normal;
+    color: #333;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 0 0 8px 8px;
+}
+
+.copy-lang-btn {
+    background: transparent;
+    border: 1.5px solid currentColor;
+    color: inherit;
+    padding: 4px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85em;
+    font-weight: 500;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.copy-lang-btn:hover {
+    transform: scale(1.05);
+}
+
+.prompt-lang.lang-th .copy-lang-btn:hover {
+    background: #fff8e1;
+    border-color: #f57f17;
+}
+
+.prompt-lang.lang-en .copy-lang-btn:hover {
+    background: #e3f2fd;
+    border-color: #1565c0;
+}
+
+.copy-lang-btn.copied {
+    background: #34a853 !important;
+    color: white !important;
+    border-color: #34a853 !important;
+}
+
+.prompt-note {
+    margin-top: 15px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* Old single copy-btn (for non-bilingual cards) */
+.copy-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: 0.2s;
+}
+
+.copy-btn:hover {
+    background: #1557b0;
+}
+
+@media (max-width: 768px) {
+    .prompt-lang-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}
+
+/* ===================================
+   LISTS AND TABLES
+   =================================== */
+ul.dashboard-links {
+    list-style: none;
+    padding-left: 0;
+}
+
+ul.dashboard-links li {
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-left: 4px solid transparent;
+}
+
+ul.dashboard-links li:hover {
+    background: var(--active-bg);
+    border-left-color: var(--primary-color);
+    transform: translateX(5px);
+}
+
+ul.dashboard-links li strong {
+    color: var(--primary-color);
+}
+
+ul,
+ol {
+    color: #3c4043;
+    font-size: 1.1em;
+}
+
+li {
+    margin-bottom: 8px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+th,
+td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+th {
+    background: var(--active-bg);
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* ===================================
+   SECTION DIVIDER
+   =================================== */
+.section-divider {
+    border: none;
+    border-top: 2px dashed #e0e0e0;
+    margin: 40px 0;
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+   =================================== */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+}

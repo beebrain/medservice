@@ -1,0 +1,34 @@
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*~
+
+# Env
+.env
+.env.*
+!.env.example
+
+# CodeIgniter 4
+Medservice/writable/cache/*
+Medservice/writable/logs/*
+Medservice/writable/session/*
+Medservice/writable/uploads/*
+Medservice/writable/debugbar/*
+!Medservice/writable/cache/.gitkeep
+!Medservice/writable/logs/.gitkeep
+!Medservice/writable/session/.gitkeep
+!Medservice/writable/uploads/.gitkeep
+
+# Dependencies
+Medservice/vendor/
+public/vendor/
+
+# Build / temp
+Medservice/builds/
+*.log
+*.bak
+*.backup
+*.save

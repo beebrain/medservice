@@ -1,0 +1,2572 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Workshop: Google Gemini Guide</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Styles -->
+    <link href="../css/styles.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- ===================================
+         SIDEBAR (LEFT MENU)
+         =================================== -->
+    <div class="sidebar">
+        <div class="logo"><i class="fas fa-robot"></i> Gemini Workshop</div>
+        <a href="https://heyzine.com/flip-book/355a960bdf.html" target="_blank" class="nav-item" style="text-decoration:none; color:inherit;">
+            <i class="fas fa-book-open"></i> เอกสารประกอบ
+        </a>
+        <a href="General_AI_Workshop.pdf" target="_blank" class="nav-item" style="text-decoration:none; color:inherit;">
+            <i class="fas fa-file-pdf" style="color:#e53935;"></i> ดาวน์โหลด PDF
+        </a>
+        <div class="nav-item active" onclick="showSection('dashboard')">
+            <i class="fas fa-home"></i> แดชบอร์ด
+        </div>
+
+        <!-- บทที่ 1 -->
+        <div class="nav-group">
+            <div class="nav-parent" onclick="toggleNav(this, 'section1')">
+                <span><i class="fas fa-book-open icon"></i> 1. บทนำ</span>
+                <i class="fas fa-chevron-right arrow"></i>
+            </div>
+            <div class="nav-children">
+                <div class="nav-child" onclick="scrollToElement('sec1-intro', event)">
+                    <i class="fas fa-info-circle"></i> 1.1 Gemini คืออะไร
+                </div>
+                <div class="nav-child" onclick="scrollToElement('sec1-features', event)">
+                    <i class="fas fa-star"></i> 1.2 ความสามารถ
+                </div>
+                <div class="nav-child" onclick="scrollToElement('sec1-workshop', event)">
+                    <i class="fas fa-flask"></i> Workshop
+                </div>
+            </div>
+        </div>
+
+        <!-- บทที่ 2 -->
+        <div class="nav-group">
+            <div class="nav-parent" onclick="toggleNav(this, 'section2')">
+                <span><i class="fas fa-keyboard icon"></i> 2. การใช้งานพื้นฐาน</span>
+                <i class="fas fa-chevron-right arrow"></i>
+            </div>
+            <div class="nav-children">
+                <div class="nav-child" onclick="scrollToElement('sec2-conversation', event)">
+                    <i class="fas fa-comments"></i> 2.1 การสนทนา
+                </div>
+                <div class="nav-child" onclick="scrollToElement('sec2-gem', event)">
+                    <i class="fas fa-gem"></i> 2.2 Gem Manager
+                </div>
+                <div class="nav-child" onclick="scrollToElement('sec2-workshop', event)">
+                    <i class="fas fa-flask"></i> Workshop
+                </div>
+            </div>
+        </div>
+
+        <!-- บทที่ 3 -->
+        <div class="nav-group">
+            <div class="nav-parent" onclick="toggleNav(this, 'section3')">
+                <span><i class="fas fa-wand-magic-sparkles icon"></i> 3. Prompt Engineering</span>
+                <i class="fas fa-chevron-right arrow"></i>
+            </div>
+            <div class="nav-children">
+                <div class="nav-child" onclick="scrollToElement('sec3-principles', event)">
+                    <i class="fas fa-lightbulb"></i> 3.1 หลักการ
+                </div>
+                <div class="nav-child" onclick="scrollToElement('sec3-frameworks', event)">
+                    <i class="fas fa-cubes"></i> 3.2 Frameworks
+                </div>
+                <div class="nav-child" onclick="scrollToElement('sec3-advanced', event)">
+                    <i class="fas fa-rocket"></i> 3.3 เทคนิคขั้นสูง
+                </div>
+                <div class="nav-child" onclick="scrollToElement('sec3-workshop', event)">
+                    <i class="fas fa-flask"></i> Workshop
+                </div>
+            </div>
+        </div>
+
+        <!-- บทที่ 4 -->
+        <div class="nav-group">
+            <div class="nav-parent" onclick="toggleNav(this, 'section4')">
+                <span><i class="fas fa-briefcase-medical icon"></i> 4. การประยุกต์ใช้</span>
+                <i class="fas fa-chevron-right arrow"></i>
+            </div>
+            <div class="nav-children">
+                <div class="nav-child" onclick="scrollToElement('sec4-documents', event)">
+                    <i class="fas fa-file-medical"></i> 4.1 เขียนเอกสาร
+                </div>
+                <div class="nav-child" onclick="scrollToElement('sec4-analysis', event)">
+                    <i class="fas fa-chart-pie"></i> 4.2 วิเคราะห์ข้อมูล
+                </div>
+                <div class="nav-child" onclick="scrollToElement('sec4-caution', event)">
+                    <i class="fas fa-exclamation-triangle"></i> 4.3 ข้อควรระวัง
+                </div>
+                <div class="nav-child" onclick="scrollToElement('sec4-workshop', event)">
+                    <i class="fas fa-flask"></i> Workshop
+                </div>
+            </div>
+        </div>
+
+        <!-- บทที่ 5 -->
+        <div class="nav-group">
+            <div class="nav-parent" onclick="toggleNav(this, 'section5')">
+                <span><i class="fas fa-image icon"></i> 5. การสร้างภาพ</span>
+                <i class="fas fa-chevron-right arrow"></i>
+            </div>
+            <div class="nav-children">
+                <div class="nav-child" onclick="scrollToElement('sec5-structure', event)">
+                    <i class="fas fa-palette"></i> 5.1 โครงสร้าง Prompt
+                </div>
+                <div class="nav-child" onclick="scrollToElement('sec5-styles', event)">
+                    <i class="fas fa-paint-brush"></i> 5.2 สไตล์และสี
+                </div>
+                <div class="nav-child" onclick="scrollToElement('sec5-healthcare', event)">
+                    <i class="fas fa-heartbeat"></i> 5.3 Prompt สุขภาพ
+                </div>
+                <div class="nav-child" onclick="scrollToElement('sec5-tips', event)">
+                    <i class="fas fa-magic"></i> 5.4 เทคนิคปรับปรุง
+                </div>
+                <div class="nav-child" onclick="scrollToElement('sec5-examples', event)">
+                    <i class="fas fa-images"></i> 5.5 ผลลัพธ์จริง
+                </div>
+                <div class="nav-child" onclick="scrollToElement('sec5-workshop', event)">
+                    <i class="fas fa-flask"></i> Workshop
+                </div>
+            </div>
+        </div>
+
+        <!-- บทที่ 6 -->
+        <div class="nav-group">
+            <div class="nav-parent" onclick="toggleNav(this, 'section6')">
+                <span><i class="fas fa-eye icon"></i> 6. Image-to-Prompt</span>
+                <i class="fas fa-chevron-right arrow"></i>
+            </div>
+            <div class="nav-children">
+                <div class="nav-child" onclick="scrollToElement('sec6-vision', event)">
+                    <i class="fas fa-camera"></i> 6.1 Vision ของ Gemini
+                </div>
+                <div class="nav-child" onclick="scrollToElement('sec6-analysis', event)">
+                    <i class="fas fa-search"></i> 6.2 วิเคราะห์การออกแบบ
+                </div>
+                <div class="nav-child" onclick="scrollToElement('sec6-generate', event)">
+                    <i class="fas fa-wand-magic-sparkles"></i> 6.3 สร้าง Prompt จากรูป
+                </div>
+                <div class="nav-child" onclick="scrollToElement('sec6-pr', event)">
+                    <i class="fas fa-bullhorn"></i> 6.4 สร้างสื่อ PR
+                </div>
+                <div class="nav-child" onclick="scrollToElement('sec6-workshop', event)">
+                    <i class="fas fa-flask"></i> Workshop
+                </div>
+            </div>
+        </div>
+
+        <!-- บทที่ 7 -->
+        <div class="nav-group">
+            <div class="nav-parent" onclick="toggleNav(this, 'section7')">
+                <span><i class="fas fa-video icon"></i> 7. การสร้างวิดีโอ AI</span>
+                <i class="fas fa-chevron-right arrow"></i>
+            </div>
+            <div class="nav-children">
+                <div class="nav-child" onclick="scrollToElement('sec7-veo', event)">
+                    <i class="fas fa-film"></i> 7.1 Google Veo
+                </div>
+                <div class="nav-child" onclick="scrollToElement('sec7-flow', event)">
+                    <i class="fas fa-magic"></i> 7.2 Google Flow
+                </div>
+                <div class="nav-child" onclick="scrollToElement('sec7-prompts', event)">
+                    <i class="fas fa-edit"></i> 7.3 เทคนิค Prompt
+                </div>
+                <div class="nav-child" onclick="scrollToElement('sec7-workshop', event)">
+                    <i class="fas fa-flask"></i> Workshop
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-item" onclick="showSection('section8')">
+            <i class="fas fa-graduation-cap"></i> 8. สรุป
+        </div>
+
+        <div class="nav-item" onclick="showSection('section9')">
+            <i class="fas fa-gem"></i> 9. Gem Workshop
+        </div>
+
+        <div class="nav-item" onclick="showSection('section10')">
+            <i class="fas fa-paper-plane"></i> 10. ส่งงาน
+        </div>
+    </div>
+
+    <!-- ===================================
+         MAIN CONTENT (RIGHT)
+         =================================== -->
+    <div class="main-content">
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="section-container active">
+            <h2>ยินดีต้อนรับสู่คู่มือการใช้งาน Google Gemini</h2>
+            <p>คู่มือฉบับสมบูรณ์สำหรับการอบรมเชิงปฏิบัติการ "การประยุกต์ใช้ AI ในงานด้านสุขภาพ"</p>
+
+            <div class="box infobox">
+                <div class="box-title"><i class="fas fa-rocket"></i> AI Workshop 2026</div>
+                <p>ปลดล็อกศักยภาพการทำงานด้วย Google Gemini</p>
+            </div>
+
+            <h3>เลือกเนื้อหาที่สนใจ</h3>
+            <ul class="dashboard-links">
+                <li onclick="showSection('section1')"><strong>บทที่ 1:</strong> ทำความรู้จัก Gemini และความสามารถ</li>
+                <li onclick="showSection('section2')"><strong>บทที่ 2:</strong> เริ่มต้นใช้งานและ Gem Manager</li>
+                <li onclick="showSection('section3')"><strong>บทที่ 3:</strong> เทคนิค Prompt Engineering</li>
+                <li onclick="showSection('section4')"><strong>บทที่ 4:</strong> การประยุกต์ใช้งานจริง</li>
+                <li onclick="showSection('section5')"><strong>บทที่ 5:</strong> การสร้างภาพด้วย AI</li>
+                <li onclick="showSection('section6')"><strong>บทที่ 6:</strong> เทคนิค Image-to-Prompt (Vision)</li>
+                <li onclick="showSection('section7')"><strong>บทที่ 7:</strong> การสร้างวิดีโอด้วย AI</li>
+                <li onclick="showSection('section8')"><strong>บทที่ 8:</strong> สรุปและแหล่งเรียนรู้</li>
+                <li onclick="showSection('section9')"><strong>บทที่ 9:</strong> Gem Workshop - ทดลองใช้ Gem</li>
+                <li onclick="showSection('section10')"><strong>ส่งงาน:</strong> แบบฟอร์มส่งงานอบรม</li>
+            </ul>
+        </div>
+
+        <!-- Section 1: บทนำ -->
+        <div id="section1" class="section-container">
+            <h2>1. บทนำสู่ Google Gemini</h2>
+
+            <div id="sec1-intro">
+                <h3>1.1 Gemini คืออะไร</h3>
+                <div class="box infobox">
+                    <div class="box-title"><i class="fas fa-info-circle"></i> Google Gemini</div>
+                    <p>Gemini เป็น AI รุ่นใหม่ล่าสุดของ Google ที่มีความสามารถในการประมวลผลข้อความ รูปภาพ และวิดีโอ</p>
+                </div>
+                <p>Google Gemini คือ Large Language Model (LLM) ที่พัฒนาโดย Google DeepMind
+                    มีความสามารถในการเข้าใจและสร้างเนื้อหาในหลากหลายรูปแบบ</p>
+            </div>
+
+            <div id="sec1-features">
+                <h3>1.2 ความสามารถของ Gemini</h3>
+                <ul>
+                    <li><strong>การเข้าใจภาษาธรรมชาติ:</strong> สามารถเข้าใจบริบทและความหมายได้ดี</li>
+                    <li><strong>การสร้างเนื้อหา:</strong> เขียนบทความ สรุปข้อมูล แปลภาษา</li>
+                    <li><strong>การวิเคราะห์ข้อมูล:</strong> อ่านและวิเคราะห์ข้อมูลได้</li>
+                    <li><strong>การสร้างภาพ (Imagen 3):</strong> สร้างภาพจากคำอธิบายคุณภาพสูง</li>
+                </ul>
+            </div>
+
+            <div id="sec1-workshop">
+                <h3>Workshop: ลองใช้งานเบื้องต้น</h3>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt 1: แนะนำตัว</div>
+                    <div class="prompt-content">สวัสดีครับ คุณคือใคร และสามารถช่วยอะไรฉันได้บ้าง?</div>
+                    <p class="prompt-note">💡 ใช้ทดสอบการตอบสนองเบื้องต้น</p>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt 2: สรุปข้อมูล</div>
+                    <div class="prompt-content">สรุปประโยชน์ของการใช้ AI ในงานสุขภาพ ให้เข้าใจง่ายใน 5 ข้อ</div>
+                    <p class="prompt-note">💡 ทดสอบความสามารถในการสรุป</p>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt 3: วางแผนงานประจำวัน</div>
+                    <div class="prompt-content">ฉันมีงาน 5 อย่างที่ต้องทำในวันนี้:
+                        1. ตรวจเยี่ยมผู้ป่วย 30 เตียง
+                        2. ตอบอีเมลจากญาติผู้ป่วยที่สอบถามเรื่องการดูแล
+                        3. เตรียมเนื้อหาบรีฟฟิ่งเช้าเรื่องการป้องกันการติดเชื้อ
+                        4. สรุปข้อมูลผู้ป่วยใหม่ 8 ราย
+                        5. จัดทำรายงานประจำสัปดาห์
+
+                        ช่วยจัดลำดับความสำคัญและแนะนำวิธีบริหารเวลาให้เสร็จทันภายใน 8 ชั่วโมง</div>
+                    <p class="prompt-note">💡 ทดสอบการช่วยวางแผนและจัดลำดับความสำคัญ</p>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt 4: เขียนอีเมลตอบญาติผู้ป่วย</div>
+                    <div class="prompt-content">
+                        ช่วยเขียนแม่แบบอีเมลตอบญาติผู้ป่วยที่สอบถามเรื่องการดูแลผู้ป่วยหลังผ่าตัด
+                        โดยต้องครอบคลุม:
+                        - การให้อาหาร
+                        - การดูแลแผล
+                        - อาการที่ต้องระวัง
+                        - การนัดพบแพทย์ครั้งต่อไป
+
+                        ใช้ภาษาสุภาพ เป็นกันเอง และเข้าใจง่าย</div>
+                    <p class="prompt-note">💡 ทดสอบการเขียนเอกสารเชิงวิชาชีพ</p>
+                </div>
+
+                <div class="box exercisebox">
+                    <div class="box-title"><i class="fas fa-pencil-alt"></i> แบบฝึกหัด Workshop บทที่ 1</div>
+                    <p><strong>วัตถุประสงค์:</strong> ฝึกใช้ Prompt พื้นฐานกับ Gemini</p>
+                    <p><strong>ระยะเวลา:</strong> 15 นาที</p>
+                    <ol>
+                        <li>เปิด gemini.google.com</li>
+                        <li>ทดลองใช้ Prompt 1-4 ข้างต้น</li>
+                        <li>สังเกตความแตกต่างของคำตอบ</li>
+                        <li>ลองปรับแต่ง Prompt ให้เหมาะกับงานจริงของคุณ</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: การใช้งานพื้นฐาน -->
+        <div id="section2" class="section-container">
+            <h2>2. การใช้งานพื้นฐาน</h2>
+
+            <div id="sec2-conversation">
+                <h3>2.1 การสนทนากับ Gemini</h3>
+                <div class="box tipbox">
+                    <div class="box-title"><i class="fas fa-lightbulb"></i> เคล็ดลับ</div>
+                    <p>Gemini สามารถจดจำบริบทการสนทนาได้ ลองพูดคุยต่อเนื่องเพื่อผลลัพธ์ที่ดีขึ้น</p>
+                </div>
+                <p>การสนทนากับ Gemini ทำได้ง่ายๆ เพียงพิมพ์คำถามหรือคำสั่ง และรอการตอบกลับ</p>
+                <ul>
+                    <li>พิมพ์คำถามเป็นภาษาธรรมชาติ</li>
+                    <li>สามารถถามต่อเนื่องได้</li>
+                    <li>แก้ไขหรือขอให้ปรับปรุงคำตอบได้</li>
+                </ul>
+            </div>
+
+            <div id="sec2-gem">
+                <h3>2.2 Gem Manager</h3>
+                <p>Gem คือ AI Assistant ที่ปรับแต่งได้ตามความต้องการ สามารถสร้าง Gem
+                    ที่มีบุคลิกและความเชี่ยวชาญเฉพาะทาง
+                </p>
+                <div class="box infobox">
+                    <div class="box-title"><i class="fas fa-gem"></i> สร้าง Gem ของคุณเอง</div>
+                    <p>ไปที่ gemini.google.com > Gem Manager > Create New Gem</p>
+                </div>
+            </div>
+
+            <div id="sec2-workshop">
+                <h3>Workshop: ทดลองสร้าง Gem</h3>
+
+                <div class="box tipbox">
+                    <div class="box-title"><i class="fas fa-lightbulb"></i> Gem คืออะไร</div>
+                    <p>Gem (อัญมณี) คือฟีเจอร์ของ Google Gemini ที่ช่วยให้คุณสร้าง <strong>ผู้ช่วย AI เฉพาะทาง</strong>
+                        ที่ปรับแต่งตามความต้องการของคุณเอง โดย Gem จะจดจำคำสั่ง บริบท และบทบาทที่คุณกำหนดไว้
+                        ทำให้ไม่ต้องพิมพ์ Prompt ยาวๆ ซ้ำๆ ทุกครั้ง</p>
+                </div>
+
+                <h4>ตัวอย่าง Gem สำหรับงานสุขภาพ</h4>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Gem 1: ผู้เชี่ยวชาญสุขศึกษา</div>
+                    <div class="prompt-content">คุณคือผู้เชี่ยวชาญด้านสุขศึกษาที่มีประสบการณ์ 15 ปี เชี่ยวชาญในการสื่อสารสุขภาพกับประชาชนทั่วไป
+โดยมีหลักการทำงานดังนี้:
+
+1. ใช้ภาษาที่เข้าใจง่าย เหมาะกับคนทั่วไป หลีกเลี่ยงศัพท์ทางการแพทย์ที่ซับซ้อน
+2. ให้ข้อมูลที่ถูกต้องตามหลักวิชาการ อ้างอิงแหล่งข้อมูลที่เชื่อถือได้
+3. เน้นการป้องกันและการดูแลตนเอง
+4. ใช้ตัวอย่างจากชีวิตประจำวันให้เข้าใจง่าย
+5. จัดรูปแบบเป็นหัวข้อย่อย มี bullet points ชัดเจน
+6. มีน้ำเสียงเป็นกันเอง อบอุ่น ให้กำลังใจ ไม่ตำหนิ</div>
+                    <p class="prompt-note">💡 ใช้เป็น System Instruction สำหรับสร้างเนื้อหาสุขศึกษา</p>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Gem 2: นักเขียนสื่อ PR โรงพยาบาล</div>
+                    <div class="prompt-content">คุณคือนักประชาสัมพันธ์โรงพยาบาลมืออาชีพ มีหน้าที่สร้างเนื้อหาสื่อต่างๆ สำหรับโรงพยาบาล โดย:
+
+1. เขียนเนื้อหาที่น่าสนใจ ดึงดูดความสนใจ แต่ไม่เกินจริง
+2. ใช้ข้อมูลที่ถูกต้องทางการแพทย์
+3. เหมาะสำหรับสื่อต่างๆ: โปสเตอร์, แผ่นพับ, Social Media, เว็บไซต์
+4. มี Call-to-Action ชัดเจน
+5. ใช้น้ำเสียงสร้างความเชื่อมั่นและไว้วางใจ
+6. ระบุข้อมูลติดต่อและแหล่งข้อมูลเพิ่มเติม
+
+เมื่อสร้างเนื้อหา ให้แสดง:
+- หัวข้อหลัก (Headline)
+- เนื้อหา (Body copy)
+- Call-to-Action
+- ข้อมูลติดต่อ (สามารถใส่ [ชื่อโรงพยาบาล] แทน)</div>
+                    <p class="prompt-note">💡 ใช้สร้างสื่อประชาสัมพันธ์ทุกประเภท</p>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Gem 3: ผู้ช่วยแปลภาษาทางการแพทย์</div>
+                    <div class="prompt-content">คุณคือนักแปลทางการแพทย์มืออาชีพ เชี่ยวชาญในการแปลเอกสารและการสื่อสารทางการแพทย์ระหว่างภาษาไทยและภาษาอังกฤษ โดย:
+
+1. ใช้ศัพท์ทางการแพทย์ที่ถูกต้องและเป็นสากล
+2. คงความหมายและนัยสำคัญของข้อมูลทางการแพทย์
+3. เมื่อแปลให้ผู้ป่วย ใช้ภาษาง่ายพร้อมอธิบายศัพท์เทคนิค
+4. เมื่อแปลเอกสารทางการ ใช้ศัพท์มาตรฐานทางการแพทย์
+5. ระบุว่าเป็นการแปลแบบใด (สำหรับผู้ป่วย/สำหรับบุคลากรทางการแพทย์)
+
+รูปแบบการแปล:
+- แสดงต้นฉบับ
+- แสดงคำแปล
+- หมายเหตุ (ถ้ามีศัพท์ที่ต้องอธิบาย)</div>
+                    <p class="prompt-note">💡 ใช้แปลเอกสารและสื่อสารกับผู้ป่วยต่างชาติ</p>
+                </div>
+
+                <div class="box exercisebox">
+                    <div class="box-title"><i class="fas fa-pencil-alt"></i> แบบฝึกหัด: สร้าง Gem ของคุณเอง (15 นาที)</div>
+                    <p><strong>วัตถุประสงค์:</strong> ฝึกการสร้าง Gem ที่เหมาะกับงานของตนเอง</p>
+                    <p><strong>ขั้นตอน:</strong></p>
+                    <ol>
+                        <li>พิจารณางานที่ต้องใช้ AI สม่ำเสมอ (เช่น เขียนรายงาน, สร้างสื่อ PR, แปลภาษา)</li>
+                        <li>เขียนคำสั่งสำหรับ Gem โดยระบุ:
+                            <ul>
+                                <li>บทบาทของ Gem</li>
+                                <li>ความเชี่ยวชาญที่ต้องการ</li>
+                                <li>รูปแบบการตอบ</li>
+                                <li>ข้อจำกัดหรือหลักการทำงาน</li>
+                            </ul>
+                        </li>
+                        <li>สร้าง Gem ใน Gemini (Gem Manager)</li>
+                        <li>ทดสอบใช้งาน 3-5 ครั้ง</li>
+                    </ol>
+                    <p><strong>ตัวอย่างแนวคิด Gem:</strong> "ผู้ช่วยเขียนรายงานผู้ป่วย", "ผู้เชี่ยวชาญด้านโภชนาการ", "ที่ปรึกษาด้านการจัดกิจกรรมสุขภาพ"</p>
+                </div>
+
+                <div class="box exercisebox">
+                    <div class="box-title"><i class="fas fa-dumbbell"></i> แบบฝึกหัด: สรุปบันทึกผู้ป่วย (20 นาที)</div>
+                    <p><strong>สถานการณ์:</strong> คุณเป็นพยาบาลประจำหอผู้ป่วย มีบันทึกการดูแลผู้ป่วยตลอดกะ 12 ชั่วโมง ตอนนี้ต้องสรุปรายงานส่งต่อให้กะถัดไปภายใน 15 นาที</p>
+                    <p><strong>บันทึกผู้ป่วย (ตัวอย่าง):</strong></p>
+                    <div class="box codebox" style="margin: 10px 0;">
+                        <div class="content"><em>ผู้ป่วยหญิง อายุ 68 ปี โรคเบาหวานและความดันโลหิตสูง รับไว้รักษาด้วยอาการปวดท้อง มีไข้ 38.5°C เช้า 08:00 ตรวจร่างกาย: ชีพจรปกติ ความดัน 150/95 เบากินยาลดความดันแล้ว 09:30 แพทย์สั่งเจาะเลือด พบ WBC สูง 12,000 11:00 ให้ยาปฏิชีวนะ IV 13:00 ผู้ป่วยกินอาหารได้ครึ่งถาด 15:00 ไข้ลด 37.8°C 17:30 ตรวจเยี่ยม ผู้ป่วยบอกปวดท้องลดลง 19:00 ญาติมาเยี่ยม ซักถามข้อมูลรายละเอียด</em></div>
+                    </div>
+                    <p><strong>งาน:</strong></p>
+                    <ol>
+                        <li>เขียน Prompt เพื่อให้ Gemini สรุปบันทึกนี้เป็นรายงานสั้นๆ</li>
+                        <li>ทดลองถามหลายรูปแบบ: แบบสั้น vs แบบละเอียด</li>
+                        <li>เปรียบเทียบผลลัพธ์ทั้งสองแบบ</li>
+                    </ol>
+                    <p><strong>ตัวอย่าง Prompt:</strong> "สรุปบันทึกผู้ป่วยนี้เป็นรายงานส่งต่อกะ จัดเป็น 5 หัวข้อ: ข้อมูลผู้ป่วย, อาการ, การรักษา, ผลตรวจติดตาม, ข้อควรระวัง ความยาวไม่เกิน 150 คำ"</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Prompt Engineering -->
+        <div id="section3" class="section-container">
+            <h2>3. เทคนิค Prompt Engineering</h2>
+
+            <div id="sec3-principles">
+                <h3>3.1 หลักการเขียน Prompt ที่ดี</h3>
+                <div class="box tipbox">
+                    <div class="box-title"><i class="fas fa-check-circle"></i> หลัก 4C</div>
+                    <ul>
+                        <li><strong>Clear (ชัดเจน):</strong> ระบุสิ่งที่ต้องการชัดเจน</li>
+                        <li><strong>Concise (กระชับ):</strong> ไม่ยาวเกินไป</li>
+                        <li><strong>Context (บริบท):</strong> ให้ข้อมูลพื้นฐานที่จำเป็น</li>
+                        <li><strong>Correct (ถูกต้อง):</strong> ตรวจสอบความถูกต้องของข้อมูล</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="sec3-frameworks">
+                <h3>3.2 Frameworks สำคัญ</h3>
+
+                <div class="box infobox">
+                    <div class="box-title"><i class="fas fa-crown"></i> Mega Prompt: 6 องค์ประกอบสำหรับสื่อ PR</div>
+                    <p>สำหรับการสร้างสื่อประชาสัมพันธ์และสื่อสุขศึกษาที่มีคุณภาพ ใช้ <strong>Mega Prompt</strong> ประกอบด้วย 6 องค์ประกอบ:</p>
+                    <ol>
+                        <li><strong>Task (ภารกิจ):</strong> ระบุงานที่ต้องการให้ชัดเจน</li>
+                        <li><strong>Context (บริบท):</strong> อธิบายสถานการณ์และข้อจำกัด</li>
+                        <li><strong>Example (ตัวอย่าง):</strong> ใส่รูปแบบผลลัพธ์ที่ต้องการ</li>
+                        <li><strong>Persona (บทบาท):</strong> กำหนดให้ AI สวมบทบาทผู้เชี่ยวชาญ</li>
+                        <li><strong>Format (รูปแบบ):</strong> ระบุรูปแบบ Output ที่ต้องการ</li>
+                        <li><strong>Mood & Tone (โทน):</strong> กำหนดความทางการและบรรยากาศ</li>
+                    </ol>
+                </div>
+
+                <h4>ตัวอย่าง Mega Prompt ครบ 6 องค์ประกอบ</h4>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Mega Prompt: โปสเตอร์รณรงค์งดสูบบุหรี่</div>
+                    <div class="prompt-content">[1. TASK]
+สร้างเนื้อหาโปสเตอร์รณรงค์ "วันงดสูบบุหรี่โลก" ขนาด A2 แนวตั้ง
+
+[2. CONTEXT]
+โรงพยาบาลจัดกิจกรรมช่วยเลิกบุหรี่ฟรี พบว่ากลุ่มเป้าหมายส่วนใหญ่เป็นผู้ชายวัยทำงาน 30-50 ปี ที่สูบบุหรี่มานานแต่อยากเลิก ต้องการสื่อที่ไม่ตำหนิ แต่ให้กำลังใจและแสดงประโยชน์ของการเลิกอย่างชัดเจน
+
+[3. EXAMPLE]
+ใช้โครงสร้างแบบนี้:
+- หัวข้อดึงดูดใจ (ไม่เกิน 10 คำ)
+- คำขวัญสั้นๆ (1 ประโยค)
+- ประโยชน์ของการเลิก 4 ข้อ (แต่ละข้อ 10-15 คำ)
+- ข้อมูลบริการช่วยเลิก (เบอร์โทร/สถานที่)
+
+[4. PERSONA]
+สวมบทบาทเป็นผู้เชี่ยวชาญด้านการเลิกบุหรี่ที่เข้าใจจิตวิทยาผู้ติดบุหรี่ และรู้วิธีสร้างแรงจูงใจโดยไม่ตำหนิ
+
+[5. FORMAT]
+จัดเป็น:
+1. หัวข้อ (ตัวใหญ่ชัดเจน)
+2. Sub-headline (สร้างแรงจูงใจ)
+3. Body (4 bullet points)
+4. Call-to-Action (ชัดเจน มีเบอร์โทร)
+5. Logo/ชื่อโรงพยาบาล
+
+[6. MOOD & TONE]
+ใช้โทนให้กำลังใจ เน้นประโยชน์มากกว่าโทษ สร้างความหวัง ภาษาเป็นกันเองแต่มีน้ำหนัก ไม่ตำหนิหรือทำให้รู้สึกผิด</div>
+                    <p class="prompt-note">💡 Mega Prompt ครบทุกองค์ประกอบจะให้ผลลัพธ์ที่ตรงความต้องการมากที่สุด</p>
+                </div>
+
+                <h4>APE Framework</h4>
+                <div class="box infobox">
+                    <p><strong>A</strong>ction: ระบุสิ่งที่ต้องทำ<br>
+                        <strong>P</strong>urpose: วัตถุประสงค์<br>
+                        <strong>E</strong>xpectation: ผลลัพธ์ที่คาดหวัง
+                    </p>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> ตัวอย่าง APE Framework</div>
+                    <div class="prompt-content">[Action] เขียนคำแนะนำการดูแลสุขภาพ
+[Purpose] สำหรับผู้สูงอายุที่มีโรคเบาหวาน
+[Expectation] 5 ข้อ เข้าใจง่าย ปฏิบัติได้จริง</div>
+                    <p class="prompt-note">💡 ลองใช้ APE Framework</p>
+                </div>
+
+                <h4>RISEN Framework</h4>
+                <div class="box infobox">
+                    <p><strong>R</strong>ole: กำหนดบทบาท<br>
+                        <strong>I</strong>nstructions: คำสั่งที่ชัดเจน<br>
+                        <strong>S</strong>teps: ขั้นตอนการทำงาน<br>
+                        <strong>E</strong>nd goal: เป้าหมายสุดท้าย<br>
+                        <strong>N</strong>arrowing: กำหนดขอบเขต
+                    </p>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> ตัวอย่าง RISEN Framework</div>
+                    <div class="prompt-content">[Role] คุณคือนักโภชนาการ
+[Instructions] วิเคราะห์เมนูอาหารที่ให้
+[Steps] 1.ประเมินคุณค่าทางอาหาร 2.ระบุข้อดี/ข้อเสีย 3.ให้คำแนะนำ
+[End goal] รายงานสั้นๆ 1 หน้า
+[Narrowing] สำหรับผู้ป่วยเบาหวาน ภาษาไทย</div>
+                    <p class="prompt-note">💡 ลองใช้ RISEN Framework</p>
+                </div>
+
+            </div>
+
+            <div id="sec3-advanced">
+                <h3>3.3 เทคนิคขั้นสูง</h3>
+                <div class="box tipbox">
+                    <div class="box-title"><i class="fas fa-rocket"></i> เทคนิคการเขียน Prompt ขั้นสูง</div>
+                    <ul>
+                        <li><strong>Chain of Thought:</strong> ให้ AI คิดเป็นขั้นตอนก่อนตอบ เช่น "คิดทีละขั้นตอน"</li>
+                        <li><strong>Few-shot Prompting:</strong> ให้ตัวอย่าง 2-3 ชิ้นก่อนถามสิ่งที่ต้องการ</li>
+                        <li><strong>Role Stacking:</strong> กำหนดหลายบทบาทพร้อมกัน เช่น "คุณคือแพทย์ที่เป็นนักเขียน"</li>
+                        <li><strong>Iterative Refinement:</strong> ขอให้ปรับปรุงผลลัพธ์ทีละขั้น</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="sec3-workshop">
+                <h4>Case Studies: สถานการณ์จริงในงานสุขภาพ</h4>
+                <div class="box exercisebox">
+                    <div class="box-title"><i class="fas fa-briefcase"></i> ตัวอย่าง Prompt สำหรับสถานการณ์ต่างๆ</div>
+                    <p>5-6 ตัวอย่าง Prompt สำหรับสถานการณ์ที่พบบ่อยในงานด้านสุขภาพ สามารถนำไปปรับใช้ได้ทันที</p>
+                </div>
+
+                <h5><i class="fas fa-file-medical-alt"></i> Case Study 1: เขียนเอกสารให้ความรู้ผู้ป่วย</h5>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: แผ่นพับให้ความรู้ผู้ป่วยเบาหวาน</div>
+                    <div class="prompt-content">[Role] คุณคือพยาบาลผู้เชี่ยวชาญด้านการดูแลผู้ป่วยเบาหวาน มีประสบการณ์ 10 ปี
+
+[Task] เขียนเนื้อหาแผ่นพับ "คู่มือดูแลเท้าสำหรับผู้ป่วยเบาหวาน" ขนาด A4 พับ 3 ตอน
+
+[Context]
+- กลุ่มเป้าหมาย: ผู้ป่วยเบาหวานอายุ 50-70 ปี ระดับการศึกษาต่ำ-ปานกลาง
+- ความต้องการ: ข้อมูลที่เข้าใจง่าย มีภาพประกอบ ปฏิบัติได้จริงที่บ้าน
+- ข้อจำกัด: ไม่เกิน 2 หน้า ภาษาง่ายไม่ใช้ศัพท์เทคนิค
+
+[Format]
+หน้า 1: หน้าปก + ทำไมต้องดูแลเท้า
+หน้า 2: ขั้นตอนการตรวจเท้า 6 ขั้นตอน
+หน้า 3: สัญญาณอันตราย 5 ข้อ + ข้อมูลติดต่อ
+
+[Tone] น้ำเสียงห่วงใย ให้กำลังใจ ไม่ตื่นตระหนก</div>
+                    <p class="prompt-note">💡 ใช้ Mega Prompt สร้างเอกสารผู้ป่วยที่อ่านง่ายและปฏิบัติได้จริง</p>
+                </div>
+
+                <h5><i class="fas fa-bullhorn"></i> Case Study 2: สร้างสื่อ Social Media</h5>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: โพสต์รณรงค์วันงดสูบบุหรี่โลก</div>
+                    <div class="prompt-content">[Who] กลุ่มเป้าหมาย: วัยรุ่นและวัยทำงาน อายุ 18-40 ปี ใช้ Social Media เป็นประจำ
+
+[What] สร้างเนื้อหาโพสต์ Facebook และ Instagram สำหรับวันงดสูบบุหรี่โลก (31 พฤษภาคม)
+
+[Why] เพื่อกระตุ้นให้คนเลิกบุหรี่ หรืออย่างน้อยลดการสูบ โดยเน้นประโยชน์ที่ได้รับจริง
+
+[Format]
+- หัวข้อ Hook: ประโยคแรกที่ดึงดูด (ไม่เกิน 15 คำ)
+- เนื้อหาหลัก: 3-4 ย่อหน้าสั้นๆ ใช้ Emoji
+- แฮชแท็ก: 5-8 แท็ก
+- Call-to-Action: ชัดเจน
+
+[Tone] กระชับ สนุก ไม่ตำหนิ ให้กำลังใจ</div>
+                    <p class="prompt-note">💡 ใช้ Who-What-Why Framework สำหรับสื่อสารกลุ่มเป้าหมายเฉพาะ</p>
+                </div>
+
+                <h5><i class="fas fa-chalkboard-teacher"></i> Case Study 3: สร้างเนื้อหาอบรม</h5>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: สร้างเนื้อหาอบรมการปฐมพยาบาล</div>
+                    <div class="prompt-content">[Context] โรงพยาบาลต้องการจัดอบรมการปฐมพยาบาลเบื้องต้นให้กับบุคลากรในโรงเรียน สถานประกอบการ และชุมชน
+
+[Challenge] 
+- ผู้เข้าอบรมมีพื้นฐานต่างกันมาก
+- ต้องสอนให้เข้าใจและทำได้จริงใน 3 ชั่วโมง
+- เนื้อหาต้องถูกต้องตามมาตรฐานสภาการพยาบาล
+
+[Resolution] ช่วยสร้าง:
+1. โครงสร้างหลักสูตร 3 ชั่วโมง (แบ่งเป็น 4 ช่วง)
+2. สรุปเนื้อหาทฤษฎีสำหรับสไลด์นำเสนอ (ไม่เกิน 20 สไลด์)
+3. ขั้นตอนปฏิบัติแบบ Step-by-Step สำหรับสถานการณ์ฉุกเฉิน 5 แบบ
+4. แบบทดสอบท้ายการอบรม 10 ข้อ พร้อมเฉลย</div>
+                    <p class="prompt-note">💡 ใช้ Context-Challenge-Resolution สำหรับการออกแบบการอบรม</p>
+                </div>
+
+                <h5><i class="fas fa-chart-line"></i> Case Study 4: วิเคราะห์และรายงานข้อมูล</h5>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: รายงานสรุปผลการตรวจสุขภาพ</div>
+                    <div class="prompt-content">[Role] คุณคือนักวิชาการสาธารณสุขที่เชี่ยวชาญด้านการวิเคราะห์ข้อมูล
+
+[Goal] เขียนรายงานสรุปผลการตรวจสุขภาพประจำปี 2567 ของบริษัท XYZ สำหรับเสนอผู้บริหาร
+
+[Data] 
+- จำนวนผู้เข้ารับการตรวจ: 500 คน (จากพนักงาน 600 คน)
+- ผลการตรวจพบ:
+  * ความดันโลหิตสูง: 120 คน (24%)
+  * เบาหวาน: 45 คน (9%)
+  * ไขมันในเลือดสูง: 150 คน (30%)
+  * โรคอ้วน (BMI ≥ 25): 200 คน (40%)
+  * ผลตรวจปกติทุกอย่าง: 85 คน (17%)
+
+[Strategy] 
+- นำเสนอข้อมูลในรูปแบบที่เข้าใจง่าย
+- วิเคราะห์แนวโน้มและความเสี่ยง
+- เสนอแนะมาตรการเชิงป้องกัน
+
+[Metrics] รายงานความยาว 3-4 หน้า พร้อม Executive Summary 1 หน้า</div>
+                    <p class="prompt-note">💡 ใช้ Goal-Strategy-Metrics Framework สำหรับรายงานเชิงวิเคราะห์</p>
+                </div>
+
+                <h5><i class="fas fa-comments"></i> Case Study 5: ตอบคำถามญาติผู้ป่วย</h5>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: ตอบคำถามญาติผู้ป่วยหลังผ่าตัด</div>
+                    <div class="prompt-content">[Scenario] คุณเป็นพยาบาลเวรเปลี่ยนในแผนกผู้ป่วยในศัลยกรรม มีญาติผู้ป่วยเข้ามาสอบถามข้อมูลหลังผ่าตัด
+
+[Action] ช่วยเตรียมคำตอบสำหรับคำถามที่พบบ่อย:
+
+1. "ผู้ป่วยกินอะไรได้บ้าง? ต้องงดอะไร?"
+2. "แผลต้องดูแลยังไง? อาบน้ำได้ไหม?"
+3. "ถ้าผู้ป่วยมีไข้/ปวดมาก ต้องทำยังไง?"
+4. "เมื่อไหร่ถึงจะหายดี? ต้องพักฟื้นนานไหม?"
+5. "มีอาการอะไรที่ต้องรีบพบแพทย์?"
+6. "นัดตัดไหม/ติดตามผลเมื่อไหร่?"
+
+[Impact] คำตอบต้อง:
+- เข้าใจง่าย ไม่ใช้ศัพท์เทคนิค
+- ชัดเจน ไม่กำกวม
+- ให้กำลังใจญาติและผู้ป่วย
+- มีข้อมูลติดต่อฉุกเฉิน</div>
+                    <p class="prompt-note">💡 ใช้ Scenario-Action-Impact สำหรับการสื่อสารกับญาติผู้ป่วย</p>
+                </div>
+
+                <h5><i class="fas fa-clipboard-list"></i> Case Study 6: สร้างเครื่องมือประเมิน</h5>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: แบบประเมินความเสี่ยงโรคหัวใจ</div>
+                    <div class="prompt-content">[Role] คุณคือพยาบาลนักวิจัยที่กำลังพัฒนาเครื่องมือคัดกรองความเสี่ยงโรคหัวใจสำหรับชุมชน
+
+[Objective] สร้างแบบสอบถามคัดกรองความเสี่ยงโรคหัวใจที่:
+- ใช้เวลาทำไม่เกิน 5 นาที
+- คำถามเข้าใจง่าย ไม่ต้องมีพื้นฐานทางการแพทย์
+- ให้คะแนนความเสี่ยงระดับ ต่ำ/ปานกลาง/สูง
+- มีคำแนะนำเบื้องต้นตามระดับความเสี่ยง
+
+[Constraints]
+- ไม่เกิน 10 คำถาม
+- ครอบคลุมปัจจัยเสี่ยงหลัก: อายุ, เพศ, การสูบบุหรี่, ความดันโลหิต, เบาหวาน, ไขมัน, การออกกำลังกาย, ประวัติครอบครัว
+- มีคำอธิบายวิธีให้คะแนนสำหรับเจ้าหน้าที่
+
+[Format] แบบฟอร์มพร้อมใช้งาน พร้อมคำอธิบายการตอบและการให้คะแนน</div>
+                    <p class="prompt-note">💡 ใช้ Role-Objective-Constraints สำหรับการออกแบบเครื่องมือทางการพยาบาล</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: การประยุกต์ใช้ -->
+        <div id="section4" class="section-container">
+            <h2>4. การประยุกต์ใช้งานจริง</h2>
+
+            <div id="sec4-documents">
+                <h3>4.1 การเขียนเอกสาร</h3>
+                <p>Gemini สามารถช่วยเขียนเอกสารได้หลากหลายประเภท:</p>
+                <ul>
+                    <li>รายงาน และบันทึก</li>
+                    <li>สรุปการประชุม</li>
+                    <li>เอกสารให้ความรู้</li>
+                    <li>อีเมลและจดหมาย</li>
+                </ul>
+            </div>
+
+            <div id="sec4-analysis">
+                <h3>4.2 การวิเคราะห์ข้อมูล</h3>
+                <div class="box tipbox">
+                    <div class="box-title"><i class="fas fa-chart-bar"></i> Gemini ช่วยวิเคราะห์</div>
+                    <p>อัปโหลดไฟล์ข้อมูล หรือวางข้อมูลลงไป แล้วขอให้วิเคราะห์ สรุป หรือหา insight</p>
+                </div>
+            </div>
+
+            <div id="sec4-caution">
+                <h3>4.3 ข้อควรระวัง</h3>
+                <div class="box cautionbox">
+                    <div class="box-title"><i class="fas fa-exclamation-triangle"></i> สิ่งที่ต้องระวัง
+                    </div>
+                    <ul>
+                        <li><strong>Hallucination:</strong> AI อาจสร้างข้อมูลที่ไม่ถูกต้อง</li>
+                        <li><strong>ความเป็นส่วนตัว:</strong> อย่าใส่ข้อมูลส่วนบุคคลที่ละเอียดอ่อน</li>
+                        <li><strong>ตรวจสอบเสมอ:</strong> ข้อมูลทางการแพทย์ต้องตรวจสอบกับแหล่งที่เชื่อถือได้
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="sec4-workshop">
+                <h3>Workshop: ทดลองใช้งานจริง</h3>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: เขียนสรุปการประชุม</div>
+                    <div class="prompt-content">ช่วยเขียนสรุปการประชุมจากประเด็นต่อไปนี้:
+                        - วัตถุประสงค์: ประชุมวางแผนโครงการสุขภาพชุมชน
+                        - ผู้เข้าร่วม: ทีมสาธารณสุข 5 คน
+                        - ประเด็นหลัก: งบประมาณ, กำหนดการ, กลุ่มเป้าหมาย
+                        - มติที่ประชุม: อนุมัติโครงการ เริ่มเดือนหน้า
+
+                        รูปแบบ: สรุปสั้นๆ 1 หน้า มีหัวข้อชัดเจน</div>
+                    <p class="prompt-note">💡 ใช้เขียนสรุปการประชุม</p>
+                </div>
+
+                <div class="box exercisebox">
+                    <div class="box-title"><i class="fas fa-users"></i> กิจกรรมกลุ่ม: Case Study Analysis (45 นาที)</div>
+                    <p><strong>วัตถุประสงค์:</strong> วิเคราะห์กรณีศึกษาและออกแบบการแก้ปัญหาด้วย Gemini</p>
+                    <p><strong>จัดกลุ่ม:</strong> แบ่งกลุ่มละ 3-4 คน แต่ละกลุ่มได้ case study ต่างกัน</p>
+
+                    <h4>Case Studies:</h4>
+
+                    <div class="box infobox" style="margin: 10px 0;">
+                        <div class="box-title"><i class="fas fa-hospital-user"></i> กลุ่มที่ 1 - พยาบาลชุมชน</div>
+                        <p>"คุณรับผิดชอบพื้นที่ห่างไกล 15 หมู่บ้าน ต้องจัดอบรมผู้ดูแลผู้สูงอายุเรื่อง 'การป้องกันการหกล้ม' ให้กับ อสม. 50 คน แต่มีงบจำกัด แบบฝึกหัดและเอกสารต้องทำเอง"</p>
+                    </div>
+
+                    <div class="box infobox" style="margin: 10px 0;">
+                        <div class="box-title"><i class="fas fa-school"></i> กลุ่มที่ 2 - พยาบาลโรงเรียน</div>
+                        <p>"โรงเรียนมอบหมายให้สร้างสื่อสุขศึกษาเรื่อง 'พฤติกรรมสุขภาพวัยรุ่น' สำหรับนักเรียน ม.ต้น 300 คน ต้องสนุก ดึงดูด และนักเรียนจดจำได้ง่าย"</p>
+                    </div>
+
+                    <div class="box infobox" style="margin: 10px 0;">
+                        <div class="box-title"><i class="fas fa-procedures"></i> กลุ่มที่ 3 - พยาบาลโรงพยาบาล</div>
+                        <p>"แผนกของคุณมีผู้ป่วยเบาหวานเพิ่มขึ้นมาก ต้องการจัดคลินิกให้ความรู้แต่ขาดแคลนเจ้าหน้าที่ จึงต้องสร้างสื่อให้ความรู้ที่ผู้ป่วยสามารถเรียนรู้ด้วยตัวเองได้"</p>
+                    </div>
+
+                    <div class="box infobox" style="margin: 10px 0;">
+                        <div class="box-title"><i class="fas fa-clinic-medical"></i> กลุ่มที่ 4 - พยาบาลคลินิก</div>
+                        <p>"คลินิกเปิดบริการใหม่ ต้องการประชาสัมพันธ์ผ่าน Social Media โฆษณาท้องถิ่น และแผ่นพับ แต่ไม่มีทีมออกแบบและงบจำกัด"</p>
+                    </div>
+
+                    <h4>งานของแต่ละกลุ่ม:</h4>
+                    <ol>
+                        <li>วิเคราะห์ปัญหา (5 นาที)</li>
+                        <li>ออกแบบวิธีแก้ปัญหาด้วย Gemini - ระบุว่าจะใช้ Gemini ช่วยอะไรบ้าง (10 นาที)</li>
+                        <li>สร้าง Prompt ตัวอย่างอย่างน้อย 2 Prompt (10 นาที)</li>
+                        <li>ทดสอบกับ Gemini จริงและเก็บผลลัพธ์ (10 นาที)</li>
+                        <li>เตรียมนำเสนอ (5 นาที)</li>
+                    </ol>
+
+                    <h4>การนำเสนอ (แต่ละกลุ่ม 5 นาที):</h4>
+                    <ul>
+                        <li>ปัญหาและความท้าทาย</li>
+                        <li>วิธีแก้ปัญหาด้วย Gemini</li>
+                        <li>Prompt ที่ใช้ และผลลัพธ์</li>
+                        <li>ข้อดีข้อเสียของวิธีนี้</li>
+                    <p><strong>ระยะเวลา:</strong> 45 นาที (40 นาทีทำงาน + 20 นาทีนำเสนอ)</p>
+                </div>
+
+                <div class="box exercisebox">
+                    <div class="box-title"><i class="fas fa-lightbulb"></i> ตัวอย่าง Prompt สำหรับกลุ่มที่ 1 (พยาบาลชุมชน)</div>
+                    <div class="prompt-content">[Context] ต้องจัดอบรมผู้ดูแลผู้สูงอายุ 50 คน เรื่องการป้องกันการหกล้ม มีงบจำกัด
+[Challenge] ต้องสร้างเอกสารและแบบฝึกหัดเอง ไม่มีทีมออกแบบ
+[Resolution] ใช้ Gemini สร้าง:
+1. เอกสารให้ความรู้ 2 หน้า ภาษาง่าย มีภาพประกอบ
+2. แบบฝึกหัดทักษะ 5 ข้อ
+3. โปสเตอร์ติดหมู่บ้านขนาด A4</div>
+                    <p class="prompt-note">💡 ตัวอย่างการใช้ Context-Challenge-Resolution Framework</p>
+                </div>
+
+                <h4>Case Studies: สถานการณ์จริงในการประยุกต์ใช้งาน</h4>
+                <div class="box exercisebox">
+                    <div class="box-title"><i class="fas fa-briefcase"></i> ตัวอย่างการประยุกต์ใช้ Gemini ในสถานการณ์ต่างๆ พร้อม Prompt ที่พร้อมใช้งาน</div>
+                    <p>5-6 ตัวอย่างการนำ Gemini ไปใช้งานจริงในบริบทต่างๆ พร้อม Prompt ที่พร้อมใช้งาน</p>
+                </div>
+
+                <h5><i class="fas fa-file-alt"></i> Case Study 1: เขียนรายงานประจำวัน/กะ</h5>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: สรุปรายงานประจำกะแผนกผู้ป่วย</div>
+                    <div class="prompt-content">[Role] คุณคือพยาบาลหัวหน้าเวรที่กำลังจะส่งมอบกะให้กับพยาบาลเวรถัดไป
+
+[Task] เขียนรายงานสรุปสภาพแผนกและผู้ป่วยประจำกะ (8 ชั่วโมง)
+
+[Context]
+- แผนกผู้ป่วยในเวรนี้มีทั้งหมด 30 เตียง
+- ผู้ป่วยใหม่รับ 2 ราย จำหวัด 3 ราย
+- มีผู้ป่วยติดเชื้อที่ต้องแยกห้อง 2 ราย
+- มีเหตุฉุกเฉิน 1 ครั้ง (ผู้ป่วยหมดสติ แต่ปลอดภัยแล้ว)
+- เวชภัณฑ์ที่ใกล้หมด: ถุงมือผ่าตัด, น้ำเกลือ
+- มีญาติผู้ป่วยร้องเรียนเรื่องเสียงดัง 1 เรื่อง (แก้ไขแล้ว)
+
+[Format] 
+รายงาน 1 หน้า แบ่งเป็น:
+1. สถิติผู้ป่วย (รับใหม่/จำหวัด/เหลือ)
+2. เหตุการณ์สำคัญ/ปัญหาที่เกิด
+3. ผู้ป่วยที่ต้องติดตามพิเศษ
+4. ของที่ต้องสั่งเติม
+5. ข้อควรระวังสำหรับกะถัดไป
+
+[Tone] กระชับ ชัดเจน มืออาชีพ</div>
+                    <p class="prompt-note">💡 ใช้สรุปรายงานกะให้กระชับและครบถ้วน</p>
+                </div>
+
+                <h5><i class="fas fa-envelope"></i> Case Study 2: เขียนอีเมล/จดหมายทางการ</h5>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: อีเมลขอความร่วมมือจัดกิจกรรม</div>
+                    <div class="prompt-content">[Role] คุณคือพยาบาลวิชาการโรงพยาบาล ต้องเขียนอีเมลถึงหัวหน้างานต่างๆ
+
+[Task] เขียนอีเมลขอความร่วมมือจัดกิจกรรม "วันงดสูบบุหรี่โลก"
+
+[Context]
+- วันจัดกิจกรรม: 31 พฤษภาคม 2567
+- สถานที่: ลานอเนกประสงค์โรงพยาบาล
+- ต้องการความร่วมมือ: 
+  * แผนกการตลาด: ประชาสัมพันธ์ผ่านช่องทางต่างๆ
+  * แผนกจัดซื้อ: จัดหาของรางวัล
+  * แผนกอาคารสถานที่: จัดเตรียมสถานที่
+  * แผนกบุคคล: ประสานงานอาสาสมัคร
+
+[Format]
+- หัวข้ออีเมล: ชัดเจน
+- คำนำหน้า: ทางการแต่เป็นมิตร
+- เนื้อหา: จุดประสงค์ วันเวลา ความต้องการเฉพาะแต่ละแผนก
+- กำหนดการตอบกลับ: ชัดเจน
+- ลงท้าย: สุภาพ พร้อมข้อมูลติดต่อ
+
+[Tone] ทางการ สุภาพ ให้เกียรติ มีเหตุผลชัดเจน</div>
+                    <p class="prompt-note">💡 ใช้เขียนอีเมลทางการแพทย์ที่ได้ผลลัพธ์</p>
+                </div>
+
+                <h5><i class="fas fa-user-injured"></i> Case Study 3: สรุปข้อมูลผู้ป่วยสำหรับส่งต่อ</h5>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: สรุปประวัติผู้ป่วยส่งต่อโรงพยาบาลใหญ่</div>
+                    <div class="prompt-content">[Role] คุณคือพยาบาลผู้ดูแลผู้ป่วยที่ต้องส่งต่อไปรักษาต่อที่โรงพยาบาลศูนย์
+
+[Task] เขียนสรุปประวัติและเหตุผลการส่งต่อ (Referral Summary)
+
+[ข้อมูลผู้ป่วย]
+- ชื่อ: นายสมชาย ดวงดี, อายุ 65 ปี
+- วันที่รับ: 15 มี.ค. 67
+- อาการแรกรับ: เจ็บหน้าอก หายใจลำบาก มา 2 ชม.
+- การรักษาที่ให้:
+  * ให้ O2 6L/min ผ่าน nasal cannula
+  * ให้ Aspirin 300mg, Clopidogrel 300mg
+  * NTG sublingual 0.6mg ซ้ำได้ 3 ครั้ง
+  * เจาะเลือด: Troponin ขึ้น 2 ng/mL (ปกติ <0.04)
+- ผลตรวจพบ: ECG ขาดเลือดหน้าอกล่างด้านหน้า
+- เหตุผลส่งต่อ: ต้องทำ Cardiac catheterization ซึ่งไม่มีเครื่องมือ
+
+[Format] 
+สรุป 1 หน้า จัดเป็น:
+1. ข้อมูลทั่วไปผู้ป่วย
+2. อาการสำคัญและระยะเวลา
+3. การรักษาที่ให้แล้วและผลตอบสนอง
+4. ผลตรวจสำคัญ
+5. เหตุผลการส่งต่อ/ความต้องการเฉพาะจากโรงพยาบาลรับ
+6. ข้อมูลติดต่อผู้ส่งและเวลาส่งต่อ
+
+[Tone] กระชับ ชัดเจน ครบถ้วน มืออาชีพ</div>
+                    <p class="prompt-note">💡 ใช้สรุปประวัติส่งต่อผู้ป่วยให้ครบถ้วนในเวลาจำกัด</p>
+                </div>
+
+                <h5><i class="fas fa-clipboard-check"></i> Case Study 4: จัดทำแบบฟอร์ม/เอกสาร</h5>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: สร้างแบบประเมินอาการผู้ป่วยหลังผ่าตัด</div>
+                    <div class="prompt-content">[Role] คุณคือพยาบาลหัวหน้าแผนกศัลยกรรม ต้องการปรับปรุงการติดตามผู้ป่วย
+
+[Task] ออกแบบแบบฟอร์มประเมินอาการผู้ป่วยหลังผ่าตัด (Post-op Assessment Form)
+
+[Context]
+- ใช้สำหรับพยาบาลเวรตรวจทุก 4 ชั่วโมง
+- ต้องครอบคลุมการผ่าตัดทั่วไป (ไม่เฉพาะเจาะจง)
+- ต้องมีเกณฑ์การประเมินที่ชัดเจน
+- ต้องมีช่องบันทึกเพิ่มเติม
+- ต้องกระชับ พกพาสะดวก (ไม่เกินหน้าเดียว)
+
+[ข้อมูลที่ต้องมี]
+1. ข้อมูลทั่วไป: ชื่อ, อายุ, วันที่ผ่าตัด, ประเภทการผ่าตัด
+2. อาการสำคัญ: Pain score (0-10), อุณหภูมิ, ชีพจร, ความดัน, การหายใจ
+3. แผลผ่าตัด: ลักษณะ, การเติบโต, ของเหลือ
+4. การทำงานของระบบ: GI, Urine output, การขับถ่าย
+5. การรับยา/อาการข้างเคียง
+6. กิจกรรม: การนอน, การเคลื่อนไหว, การกิน
+7. ความกังวล/คำถามของผู้ป่วย
+8. แผนการดูแล/การนัดหมาย
+
+[Format] 
+ตาราง/ฟอร์มพร้อมใช้งาน พร้อมคำอธิบายการให้คะแนน</div>
+                    <p class="prompt-note">💡 ใช้ออกแบบเครื่องมือทางการพยาบาลที่ใช้งานจริง</p>
+                </div>
+
+                <h5><i class="fas fa-users-cog"></i> Case Study 5: วางแผนกิจกรรม/โครงการ</h5>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: วางแผนโครงการลดการติดเชื้อในแผนก</div>
+                    <div class="prompt-content">[Role] คุณคือพยาบาลควบคุมการติดเชื้อ (ICN) ของแผนกผู้ป่วยใน
+
+[Task] เขียนแผนโครงการ "ลดอัตราการติดเชื้อแผลผ่าตัดในแผนกศัลยกรรม"
+
+[Context]
+- ปัญหา: อัตราการติดเชื้อแผลผ่าตัดสูงกว่าเกณฑ์ (5% เมื่อเทียบกับเกณฑ์ <2%)
+- ระยะเวลาโครงการ: 6 เดือน (ม.ค. - มิ.ย. 2567)
+- งบประมาณ: 50,000 บาท
+- ทีมงาน: พยาบาล IC 2 คน + อสม. 5 คน
+
+[สิ่งที่ต้องมีในแผน]
+1. ชื่อโครงการที่กระชับและสื่อความหมาย
+2. หลักการและเหตุผล (1 ย่อหน้า)
+3. วัตถุประสงค์: ทั่วไป 1 ข้อ + เฉพาะ 3 ข้อ
+4. กลุ่มเป้าหมายและพื้นที่ดำเนินงาน
+5. ระยะเวลาดำเนินงานแบ่งเป็น 3 Phase
+6. กิจกรรม/แผนการดำเนินงานแต่ละเดือน
+7. ตัวชี้วัดความสำเร็จ (KPIs)
+8. งบประมาณโดยละเอียด
+9. ผลที่คาดว่าจะได้รับ
+
+[Format] 
+เอกสารโครงการสมบูรณ์ 3-5 หน้า ภาษาทางการ</div>
+                    <p class="prompt-note">💡 ใช้วางแผนโครงการสุขภาพที่มีโครงสร้างครบถ้วน</p>
+                </div>
+
+                <h5><i class="fas fa-chalkboard-teacher"></i> Case Study 6: สร้างเนื้อหาให้ความรู้</h5>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: สร้างบทเรียนออนไลน์เรื่องการดูแลผู้สูงอายุ</div>
+                    <div class="prompt-content">[Role] คุณคือพยาบาลวิชาการที่ออกแบบการเรียนการสอน
+
+[Task] สร้างเนื้อหาบทเรียนออนไลน์ "การดูแลผู้สูงอายุเบื้องต้นสำหรับผู้ดูแล"
+
+[Context]
+- กลุ่มเป้าหมาย: ผู้ดูแลผู้สูงอายุที่บ้าน (ไม่ใช่บุคลากรทางการแพทย์)
+- ระดับความรู้: ประถมศึกษา - มัธยมศึกษา
+- รูปแบบ: บทเรียนออนไลน์ 5 บท แต่ละบท 15-20 นาที
+- ต้องมีแบบทดสอบก่อน-หลังเรียน
+
+[โครงสร้างที่ต้องการ]
+สำหรับแต่ละบท ให้สร้าง:
+1. ชื่อบทและวัตถุประสงค์การเรียนรู้
+2. เนื้อหาหลัก 3-5 หัวข้อ (เข้าใจง่าย มีตัวอย่าง)
+3. กิจกรรม/สอดแทรกระหว่างเรียน (คำถาม/กรณีศึกษาเล็กๆ)
+4. สรุปบทเรียน (Infographic หรือ Mind map)
+5. แบบทดสอบท้ายบท 5 ข้อ
+
+[บทที่ 1-5 ที่ต้องการ]
+1. เข้าใจการเปลี่ยนแปลงของร่างกายผู้สูงอายุ
+2. การให้ความช่วยเหลือในการกินและการดื่ม
+3. การดูแลสุขอนามัยส่วนบุคคล
+4. การป้องกันการหกล้มและการเคลื่อนย้าย
+5. การสังเกตอาการผิดปกติและเมื่อไหร่ควรพบแพทย์
+
+[Tone] เป็นกันเอง อบอุ่น ให้กำลังใจ ไม่ตื่นตระหนก</div>
+                    <p class="prompt-note">💡 ใช้ออกแบบการเรียนการสอนที่เหมาะกับกลุ่มเป้าหมาย</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 5: การสร้างภาพ -->
+        <div id="section5" class="section-container">
+            <h2>5. การสร้างภาพด้วย Google Gemini</h2>
+
+            <div class="box infobox">
+                <div class="box-title"><i class="fas fa-info-circle"></i> ความสามารถในการสร้างภาพของ Gemini</div>
+                <p>Google Gemini มีความสามารถในการสร้างภาพคุณภาพสูงจากคำอธิบาย (Text-to-Image)
+                    ผ่านการผสานรวมกับเทคโนโลยี Imagen
+                    ทำให้สามารถสร้างภาพที่มีรายละเอียด สีสัน และองค์ประกอบตรงตามที่ต้องการ
+                    เหมาะสำหรับการสร้างสื่อการสอน Infographic โปสเตอร์ และภาพประกอบต่างๆ</p>
+            </div>
+
+            <div id="sec5-structure">
+                <h3>5.1 โครงสร้าง Prompt สร้างภาพ</h3>
+                <p>เพื่อให้ได้ภาพที่ตรงตามความต้องการ คำสั่ง (Prompt) ควรครอบคลุมองค์ประกอบสำคัญ <strong>7
+                        ประการ</strong> ดังนี้:</p>
+                <div class="box tipbox">
+                    <div class="box-title"><i class="fas fa-check-circle"></i> องค์ประกอบ 7 ประการของ Prompt สร้างภาพ
+                    </div>
+                    <ul>
+                        <li><strong>Subject (หัวข้อหลัก):</strong> ระบุสิ่งที่ต้องการให้อยู่ในภาพอย่างชัดเจน</li>
+                        <li><strong>Action (การกระทำ):</strong> บอกเล่าเรื่องราวว่าตัวละครกำลังทำอะไร</li>
+                        <li><strong>Style (สไตล์):</strong> กำหนดรูปแบบทางศิลปะ เช่น ภาพการ์ตูนหรือภาพสมจริง</li>
+                        <li><strong>Mood/Tone (บรรยากาศ):</strong> สื่ออารมณ์ของภาพ เช่น อบอุ่น สงบ สดใส</li>
+                        <li><strong>Color (สีสัน):</strong> สีที่ต้องการเน้น หรือโทนสีโดยรวม</li>
+                        <li><strong>Composition (องค์ประกอบ):</strong> การจัดวางมุมมอง เช่น แนวตั้ง แนวนอน</li>
+                        <li><strong>Details (รายละเอียด):</strong> รายละเอียดเพิ่มเติมเพื่อให้ภาพสมบูรณ์</li>
+                    </ul>
+                </div>
+
+                <div class="box tipbox">
+                    <div class="box-title"><i class="fas fa-lightbulb"></i> สูตร Prompt ที่ครบถ้วน</div>
+                    <p><strong>[สิ่งหลักที่ต้องการ]</strong> + <strong>[การกระทำ/ท่าทาง]</strong> +
+                        <strong>[สถานที่/ฉากหลัง]</strong>
+                        + <strong>[สไตล์]</strong> + <strong>[สีสัน]</strong> + <strong>[บรรยากาศ]</strong>
+                        + <strong>[มุมมอง]</strong> + <strong>[รายละเอียดเพิ่มเติม]</strong>
+                    </p>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> ตัวอย่าง Prompt ครบเซ็ต</div>
+                    <div class="prompt-content">A friendly Thai female nurse (wearing light blue scrubs and nurse cap)
+                        teaching a group of mothers how to prepare nutritious baby food / in a bright community health
+                        center with educational posters on walls / modern flat illustration style / using warm and
+                        welcoming color palette (soft blues, greens, and cream) / professional yet approachable
+                        atmosphere / eye-level view showing interaction / include baby food ingredients on table and
+                        happy expressions</div>
+                    <p class="prompt-note">💡 ตัวอย่างนี้ครอบคลุมทั้ง 7 องค์ประกอบในประโยคเดียว</p>
+                </div>
+            </div>
+
+            <div id="sec5-styles">
+                <h3>5.2 สไตล์ภาพและสีสัน</h3>
+
+                <h4>สไตล์ที่นิยมสำหรับงานสุขภาพ</h4>
+                <ul>
+                    <li><strong>Flat Design Illustration:</strong> กราฟิกแบบแบน สีสันสดใส เหมาะสำหรับ Infographic</li>
+                    <li><strong>Minimalist:</strong> เน้นความเรียบง่าย สื่อความหมายชัดเจน</li>
+                    <li><strong>Modern Healthcare Illustration:</strong> ความเป็นมืออาชีพ น่าเชื่อถือ</li>
+                    <li><strong>Friendly Cartoon:</strong> สร้างความรู้สึกเป็นมิตร เข้าถึงง่าย เหมาะกับเด็กและครอบครัว
+                    </li>
+                    <li><strong>Clean Professional:</strong> สะอาดตา เป็นทางการ เหมาะกับงานวิชาการ</li>
+                </ul>
+
+                <h4>สีที่มีความหมายในงานสุขภาพ</h4>
+                <div class="box infobox">
+                    <div class="box-title"><i class="fas fa-palette"></i> จิตวิทยาของสีในสื่อสุขภาพ</div>
+                    <ul>
+                        <li>🔵 <strong>สีน้ำเงิน:</strong> ความน่าเชื่อถือ ความสงบ ความเป็นมืออาชีพ</li>
+                        <li>🟢 <strong>สีเขียว:</strong> สุขภาพ ธรรมชาติ ความสดชื่น</li>
+                        <li>⚪ <strong>สีขาว:</strong> ความสะอาด ความบริสุทธิ์</li>
+                        <li>🟠 <strong>สีส้ม/สีเหลือง:</strong> พลังงาน ความอบอุ่น การกระตุ้น</li>
+                        <li>🟣 <strong>สีม่วง:</strong> ความคิดสร้างสรรค์ การดูแลเอาใจใส่</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="sec5-healthcare">
+                <h3>5.3 ตัวอย่าง Prompt สำหรับงานด้านสุขภาพ</h3>
+
+                <h4><i class="fas fa-stethoscope"></i> การสื่อสารด้านการแพทย์</h4>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: ภาพประกอบการตรวจสุขภาพ</div>
+                    <div class="prompt-content">[TH] สร้างภาพประกอบสไตล์ flat design ทันสมัย
+                        แสดงแพทย์หญิงสวมเสื้อกาวน์ขาวถือหูฟังแพทย์กำลังตรวจผู้ป่วยอย่างเป็นมิตร
+                        สถานที่เป็นคลินิกสะอาดสว่างไสว มีอุปกรณ์การแพทย์เช่นเครื่องวัดความดันและคอมพิวเตอร์ในพื้นหลัง
+                        ใช้โทนสีฟ้าและขาวที่สร้างความรู้สึกสงบ สไตล์: ภาพประกอบทางการแพทย์แบบมืออาชีพ
+                        บรรยากาศอบอุ่นและเป็นกันเอง
+                        [EN] Create a modern flat design illustration showing a friendly female doctor in white coat
+                        with stethoscope examining a patient. The setting is a bright, clean clinic. Include medical
+                        equipment like blood pressure monitor and computer in the background. Use calming blue and white
+                        color scheme. Style: professional healthcare illustration, warm and welcoming atmosphere.</div>
+                    <p class="prompt-note">💡 ระบุรายละเอียดครบ: สไตล์ + ตัวละคร + สถานที่ + อุปกรณ์ + สี + บรรยากาศ</p>
+                    <div style="text-align:center; margin:12px 0;">
+                        <img src="../images/doctor_checkup_example.png" alt="ผลลัพธ์: ภาพแพทย์ตรวจผู้ป่วย" style="max-width:340px; width:100%; border-radius:10px; box-shadow:0 3px 12px rgba(0,0,0,0.15); border:1px solid #e0e0e0;">
+                        <p style="font-size:0.8em; color:#888; margin-top:6px;"><i class="fas fa-image"></i> ตัวอย่างผลลัพธ์จาก Prompt นี้</p>
+                    </div>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: Infographic ความปลอดภัยอาหาร</div>
+                    <div class="prompt-content">[TH] Infographic ให้ความรู้เกี่ยวกับความปลอดภัยทางอาหารและสุขอนามัย
+                        การจัดวางแนวตั้งแบ่งเป็น 5 ส่วนแสดง: การล้างผัก, อุณหภูมิปรุงอาหาร, การเก็บรักษาอาหาร,
+                        ครัวที่สะอาด, และการแยกของดิบและสุก แต่ละส่วนมีไอคอนและภาพประกอบง่ายๆ ใช้สีสดใสสะอาด
+
+                        [EN] Educational infographic about food safety and hygiene. Vertical layout with 5 sections
+                        showing: washing vegetables, cooking temperature, food storage, clean kitchen, and avoiding
+                        cross-contamination. Each section with simple icon and illustration. Use fresh, clean colors
+                        (green for vegetables, red for temperature warning, blue for water/cleaning). Flat design style,
+                        easy to understand.</div>
+                    <p class="prompt-note">💡 สื่อสุขศึกษาเรื่องความปลอดภัยอาหาร</p>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: Infographic สุขภาพฟันเด็ก</div>
+                    <div class="prompt-content">[TH] Infographic สุขภาพฟันที่เป็นมิตรสำหรับเด็ก
+                        แสดงตัวละครฟันยิ้มแย้มขนาดใหญ่เป็นองค์ประกอบหลัก ล้อมรอบด้วย 4 เคล็ดลับการดูแล:
+                        เทคนิคการแปรงฟัน, การใช้ไหมขัดฟัน, อาหารที่มีประโยชน์, และการตรวจฟันประจำ ใช้สีสดใสและขี้เล่น
+                        (ขาว ฟ้าอ่อน ชมพู เหลือง) สไตล์การ์ตูน สนุกและดึงดูดเด็กๆ
+                        [EN] Friendly dental health infographic for children. Show a large smiling tooth character as
+                        main element, surrounded by 4 care tips: brushing technique, flossing, healthy foods, and
+                        regular check-ups. Use bright, playful colors (white, light blue, pink, yellow). Cartoon style,
+                        fun and engaging for kids.</div>
+                    <p class="prompt-note">💡 เหมาะสำหรับสร้างสื่อทันตกรรมสำหรับเด็ก</p>
+                    <div style="text-align:center; margin:12px 0;">
+                        <img src="../images/dental_health_kids_example.png" alt="ผลลัพธ์: Infographic สุขภาพฟันเด็ก" style="max-width:340px; width:100%; border-radius:10px; box-shadow:0 3px 12px rgba(0,0,0,0.15); border:1px solid #e0e0e0;">
+                        <p style="font-size:0.8em; color:#888; margin-top:6px;"><i class="fas fa-image"></i> ตัวอย่างผลลัพธ์จาก Prompt นี้</p>
+                    </div>
+                </div>
+
+                <h4><i class="fas fa-bug"></i> Infographic ด้านโรคติดต่อ</h4>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: อาการและการป้องกันไข้เลือดออก</div>
+                    <div class="prompt-content">[TH] Infographic ที่ครอบคลุมเรื่องไข้เลือดออก การจัดวาง:
+                        ส่วนหัวมีภาพประกอบยุงลาย ตามด้วย 4 ส่วนหลักในตาราง: อาการ, การป้องกัน (4Rs),
+                        สัญญาณที่ต้องไปพบแพทย์, และการดูแลที่บ้าน
+                        ใช้สีของหน่วยงานสาธารณสุข (ฟ้า ขาว แดงนิดหน่อยเพื่อเตือน) สไตล์มืออาชีพสะอาดตา
+
+                        [EN] Comprehensive infographic about dengue fever. Layout: header with mosquito illustration,
+                        followed by 4 main sections in grid: symptoms, prevention (4Rs), treatment seeking signs,
+                        and home care. Use health authority colors (blue, white, bit of red for warning).
+                        Professional clean style.</div>
+                    <p class="prompt-note">💡 Infographic เตือนภัยโรคไข้เลือดออก สำหรับชุมชน</p>
+                    <div style="text-align:center; margin:12px 0;">
+                        <img src="../images/dengue_fever_infographic.png" alt="ผลลัพธ์: Infographic ไข้เลือดออก" style="max-width:340px; width:100%; border-radius:10px; box-shadow:0 3px 12px rgba(0,0,0,0.15); border:1px solid #e0e0e0;">
+                        <p style="font-size:0.8em; color:#888; margin-top:6px;"><i class="fas fa-image"></i> ตัวอย่างผลลัพธ์จาก Prompt นี้</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="sec5-tips">
+                <h3>5.4 เทคนิคการปรับปรุง Prompt</h3>
+                <p>หากภาพที่ได้ไม่ตรงความต้องการ สามารถปรับปรุงได้หลายวิธี:</p>
+                <div class="box tipbox">
+                    <div class="box-title"><i class="fas fa-lightbulb"></i> 3 วิธีปรับปรุง Prompt สร้างภาพ</div>
+                    <ul>
+                        <li><strong>เพิ่มรายละเอียดเฉพาะ:</strong> ระบุสีเสื้อกาวน์ อายุของตัวละคร หรือเพิ่มรอยยิ้ม</li>
+                        <li><strong>ปรับสไตล์:</strong> เปลี่ยนให้เป็นการ์ตูนมากขึ้น หรือปรับเส้นสายให้นุ่มนวลลง</li>
+                        <li><strong>เปลี่ยนมุมมองและองค์ประกอบ:</strong> ปรับมุมกล้อง หรือจัดวางตำแหน่งตัวละครใหม่</li>
+                    </ul>
+                </div>
+
+                <div class="box warningbox">
+                    <div class="box-title"><i class="fas fa-exclamation-triangle"></i> ข้อควรระวังในการสร้างภาพทางการแพทย์</div>
+                    <div class="box-content">
+                        <ul>
+                            <li><strong>ความถูกต้องทางกายวิภาค:</strong> ตรวจสอบจากแหล่งอ้างอิงที่น่าเชื่อถือ</li>
+                            <li><strong>ความเหมาะสมทางวัฒนธรรม:</strong> คำนึงถึงความหลากหลายของผู้คน</li>
+                            <li><strong>สัญลักษณ์ที่เป็นสากล:</strong> ใช้สัญลักษณ์ที่เข้าใจง่าย</li>
+                            <li><strong>ความชัดเจน:</strong> ไม่สร้างความเข้าใจผิด</li>
+                            <li><strong>ลิขสิทธิ์:</strong> ตรวจสอบสิทธิ์การใช้งานและอ้างอิงแหล่งที่มา</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="box tipbox">
+                    <div class="box-title"><i class="fas fa-magic"></i> เคล็ดลับการสร้างภาพให้ได้ผลดี</div>
+                    <ul>
+                        <li><strong>ใช้คำศัพท์เฉพาะทาง:</strong> ภาษาอังกฤษมีผลลัพธ์ดีกว่า ใช้ศัพท์ทางศิลปะ/การออกแบบ
+                        </li>
+                        <li><strong>ระบุสไตล์ชัดเจน:</strong> อ้างอิงสไตล์ที่รู้จัก เช่น "medical textbook
+                            illustration", "modern infographic"</li>
+                        <li><strong>กำหนดสัดส่วน:</strong> ระบุ "vertical poster", "horizontal banner", "square social
+                            media post"</li>
+                        <li><strong>ทดลองหลายรอบ:</strong> สร้างหลายเวอร์ชันและเลือกที่ดีที่สุด</li>
+                        <li><strong>บันทึก Prompt ที่ได้ผล:</strong> เก็บไว้ใช้ซ้ำและปรับแต่งต่อ</li>
+                        <li><strong>ใช้ Reference:</strong> อธิบายอ้างอิงภาพที่มีอยู่ เช่น "like WHO infographic style"
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="sec5-examples">
+                <h3>5.5 ตัวอย่างผลลัพธ์จากการใช้งานจริง</h3>
+
+                <p>ต่อไปนี้คือตัวอย่าง Prompt สำหรับสื่อ PR ต่างๆ ที่สามารถสร้างได้ใน 5-10 นาที:</p>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> ตัวอย่าง 1: โปสเตอร์รณรงค์ล้างมือ</div>
+                    <div class="prompt-content">[EN] Create a professional health campaign poster in Thai about proper
+                        handwashing technique, with 6 illustrated steps, clean blue and white design, healthcare blue
+                        color scheme, professional medical style
+
+                        [TH] สร้างโปสเตอร์รณรงค์สุขภาพภาษาไทยแบบมืออาชีพเกี่ยวกับเทคนิคการล้างมือที่ถูกต้อง มีภาพประกอบ
+                        6 ขั้นตอน ดีไซน์สะอาดตาด้วยสีฟ้าและขาว ใช้โทนสีฟ้าทางการแพทย์ สไตล์การแพทย์ระดับมืออาชีพ</div>
+                    <p class="prompt-note">💡 เหมาะสำหรับติดในโรงพยาบาลหรือสถานีอนามัย</p>
+                    <div style="text-align:center; margin:12px 0;">
+                        <img src="../images/poster_handwash.png" alt="ผลลัพธ์: โปสเตอร์ล้างมือ" style="max-width:340px; width:100%; border-radius:10px; box-shadow:0 3px 12px rgba(0,0,0,0.15); border:1px solid #e0e0e0;">
+                        <p style="font-size:0.8em; color:#888; margin-top:6px;"><i class="fas fa-image"></i> ตัวอย่างผลลัพธ์จาก Prompt นี้</p>
+                    </div>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> ตัวอย่าง 2: Infographic ดูแลเบาหวาน</div>
+                    <div class="prompt-content">[EN] Modern healthcare infographic about diabetes care in Thai, 5 steps
+                        with icons, teal blue and orange colors, flat design, professional healthcare aesthetic
+
+                        [TH] Infographic สุขภาพสมัยใหม่เกี่ยวกับการดูแลเบาหวานเป็นภาษาไทย มี 5 ขั้นตอนพร้อมไอคอน
+                        ใช้สีฟ้าอมเขียว (teal) และส้ม สไตล์ flat design ความสวยงามแบบมืออาชีพทางการแพทย์</div>
+                    <p class="prompt-note">💡 เหมาะสำหรับแผ่นพับแจก หรือโพสต์ Social Media</p>
+                    <div style="text-align:center; margin:12px 0;">
+                        <img src="../images/infographic_diabetes.png" alt="ผลลัพธ์: Infographic เบาหวาน" style="max-width:340px; width:100%; border-radius:10px; box-shadow:0 3px 12px rgba(0,0,0,0.15); border:1px solid #e0e0e0;">
+                        <p style="font-size:0.8em; color:#888; margin-top:6px;"><i class="fas fa-image"></i> ตัวอย่างผลลัพธ์จาก Prompt นี้</p>
+                    </div>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> ตัวอย่าง 3: โพสต์ Social Media - วัคซีน HPV
+                    </div>
+                    <div class="prompt-content">[EN] Engaging social media post about HPV vaccination in Thai, square
+                        format, purple-pink gradient, shield icon, 3 key points with emoji, modern friendly healthcare
+                        design
+
+                        [TH] โพสต์ Social Media ที่น่าสนใจเกี่ยวกับวัคซีน HPV เป็นภาษาไทย รูปแบบสี่เหลี่ยมจัตุรัส
+                        ใช้การไล่ระดับสีม่วง-ชมพู มีไอคอนรูปโล่ 3 ประเด็นสำคัญพร้อมอีโมจิ
+                        ดีไซน์สุขภาพที่ทันสมัยและเป็นมิตร</div>
+                    <p class="prompt-note">💡 รูปแบบ Square เหมาะสำหรับ Instagram และ Facebook</p>
+                    <div style="text-align:center; margin:12px 0;">
+                        <img src="../images/social_hpv.png" alt="ผลลัพธ์: โพสต์ HPV" style="max-width:340px; width:100%; border-radius:10px; box-shadow:0 3px 12px rgba(0,0,0,0.15); border:1px solid #e0e0e0;">
+                        <p style="font-size:0.8em; color:#888; margin-top:6px;"><i class="fas fa-image"></i> ตัวอย่างผลลัพธ์จาก Prompt นี้</p>
+                    </div>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> ตัวอย่าง 4: แผ่นพับคู่มือผู้ป่วย</div>
+                    <div class="prompt-content">[EN] Patient education leaflet about diabetic wound care in Thai,
+                        tri-fold design, soft green color, medical cross symbol, 4 warning signs with red icons, caring
+                        visual tone
+
+                        [TH] แผ่นพับให้ความรู้ผู้ป่วยเกี่ยวกับการดูแลแผลเบาหวานเป็นภาษาไทย ดีไซน์แบบพับ 3 ตอน
+                        สีเขียวอ่อน สัญลักษณ์กากบาทแพทย์ 4 สัญญาณเตือนพร้อมไอคอนสีแดง โทนภาพที่ดูใส่ใจและห่วงใย</div>
+                    <p class="prompt-note">💡 เหมาะเป็นคู่มือแจกผู้ป่วยนำกลับไปดูแลตนเองที่บ้าน</p>
+                    <div style="text-align:center; margin:12px 0;">
+                        <img src="../images/leaflet_wound.png" alt="ผลลัพธ์: แผ่นพับดูแลแผล" style="max-width:340px; width:100%; border-radius:10px; box-shadow:0 3px 12px rgba(0,0,0,0.15); border:1px solid #e0e0e0;">
+                        <p style="font-size:0.8em; color:#888; margin-top:6px;"><i class="fas fa-image"></i> ตัวอย่างผลลัพธ์จาก Prompt นี้</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="sec5-workshop">
+                <h3>Workshop: สร้างภาพสุขภาพ</h3>
+
+                <div class="box exercisebox">
+                    <div class="box-title"><i class="fas fa-flask"></i> แบบฝึกหัด: สร้าง Infographic ด่วน (25 นาที)
+                    </div>
+                    <p><strong>สถานการณ์:</strong> ต้องจัดอบรมผู้ดูแลผู้ป่วยเรื่อง "วิธีเคลื่อนย้ายผู้ป่วยอย่างปลอดภัย"
+                        อย่างเร่งด่วน แต่ขาดแคลนสื่อประกอบ</p>
+                    <p><strong>เนื้อหาที่ต้องมี:</strong></p>
+                    <ul>
+                        <li>หลักการเคลื่อนย้ายผู้ป่วยที่ถูกต้อง (4 หลักการ)</li>
+                        <li>ท่าทางที่ถูกต้องของผู้ช่วย</li>
+                        <li>ข้อควรระวังสำคัญ</li>
+                        <li>ข้อห้าม</li>
+                    </ul>
+                    <p><strong>ขั้นตอน:</strong> วิเคราะห์ข้อมูล → เขียน Prompt → สร้างภาพ → ประเมินผล → ปรับปรุง</p>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> ตัวอย่าง Prompt เฉลย: Infographic
+                        เคลื่อนย้ายผู้ป่วย</div>
+                    <div class="prompt-content">[TH] Infographic แนวตั้ง แบ่งเป็น 4 ส่วนเทคนิคการเคลื่อนย้ายผู้ป่วย:
+                        1.จัดท่าทาง 2.ย่อเข่า 3.ยกประคอง 4.วางลง สไตล์ flat design สะอาดตา ใช้สีฟ้าและเขียวทางการแพทย์
+                        มีไอคอนลูกศรแสดงทิศทาง ชัดเจนและปลอดภัย
+
+                        [EN] Vertical infographic divided into 4 sections showing safe patient transfer techniques:
+                        1.Positioning 2.Squatting 3.Lifting 4.Placing. Clean flat design style, medical blue and green
+                        colors, arrow icons showing direction, clear and safe instructions.</div>
+                    <p class="prompt-note">💡 Prompt เฉลยสำหรับแบบฝึกหัดด้านบน</p>
+                </div>
+
+                <div class="box exercisebox">
+                    <div class="box-title"><i class="fas fa-flask"></i> 30-Minute Challenge: สื่อสุขภาพสร้างสรรค์</div>
+                    <p><strong>โจทย์:</strong> สร้างสื่อสุขภาพที่แปลกใหม่และน่าสนใจที่สุด! เลือก 1 ประเภท:</p>
+                    <ul>
+                        <li><strong>กลอนรณรงค์สุขภาพ</strong> - ใช้ Gemini สร้างกลอนสุภาพ 4 บท เรื่องการล้างมือ</li>
+                        <li><strong>เพลงสั้นสุขภาพ</strong> - สร้างเนื้อเพลงสั้นๆ (1 นาที) รณรงค์กินผัก</li>
+                        <li><strong>เกมทายปัญหา</strong> - สร้างคำถาม 10 ข้อเกี่ยวกับวัคซีน แบบสนุกๆ</li>
+                        <li><strong>นิทานสุขภาพ</strong> - สร้างนิทานสั้นสอนเด็กเรื่องการแปรงฟัน</li>
+                        <li><strong>Comics Strip</strong> - เนื้อหา 4-panel comics เรื่องการออกกำลังกาย</li>
+                    </ul>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> ตัวอย่าง Prompt เฉลย: Comics Strip</div>
+                    <div class="prompt-content">[TH] Comics strip 4 ช่อง เรื่องการออกกำลังกายของผู้สูงอายุ ช่อง 1:
+                        คุณยายนั่งดูทีวีแล้วปวดหลัง ช่อง 2: หลานชวนไปเดินเล่น ช่อง 3: เดินแกว่งแขนในสวนอย่างมีความสุข
+                        ช่อง 4: กลับบ้านมารู้สึกสดชื่น สไตล์ลายเส้นการ์ตูนน่ารัก สีสันสดใส
+
+                        [EN] 4-panel comic strip about elderly exercise. Panel 1: Grandma watching TV with back pain.
+                        Panel 2: Grandchild inviting her for a walk. Panel 3: Walking and swinging arms happily in a
+                        park. Panel 4: Feeling refreshed back home. Cute cartoon line art style, vibrant colors.</div>
+                    <p class="prompt-note">💡 เหมาะสำหรับ Social Media สร้างความสนุกในการเรียนรู้</p>
+                </div>
+
+                <div class="box exercisebox">
+                    <div class="box-title"><i class="fas fa-flask"></i> โปรเจคจริง: สร้างชุดสื่อสุขศึกษาครบวงจร</div>
+                    <p><strong>โจทย์:</strong> สร้างสื่อสำหรับแคมเปญ "สุขภาพดีเริ่มที่บ้าน" จำนวน 5 ชิ้น:</p>
+                    <ul>
+                        <li><strong>โปสเตอร์หลัก</strong> - ภาพรวมแคมเปญ</li>
+                        <li><strong>Infographic</strong> - 5 กิจกรรมเพื่อสุขภาพที่ทำได้ที่บ้าน</li>
+                        <li><strong>Social Media Post</strong> - ภาพสี่เหลี่ยมจัตุรัสสำหรับ Facebook/Instagram</li>
+                        <li><strong>Flyer</strong> - แผ่นพับข้อมูล 2 หน้า</li>
+                        <li><strong>Banner</strong> - สำหรับหน้าเว็บไซต์</li>
+                    </ul>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> ตัวอย่าง Prompt เฉลย: โปสเตอร์หลักแคมเปญ</div>
+                    <div class="prompt-content">[TH] โปสเตอร์หลักแคมเปญ 'สุขภาพดีเริ่มที่บ้าน' ภาพครอบครัว (พ่อ แม่ ลูก
+                        ปู่ ย่า) ทำกิจกรรมร่วมกันในบ้านที่อบอุ่น เช่น ทำอาหาร หรือปลูกต้นไม้ สีเขียวและส้มแสด
+                        สไตล์ภาพประกอบอบอุ่น ทันสมัย มีพื้นที่ว่างสำหรับโลโก้และสโลแกน
+
+                        [EN] Main campaign poster 'Health Starts at Home'. Illustration of a multigenerational family
+                        (parents, kids, grandparents) doing activities together in a cozy home, like cooking or
+                        gardening. Warm green and orange colors. Modern heartwarming illustration style. Copy space for
+                        logo and slogan.</div>
+                    <p class="prompt-note">💡 Prompt ตัวอย่างสำหรับโปสเตอร์หลักแคมเปญ</p>
+                </div>
+            </div>
+
+            <h4>Case Studies: สถานการณ์จริงในการสร้างภาพ</h4>
+            <div class="box exercisebox">
+                <div class="box-title"><i class="fas fa-briefcase"></i> ตัวอย่าง Prompt สำหรับสถานการณ์สร้างภาพต่างๆ</div>
+                <p>5-6 ตัวอย่างสถานการณ์การสร้างภาพสื่อสุขภาพ พร้อม Prompt ที่พร้อมใช้งาน</p>
+            </div>
+
+            <h5><i class="fas fa-bullhorn"></i> Case Study 1: โปสเตอร์รณรงค์ด่วน</h5>
+            <div class="prompt-card">
+                <div class="prompt-title"><i class="fas fa-star"></i> Prompt: โปสเตอร์รณรงค์งดเหล้าเข้าพรรษา</div>
+                <div class="prompt-content">[Task] สร้างโปสเตอร์รณรงค์ "งดเหล้าเข้าพรรษา 3 เดือน" สำหรับติดในชุมชน
+
+[Context]
+- กลุ่มเป้าหมาย: ผู้ใหญ่ในชุมชน อายุ 30-60 ปี
+- ขนาด: A3 แนวตั้ง
+- ต้องการให้ดูน่าเชื่อถือ แต่ไม่ดูดีเกินไปจนดูไม่เหมือนของชุมชน
+- ต้องมีพื้นที่ติดข้อมูลติดต่อสาธารณสุข
+
+[องค์ประกอบที่ต้องการ]
+- ภาพพระหรือสัญลักษณ์เข้าพรรษาที่เคารพ
+- ข้อความ Headline ชัดเจน อ่านง่ายจากระยะไกล
+- ประโยชน์ของการงดเหล้า 3 ข้อ
+- QR Code พื้นที่ (ระบุไว้เฉยๆ)
+
+[Style] 
+- Flat design ที่ดูสบายตา
+- สีเหลืองทอง/ส้ม (สีเข้าพรรษา) ผสมเขียว
+- อารมณ์: สงบ มีสมาธิ เป็นกำลังใจ</div>
+                <p class="prompt-note">💡 โปสเตอร์รณรงค์ที่สื่อสารกับชุมชนได้จริง</p>
+            </div>
+
+            <h5><i class="fas fa-utensils"></i> Case Study 2: Infographic โภชนาการ</h5>
+            <div class="prompt-card">
+                <div class="prompt-title"><i class="fas fa-star"></i> Prompt: Infographic จานอาหารสำหรับผู้สูงอายุ</div>
+                <div class="prompt-content">[Task] สร้าง Infographic "จานอาหารที่เหมาะสมสำหรับผู้สูงอายุ"
+
+[Context]
+- สำหรับ: ผู้สูงอายุและผู้ดูแลที่บ้าน
+- รูปแบบ: Infographic แนวตั้ง A4 ที่แบ่งเป็นช่องชัดเจน
+- ต้องเข้าใจง่าย แม้ไม่มีพื้นฐานโภชนาการ
+
+[องค์ประกอบ]
+- ภาพจานอาหารจำลอง แบ่งเป็น 5 หมู่
+- สัดส่วนอาหารที่เหมาะสม (ใช้ภาพเปรียบเทียบ)
+- ตัวอย่างอาหารไทยในแต่ละหมู่ 3-4 อย่าง
+- ข้อควรระวังเฉพาะผู้สูงอายุ (เช่น อาหารนิ่ม ไม่เค็ม)
+- ข้อความชักชวน: "กินดี อายุยืน"
+
+[Style]
+- Modern flat illustration
+- สีสันสดใสแต่ไม่กระโดดมาก
+- ใช้รูปภาพประกอบอาหารไทยที่คุ้นเคย
+- ตัวอักษรขนาดใหญ่ อ่านง่าย</div>
+                <p class="prompt-note">💡 Infographic ให้ความรู้โภชนาการที่เข้าใจง่าย</p>
+            </div>
+
+            <h5><i class="fas fa-baby"></i> Case Study 3: สื่อสำหรับแม่และเด็ก</h5>
+            <div class="prompt-card">
+                <div class="prompt-title"><i class="fas fa-star"></i> Prompt: ภาพประกอบการดูแลทารกแรกเกิด</div>
+                <div class="prompt-content">[Task] สร้างชุดภาพประกอบ 4 ภาพ สำหรับแผ่นพับ "การดูแลทารกแรกเกิด 0-3 เดือน"
+
+[Context]
+- กลุ่มเป้าหมาย: คุณแม่มือใหม่
+- รูปแบบ: ภาพประกอบแนวตั้ง 4 ช่องบนแผ่นพับพับ 3 ตอน
+- ต้องดูอบอุ่น น่าไว้วางใจ
+
+[4 หัวข้อที่ต้องการ]
+1. การอาบน้ำทารกที่ถูกต้อง
+2. การให้นมและการหลังให้นม
+3. การเปลี่ยนผ้าอ้อมและดูแลผิว
+4. สัญญาณอันตรายที่ต้องพบแพทย์
+
+[Style]
+- Soft watercolor หรือ soft digital illustration
+- สีพาสเทล โทนอุ่น (ชมพูอ่อน ครีม ฟ้าอ่อน)
+- ตัวละคร: แม่ที่ดูอ่อนโยน + ทารกน่ารัก
+- บรรยากาศ: อบอุ่น ปลอดภัย ห้องนอนที่สว่างสะอาด</div>
+                <p class="prompt-note">💡 สื่อสำหรับแม่และเด็กต้องอบอุ่นและน่าเชื่อถือ</p>
+            </div>
+
+            <h5><i class="fas fa-running"></i> Case Study 4: สื่อส่งเสริมการออกกำลังกาย</h5>
+            <div class="prompt-card">
+                <div class="prompt-title"><i class="fas fa-star"></i> Prompt: โปสเตอร์ชวนออกกำลังกายสำหรับผู้สูงอายุ</div>
+                <div class="prompt-content">[Task] สร้างโปสเตอร์ "ลดหน้าท้อง เพิ่มสุขภาพ" สำหรับผู้สูงอายุ
+
+[Context]
+- กลุ่มเป้าหมาย: ผู้สูงอายุ 60+ ที่เพิ่งเริ่มออกกำลังกาย
+- ต้องการแก้ความเชื่อผิดๆ ว่า "แก่แล้วอย่าออกกำลังกาย"
+- ขนาด: A2 สำหรับติดที่ศูนย์สุขภาพชุมชน
+
+[องค์ประกอบ]
+- ภาพคุณตาคุณยายยิ้มแย้มกำลังเดินเล่น/ตีแบด/โยคะ
+- Headline: "อายุเป็นเพียงตัวเลข สุขภาพดีได้ทุกวัย"
+- ประโยชน์ของการออกกำลังกาย 4 ข้อ (เข้าใจง่าย)
+- กิจกรรมที่แนะนำ: เดิน ว่ายน้ำ โยคะ รำไทย
+- เบอร์โทรสอบถาม: [เว้นว่าง]
+
+[Style]
+- สีสันสดใสแต่ไม่กระโดดมาก
+- ตัวละครดูมีชีวิตชีวา แข็งแรง น่าอิจฉา
+- อารมณ์: สนุก เป็นกำลังใจ ไม่ตื่นตระหนก</div>
+                <p class="prompt-note">💡 สื่อกระตุ้นให้ผู้สูงอายุอยากออกกำลังกาย</p>
+            </div>
+
+            <h5><i class="fas fa-hospital"></i> Case Study 5: สื่อให้ความรู้ในโรงพยาบาล</h5>
+            <div class="prompt-card">
+                <div class="prompt-title"><i class="fas fa-star"></i> Prompt: ชุด Infographic ทางเดินโรงพยาบาล</div>
+                <div class="prompt-content">[Task] สร้างชุด Infographic 5 ภาพ สำหรับติดทางเดินในโรงพยาบาล
+
+[Context]
+- ตำแหน่ง: ทางเดินจากลิฟต์ไปแต่ละแผนก
+- ขนาด: แนวนอน A2 ต่อภาพ
+- ต้องดูมืออาชีพ สบายตา เห็นชัดจากระยะไกล
+
+[5 หัวข้อ]
+1. แผนกผู้ป่วยใน (IPD) - ชั้น 5
+2. ห้องฉุกเฉิน (ER) - ชั้น 1 ฝั่งซ้าย
+3. แผนกผู้ป่วยนอก (OPD) - ชั้น 2
+4. ห้องผ่าตัดและห้องคลอด - ชั้น 3
+5. แผนกเวชระเบียนและการเงิน - ชั้น 1 ฝั่งขวา
+
+[Style]
+- Modern healthcare illustration
+- ไอคอนชัดเจน มาตรฐานสากล
+- สีฟ้า-เขียวทางการแพทย์
+- ตัวอักษรใหญ่ อ่านง่าย มีลูกศรชี้ทาง
+- มี QR Code สำหรับแผนที่ออนไลน์ (เว้นว่างไว้)</div>
+                <p class="prompt-note">💡 สื่อ wayfinding ในโรงพยาบาลต้องชัดเจนและมืออาชีพ</p>
+            </div>
+
+            <h5><i class="fas fa-mobile-alt"></i> Case Study 6: สื่อสำหรับ Social Media</h5>
+            <div class="prompt-card">
+                <div class="prompt-title"><i class="fas fa-star"></i> Prompt: ชุด Instagram Carousel สุขภาพจิต</div>
+                <div class="prompt-content">[Task] สร้างชุดภาพสำหรับ Instagram Carousel 5 สไลด์ เรื่อง "ดูแลสุขภาพจิตวันละนิด"
+
+[Context]
+- กลุ่มเป้าหมาย: วัยทำงาน 25-40 ปี
+- รูปแบบ: Square 1:1 สำหรับ Instagram
+- ต้องน่าสนใจพอให้ swipe ดูต่อ
+
+[5 สไลด์]
+1. Cover: "ดูแลสุขภาพจิตวันละนิด" + ภาพดึงดูด
+2. สไลด์ 1: "ตื่นนอน 5 นาที หายใจลึกๆ" + ภาพสมาธิ
+3. สไลด์ 2: "พักสายตาจากจอทุก 20 นาที" + ภาพพักผ่อน
+4. สไลด์ 3: "เดินเล่น 10 นาทีหลังอาหาร" + ภาพเดิน
+5. สไลด์ 4: "นอน 7-8 ชั่วโมง" + Call-to-Action
+
+[Style]
+- Minimalist flat design
+- สีสันสดใสแต่สบายตา (mint green, soft yellow, pastel blue)
+- ไอคอนชัดเจน ไม่ซับซ้อน
+- ข้อความน้อย กระชับ อ่านใน 3 วินาทีได้
+- มี branded element (เว้นว่างสำหรับใส่โลโก้)</div>
+                <p class="prompt-note">💡 สื่อ Social Media ต้องดึงดูดและอ่านง่ายในเวลาสั้น</p>
+            </div>
+        </div>
+
+        <!-- Section 6: Image-to-Prompt / Vision -->
+        <div id="section6" class="section-container">
+            <h2>6. เทคนิคการแปลงรูปภาพเป็น Prompt (Image-to-Prompt)</h2>
+
+            <div class="box infobox">
+                <div class="box-title"><i class="fas fa-eye"></i> Vision Capability ของ Gemini</div>
+                <p>Google Gemini มีความสามารถพิเศษในการ "มองเห็น" และวิเคราะห์รูปภาพ (Vision) ซึ่งช่วยให้สามารถ:</p>
+                <ul>
+                    <li><strong>อธิบายรูปภาพ</strong> — บรรยายสิ่งที่เห็นในภาพอย่างละเอียด</li>
+                    <li><strong>วิเคราะห์การออกแบบ</strong> — แยกแยะองค์ประกอบ สี สไตล์ การจัดวาง</li>
+                    <li><strong>สร้าง Prompt จากภาพ</strong> — แปลงภาพที่ชอบกลับเป็น prompt
+                        เพื่อสร้างภาพใหม่ในสไตล์เดียวกัน</li>
+                    <li><strong>เปรียบเทียบภาพ</strong> — หาความเหมือน/ต่างระหว่างภาพ</li>
+                    <li><strong>อ่านข้อความจากภาพ</strong> — OCR จากภาพถ่ายหรือเอกสาร</li>
+                </ul>
+            </div>
+
+            <div id="sec6-vision">
+                <h3>6.1 การวิเคราะห์ภาพ 3 ระดับ</h3>
+
+                <h4>ระดับ 1: การบรรยายภาพเบื้องต้น</h4>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: บรรยายภาพ</div>
+                    <div class="prompt-content">[TH] อธิบายรายละเอียดของภาพนี้อย่างละเอียด ครอบคลุม: ตัวละคร/วัตถุหลัก,
+                        สถานที่/ฉากหลัง, สีสัน, มุมกล้อง, แสงเงา, บรรยากาศ, และรายละเอียดเล็กๆ ที่น่าสนใจ
+
+                        [EN] Describe this image in detail, covering: main subjects/objects, setting/background, colors,
+                        camera angle, lighting, mood/atmosphere, and any interesting small details.</div>
+                    <p class="prompt-note">💡 อัพโหลดรูปภาพพร้อม Prompt นี้เพื่อให้ Gemini บรรยายภาพ</p>
+                </div>
+
+                <h4>ระดับ 2: การวิเคราะห์การออกแบบ</h4>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: วิเคราะห์การออกแบบ</div>
+                    <div class="prompt-content">[TH] วิเคราะห์การออกแบบของภาพนี้อย่างเจาะลึก:
+                        1. สไตล์การออกแบบ (Design Style): Flat? 3D? Minimalist? Realistic?
+                        2. Color Palette: สีหลัก สีรอง สีเน้น พร้อมค่า HEX
+                        3. Typography: แบบอักษรที่ใช้ ขนาด น้ำหนัก
+                        4. Layout: การจัดวาง Grid ลำดับชั้น
+                        5. ไอคอนและกราฟิก: รูปแบบ ขนาด ความสม่ำเสมอ
+                        6. จุดเด่นของการออกแบบ: สิ่งที่ทำให้ภาพนี้โดดเด่น
+
+                        [EN] Analyze the design of this image in depth:
+                        1. Design Style: Flat? 3D? Minimalist? Realistic?
+                        2. Color Palette: Primary, secondary, accent colors with HEX values
+                        3. Typography: Font styles, sizes, weights
+                        4. Layout: Grid structure, hierarchy
+                        5. Icons and Graphics: Style, size, consistency
+                        6. Design Highlights: What makes this design stand out</div>
+                    <p class="prompt-note">💡 ใช้วิเคราะห์ Infographic หรือโปสเตอร์ที่ชอบ เพื่อเรียนรู้เทคนิค</p>
+                </div>
+
+                <h4>ระดับ 3: การสร้าง Prompt จากภาพ</h4>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: แปลงภาพเป็น Prompt</div>
+                    <div class="prompt-content">[TH] ดูภาพนี้แล้วเขียน prompt ที่สามารถใช้สร้างภาพในสไตล์เดียวกันได้ โดย
+                        prompt ต้องครอบคลุม:
+                        - Subject: อะไรเป็นจุดสนใจหลัก
+                        - Style: สไตล์ทางศิลปะ (ให้ระบุชื่อสไตล์ที่ใกล้เคียงที่สุด)
+                        - Colors: โทนสีและ Palette ที่ใช้
+                        - Mood: บรรยากาศและอารมณ์
+                        - Composition: การจัดวางองค์ประกอบ
+                        - Details: รายละเอียดสำคัญที่ห้ามลืม
+
+                        กรุณาเขียน prompt ทั้งภาษาไทยและอังกฤษ
+
+                        [EN] Look at this image and write a prompt that could recreate a similar image. The prompt must
+                        cover:
+                        - Subject: What is the main focus
+                        - Style: Art style (specify the closest style name)
+                        - Colors: Color tone and palette used
+                        - Mood: Atmosphere and emotion
+                        - Composition: Layout and arrangement
+                        - Details: Important details that must be included
+
+                        Please write the prompt in both Thai and English.</div>
+                    <p class="prompt-note">💡 Reverse Engineering! แปลงภาพที่ชอบกลับเป็น prompt
+                        เพื่อสร้างภาพในสไตล์คล้ายกัน</p>
+                </div>
+            </div>
+
+            <div id="sec6-analysis">
+                <h3>6.2 การวิเคราะห์สื่อเพื่อปรับปรุง</h3>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: ให้คะแนนและข้อเสนอแนะ</div>
+                    <div class="prompt-content">[TH] ช่วยวิเคราะห์และให้คะแนนสื่อ Infographic/โปสเตอร์นี้ในแต่ละด้าน
+                        (คะแนน 1-10):
+                        1. การสื่อสารข้อมูล: เข้าใจง่ายหรือไม่
+                        2. การออกแบบ: สวยงาม สะอาดตาหรือไม่
+                        3. การใช้สี: เหมาะสมกับเนื้อหาหรือไม่
+                        4. Typography: อ่านง่ายหรือไม่
+                        5. การจัดวาง: มีลำดับชั้นชัดเจนหรือไม่
+
+                        และให้ข้อเสนอแนะ 3 ข้อที่จะทำให้ดียิ่งขึ้น
+
+                        [EN] Analyze and rate this infographic/poster in each aspect (score 1-10):
+                        1. Information Communication: Is it easy to understand?
+                        2. Design: Is it visually appealing and clean?
+                        3. Color Usage: Appropriate for the content?
+                        4. Typography: Easy to read?
+                        5. Layout: Clear hierarchy?
+
+                        And provide 3 suggestions for improvement.</div>
+                    <p class="prompt-note">💡 ใช้ Gemini เป็น "นักวิจารณ์สื่อ" เพื่อปรับปรุงผลงาน</p>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: สร้างภาพใหม่จากภาพเดิม</div>
+                    <div class="prompt-content">[TH] ดูภาพต้นฉบับนี้ แล้วช่วยปรับปรุงด้วยการเขียน prompt ใหม่ที่:
+                        - คงจุดเด่นเดิมไว้
+                        - แก้ไขจุดอ่อนที่วิเคราะห์ได้
+                        - เพิ่มความทันสมัย
+                        - ปรับสีสันให้สดใสขึ้น
+                        - ปรับให้เหมาะสำหรับ Social Media มากขึ้น
+
+                        เขียน prompt ใหม่ที่พร้อมใช้งานสร้างภาพ
+
+                        [EN] Look at this original image and help improve it by writing a new prompt that:
+                        - Keeps the existing strengths
+                        - Fixes identified weaknesses
+                        - Makes it more modern
+                        - Brightens the color palette
+                        - Optimizes for social media
+
+                        Write a ready-to-use image generation prompt.</div>
+                    <p class="prompt-note">💡 ใช้สำหรับปรับปรุงสื่อเก่าให้ทันสมัย</p>
+                </div>
+            </div>
+
+            <div id="sec6-generate">
+                <h3>6.3 กรณีศึกษา: สร้างโปสเตอร์สไตล์เดียวกัน</h3>
+
+                <p>สมมุติว่าเห็นโปสเตอร์สุขภาพที่สวยมากและต้องการสร้างโปสเตอร์ในแนวเดียวกันแต่เปลี่ยนเนื้อหา ทำได้ 3
+                    ขั้นตอน:</p>
+                <div class="box tipbox">
+                    <div class="box-title"><i class="fas fa-check-circle"></i> 3 ขั้นตอน Reverse Engineering ภาพ</div>
+                    <ul>
+                        <li><strong>ขั้นตอน 1:</strong> อัพโหลดภาพต้นแบบ + ใช้ Prompt ระดับ 3 เพื่อแปลงเป็น Prompt</li>
+                        <li><strong>ขั้นตอน 2:</strong> แก้ไข Prompt — เปลี่ยนเนื้อหาแต่คง Style, Color, Mood เดิม</li>
+                        <li><strong>ขั้นตอน 3:</strong> สร้างภาพใหม่จาก Prompt ที่แก้ไข แล้วปรับแต่งเพิ่มเติม</li>
+                    </ul>
+                </div>
+
+                <h4><i class="fas fa-hospital"></i> Usecase จริง: Infographic ไข้หวัดใหญ่ โรงพยาบาลรามาธิบดี</h4>
+                <p>ตัวอย่างโปสเตอร์สุขศึกษาจากโรงพยาบาลรามาธิบดี — ใช้เป็นภาพต้นแบบสำหรับฝึก Image-to-Prompt</p>
+
+                <div style="text-align: center; margin: 15px 0;">
+                    <img src="../images/influenza-infographic-rama.jpg"
+                        alt="Infographic ไข้หวัดใหญ่ โรงพยาบาลรามาธิบดี"
+                        style="max-width: 420px; width: 100%; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.15); border: 2px solid #e0e0e0;">
+                    <p style="font-size: 0.85em; color: #757575; margin-top: 8px;">
+                        <i class="fas fa-copyright"></i> ที่มา: <a href="https://www.rama.mahidol.ac.th/ramachannel/" target="_blank" style="color: #1565c0;">Rama Channel — โรงพยาบาลรามาธิบดี</a>
+                    </p>
+                </div>
+
+                <div class="box exercisebox" style="margin-top: 15px;">
+                    <div class="box-title"><i class="fas fa-tasks"></i> ฝึกปฏิบัติ: วิเคราะห์และ Reverse Engineer โปสเตอร์นี้</div>
+                    <p><strong>ขั้นตอนที่ 1 — วิเคราะห์การออกแบบ:</strong> อัพโหลดรูปนี้ไปยัง Gemini พร้อม Prompt:</p>
+                    <div class="prompt-content" style="margin: 8px 0; border-radius: 8px;">วิเคราะห์การออกแบบของ Infographic นี้อย่างละเอียด:
+1. สไตล์การออกแบบ (Flat / 3D / Minimalist?)
+2. Color Palette: สีหลัก สีรอง พร้อมค่า HEX โดยประมาณ
+3. Typography: รูปแบบตัวอักษร ขนาด น้ำหนัก
+4. Layout: การจัดวาง ลำดับการอ่าน
+5. ไอคอนและกราฟิก: รูปแบบและความสม่ำเสมอ
+6. จุดเด่นที่ทำให้สื่อสารได้ดี</div>
+                    <p style="margin-top: 12px;"><strong>ขั้นตอนที่ 2 — สร้าง Prompt ใหม่:</strong> ขอให้ Gemini เขียน Prompt สำหรับสร้างโปสเตอร์ในสไตล์เดียวกัน แต่เปลี่ยนหัวข้อเป็น <strong>"ไข้เลือดออก"</strong> หรือ <strong>"โรคเบาหวาน"</strong></p>
+                    <div class="prompt-content" style="margin: 8px 0; border-radius: 8px;">ดู Infographic ไข้หวัดใหญ่นี้ แล้วเขียน Prompt สำหรับสร้าง Infographic ใหม่เรื่อง "ไข้เลือดออก" ในสไตล์เดียวกันทุกประการ โดย:
+1. คง Color Palette, Layout, และสไตล์ไอคอนเดิม
+2. เปลี่ยนเนื้อหาเป็นข้อมูลไข้เลือดออก (อาการ, การป้องกัน, เมื่อไหร่ควรพบแพทย์)
+3. เขียน Prompt ทั้งภาษาไทยและอังกฤษ พร้อมใช้งานทันที</div>
+                </div>
+
+                <div class="prompt-card" style="margin-top: 15px;">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: สร้างโปสเตอร์คู่ในสไตล์เดียวกัน</div>
+                    <div class="prompt-content">[TH] ฉันมีโปสเตอร์เรื่อง [หัวข้อ A] ในสไตล์ที่ชอบมาก
+ต้องการสร้างโปสเตอร์เรื่อง [หัวข้อ B] ในสไตล์เดียวกันทุกประการ ช่วย:
+1. วิเคราะห์สไตล์ของภาพต้นแบบ
+2. เขียน prompt สำหรับสร้างโปสเตอร์ใหม่ในสไตล์เดียวกัน โดยเปลี่ยนเนื้อหาเป็น [หัวข้อ B]
+3. prompt ต้องรักษา: สไตล์, สีสัน, การจัดวาง, และบรรยากาศเดิม
+
+[EN] I have a poster about [Topic A] in a style I really like. I want to create a poster about
+[Topic B] in exactly the same style. Please:
+1. Analyze the style of this reference image
+2. Write a prompt to create a new poster in the same style, changing content to [Topic B]
+3. The prompt must maintain: style, colors, layout, and mood</div>
+                    <p class="prompt-note">💡 เปลี่ยน [หัวข้อ A] และ [หัวข้อ B] ตามต้องการ แล้วอัพโหลดรูปประกอบ</p>
+                </div>
+            </div>
+
+            <div id="sec6-pr">
+                <h3>6.4 สร้างสื่อ PR จากภาพถ่าย</h3>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: เขียนข่าวจากรูปกิจกรรม</div>
+                    <div class="prompt-content">[TH] ดูภาพถ่ายกิจกรรมนี้แล้วช่วย:
+                        1. เขียนข่าวสั้น 1 ย่อหน้า สำหรับเว็บไซต์หน่วยงาน
+                        2. เขียน Caption สำหรับ Facebook โพสต์พร้อม emoji ที่เหมาะสม
+                        3. เขียน Caption สำหรับ Instagram (สั้นกระชับ พร้อม hashtag 5-10 อัน)
+                        4. สร้างข้อความสำหรับ LINE Official Account
+
+                        โทนเสียง: เป็นทางการแต่เป็นมิตร
+
+                        [EN] Look at this activity photo and help:
+                        1. Write a 1-paragraph news blurb for organizational website
+                        2. Write a Facebook post caption with appropriate emoji
+                        3. Write an Instagram caption (concise, with 5-10 hashtags)
+                        4. Create a message for LINE Official Account
+
+                        Tone: Formal but friendly</div>
+                    <p class="prompt-note">💡 ถ่ายรูปกิจกรรม แล้วให้ Gemini ช่วยเขียน PR ได้ทันที!</p>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: สร้าง Storyboard จากรูป</div>
+                    <div class="prompt-content">[TH] ดูรูปถ่ายชุดนี้ (จากกิจกรรมสุขภาพ) แล้วช่วย:
+                        1. เรียงลำดับรูปเป็น Storyboard ที่เล่าเรื่องได้ดี
+                        2. เขียน Caption แต่ละรูป (สำหรับทำ Carousel Post)
+                        3. เขียน Cover slide text ที่จะดึงดูดคนให้ swipe ดู
+                        4. เขียน Call-to-Action สำหรับ slide สุดท้าย
+
+                        เขียนเป็น Social Media Carousel ที่พร้อม post
+
+                        [EN] Look at these photos (from a health activity) and help:
+                        1. Arrange them into a storytelling storyboard
+                        2. Write captions for each photo (for a Carousel Post)
+                        3. Write an engaging cover slide text
+                        4. Write a Call-to-Action for the last slide
+
+                        Write it ready for a social media carousel post.</div>
+                    <p class="prompt-note">💡 เปลี่ยนรูปถ่ายกิจกรรมให้เป็น Carousel Post สวยๆ</p>
+                </div>
+            </div>
+
+            <div id="sec6-workshop">
+                <h3>Workshop: ฝึก Image-to-Prompt</h3>
+
+                <div class="box exercisebox">
+                    <div class="box-title"><i class="fas fa-flask"></i> แบบฝึกหัด: Reverse Engineer ภาพสุขภาพ (20 นาที)
+                    </div>
+                    <p><strong>ขั้นตอน:</strong></p>
+                    <ul>
+                        <li><strong>ขั้นตอน 1:</strong> ค้นหาภาพ Infographic สุขภาพที่ชื่นชอบจากอินเทอร์เน็ต</li>
+                        <li><strong>ขั้นตอน 2:</strong> อัพโหลดไปยัง Gemini พร้อมใช้ Prompt ระดับ 3 เพื่อสร้าง prompt
+                        </li>
+                        <li><strong>ขั้นตอน 3:</strong> แก้ไข prompt เปลี่ยนหัวข้อเป็นเรื่องที่ต้องการ</li>
+                        <li><strong>ขั้นตอน 4:</strong> สร้างภาพใหม่จาก prompt ที่แก้ไข</li>
+                    </ul>
+                </div>
+
+                <div class="box exercisebox">
+                    <div class="box-title"><i class="fas fa-flask"></i> แบบฝึกหัด: สร้างสื่อ PR จากภาพกิจกรรมจริง (15 นาที)</div>
+                    <p><strong>ขั้นตอน:</strong></p>
+                    <ul>
+                        <li>ถ่ายรูปสิ่งที่อยู่รอบตัว หรือใช้รูปจากกิจกรรมที่ผ่านมา</li>
+                        <li>อัพโหลดไป Gemini พร้อม Prompt เขียนข่าว/PR</li>
+                        <li>สร้างโพสต์พร้อมลงทั้ง Facebook, Instagram, และ LINE</li>
+                    </ul>
+                    <p><strong>เป้าหมาย:</strong> สร้างคอนเทนต์ PR ครบ 3 แพลตฟอร์มจากรูปเดียว</p>
+                </div>
+
+                <h4>Case Studies: สถานการณ์จริงในการวิเคราะห์ภาพ</h4>
+                <div class="box exercisebox">
+                    <div class="box-title"><i class="fas fa-briefcase"></i> ตัวอย่างการใช้ Image-to-Prompt ในสถานการณ์ต่างๆ</div>
+                    <p>5-6 ตัวอย่างการนำ Image-to-Prompt ไปใช้งานจริง พร้อม Prompt ที่พร้อมใช้งาน</p>
+                </div>
+
+                <h5><i class="fas fa-copy"></i> Case Study 1: คัดลอกสไตล์โปสเตอร์ที่ชอบ</h5>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: วิเคราะห์และสร้างโปสเตอร์ในสไตล์เดียวกัน</div>
+                    <div class="prompt-content">[Task] ฉันเห็นโปสเตอร์สุขภาพที่สวยมาก และต้องการสร้างโปสเตอร์เรื่อง "การป้องกันโรคไข้หวัด" ในสไตล์เดียวกัน
+
+[Steps]
+1. วิเคราะห์สไตล์ของโปสเตอร์ต้นฉบับที่อัพโหลด:
+   - สไตล์ศิลปะ (Flat/3D/Minimalist/Realistic)
+   - Color Palette หลักและรอง พร้อมค่า HEX โดยประมาณ
+   - การจัดวางองค์ประกอบ (Layout)
+   - Typography style
+   - บรรยากาศ/อารมณ์ (Mood)
+
+2. เขียน Prompt ใหม่สำหรับสร้างโปสเตอร์ "การป้องกันโรคไข้หวัด" โดย:
+   - คงสไตล์ สี และการจัดวางเดิม
+   - เปลี่ยนเนื้อหาเป็นวิธีป้องกันไข้หวัด 5 ข้อ
+   - ใส่ Headline ชัดเจน
+   - มีพื้นที่สำหรับโลโก้หน่วยงาน
+
+3. เขียน Prompt ทั้งภาษาไทยและอังกฤษ พร้อมคำอธิบายสั้นๆ ว่าทำไมถึงเลือกสไตล์นี้</div>
+                    <p class="prompt-note">💡 ใช้สำหรับ "Reverse Engineering" โปสเตอร์ที่ชอบ</p>
+                </div>
+
+                <h5><i class="fas fa-camera"></i> Case Study 2: สร้างเนื้อหา PR จากรูปถ่ายกิจกรรม</h5>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: เขียนข่าวครบเซ็ตจากรูปกิจกรรม</div>
+                    <div class="prompt-content">[Task] ดูภาพถ่ายจากกิจกรรม "วันงดสูบบุหรี่โลก" ที่โรงพยาบาลจัด และช่วยสร้างเนื้อหาครบเซ็ต
+
+[Context]
+- กิจกรรม: งานรณรงค์งดสูบบุหรี่โลก
+- สถานที่: ลานอเนกประสงค์โรงพยาบาล
+- ผู้เข้าร่วม: ผู้ป่วย ญาติ พนักงาน และประชาชนทั่วไป
+- กิจกรรม: ตรวจสุขภาพฟรี ให้คำปรึกษาเลิกบุหรี่ มอบของที่ระลึก
+
+[Content Required]
+1. ข่าวสั้น 1 ย่อหน้า (100 คำ) สำหรับเว็บไซต์โรงพยาบาล
+2. Facebook Post พร้อม emoji และ Hashtag 5-8 อัน</div>
+                    <p class="prompt-note">ถ่ายรูปกิจกรรม แล้วให้ Gemini ช่วยเขียนข่าวครบเซ็ตได้ทันที</p>
+                </div>
+
+                <h5><i class="fas fa-star-half-alt"></i> Case Study 3: ให้คะแนนและปรับปรุงสื่อเก่า</h5>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: ให้คะแนนและปรับปรุงสื่อเก่า</div>
+                    <div class="prompt-content">[Task] วิเคราะห์ Infographic สุขภาพที่ใช้มา 3 ปีแล้ว และให้คำแนะนำปรับปรุง
+
+[Steps]
+1. ให้คะแนนสื่อนี้ในแต่ละด้าน (1-10):
+   - การสื่อสาร: ข้อมูลเข้าใจง่ายหรือไม่
+   - การออกแบบ: สวยงาม สะอาดตา
+   - การใช้สี: เหมาะสมกับเนื้อหา
+   - ตัวอักษร: อ่านง่าย ขนาดเหมาะสม
+   - การจัดวาง: มีลำดับชั้นชัดเจน
+   - ความทันสมัย: ดูยุคปัจจุบันหรือล้าสมัย
+
+2. วิเคราะห์จุดแข็ง 3 ข้อ และจุดอ่อน 3 ข้อ
+
+3. เขียน Prompt ใหม่สำหรับสร้าง Infographic ที่ปรับปรุงแล้วโดย:
+   - คงจุดเด่นเดิมไว้
+   - แก้ไขจุดอ่อนที่ระบุ
+   - เพิ่มความทันสมัย (Modern flat design)
+   - ปรับสีสันให้สดใสขึ้น
+   - ทำให้เหมาะกับ Social Media มากขึ้น</div>
+                    <p class="prompt-note">💡 ใช้ปรับปรุงสื่อเก่าให้ทันสมัยโดยไม่ต้องเริ่มจากศูนย์</p>
+                </div>
+
+                <h5><i class="fas fa-images"></i> Case Study 4: สร้าง Carousel Post จากหลายรูป</h5>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: สร้าง Storyboard Carousel จากรูปถ่าย</div>
+                    <div class="prompt-content">[Task] ดูรูปถ่าย 5 รูปจากกิจกรรม "อบรมการปฐมพยาบาลเบื้องต้น" แล้วช่วยสร้าง Carousel Post
+
+[Steps]
+1. วิเคราะห์แต่ละรูปว่าเหมาะจะเป็น Slide ไหนของ Carousel (1-5)
+2. เรียงลำดับให้เป็น Storytelling ที่ดี (มีจุดเริ่ม จุดสูงสุด จุดจบ)
+3. เขียน Caption สำหรับแต่ละ Slide:
+   - Slide 1 (Cover): Hook ดึงดูดให้อยาก Swipe
+   - Slides 2-4: เนื้อหาหลัก พร้อมข้อมูลที่เป็นประโยชน์
+   - Slide 5: Call-to-Action + ข้อมูลติดต่อ
+
+4. แนะนำแฮชแท็กที่เหมาะสมสำหรับกิจกรรมนี้
+5. แนะนำเพลง/เสียงประกอบที่เหมาะสมถ้านำไปทำ Reels/TikTok</div>
+                    <p class="prompt-note">💡 ใช้สร้าง Carousel Post ที่เล่าเรื่องได้สนุกจากรูปหลายรูป</p>
+                </div>
+
+                <h5><i class="fas fa-chart-line"></i> Case Study 5: วิเคราะห์แผนที่ Infographic</h5>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: วิเคราะห์และสร้าง Infographic แบบเดียวกัน</div>
+                    <div class="prompt-content">[Task] วิเคราะห์ Infographic เรื่อง "สถิติโรคไข้เลือดออกในไทย" และสร้าง Infographic ใหม่ในสไตล์เดียวกัน
+
+[Context]
+- อัพโหลด Infographic ต้นฉบับที่ต้องการเลียนแบบ
+- ต้องการสร้าง Infographic ใหม่เรื่อง "สถิติโรคเบาหวาน" ในสไตล์เดียวกัน
+
+[Steps]
+1. วิเคราะห์โครงสร้าง Infographic ต้นฉบับ:
+   - รูปแบบการนำเสนอข้อมูล (กราฟแท่ง วงกลม แผนที่ เส้น)
+   - Color Scheme หลักและรอง
+   - การจัดวาง Title, Subtitle, Body, Source
+   - สไตล์การแสดงตัวเลข (Big numbers, percentages)
+   - การใช้ไอคอนประกอบ
+
+2. สร้าง Prompt สำหรับ Infographic ใหม่โดย:
+   - ใช้โครงสร้างและสไตล์เดียวกัน
+   - เปลี่ยนเนื้อหาเป็นข้อมูลเบาหวาน:
+     * จำนวนผู้ป่วยเบาหวานในไทย
+     * แนวโน้ม 5 ปี
+     * ภูมิภาคที่พบมากที่สุด
+     * กลุ่มอายุที่เสี่ยง
+     * คำแนะนำป้องกัน
+   - ใส่ Source: กรมควบคุมโรค กระทรวงสาธารณสุข</div>
+                    <p class="prompt-note">💡 ใช้สร้าง Infographic สถิติในสไตล์เดียวกัน</p>
+                </div>
+
+                <h5><i class="fas fa-spell-check"></i> Case Study 6: อ่านและแก้ไขข้อความจากภาพ</h5>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: OCR และแก้ไขเอกสาร</div>
+                    <div class="prompt-content">[Task] อ่านข้อความจากแผ่นพับสุขภาพที่ถ่ายรูปไว้ และช่วยแก้ไขให้ดีขึ้น
+
+[Steps]
+1. OCR: อ่านข้อความทั้งหมดจากภาพแผ่นพับที่ให้
+2. วิเคราะห์จุดอ่อนของเนื้อหา:
+   - ข้อความยาวเกินไปหรือไม่
+   - ศัพท์เทคนิคมากไปหรือไม่
+   - โครงสร้างชัดเจนหรือไม่
+   - มี Call-to-Action หรือไม่
+
+3. แก้ไขเนื้อหาให้:
+   - กระชับขึ้น (ลดความยาว 30%)
+   - ใช้ภาษาที่เข้าใจง่ายขึ้น
+   - เพิ่มหัวข้อย่อยให้ชัดเจน
+   - เพิ่มข้อความชักชวนให้ปฏิบัติตาม
+   - แยกเป็นข้อๆ อ่านง่าย
+
+4. สรุปการเปลี่ยนแปลงที่ทำ และอธิบายว่าทำไมถึงแก้ไขแบบนั้น</div>
+                    <p class="prompt-note">💡 ใช้ OCR แผ่นพับเก่าแล้วปรับปรุงให้ดีขึ้น</p>
+                    <div style="text-align:center; margin:12px 0;">
+                        <img src="../images/leaflet_wound.png" alt="ตัวอย่าง: แผ่นพับดูแลแผลเบาหวาน สำหรับฝึก OCR" style="max-width:380px; width:100%; border-radius:10px; box-shadow:0 3px 12px rgba(0,0,0,0.15); border:1px solid #e0e0e0;">
+                        <p style="font-size:0.85em; color:#757575; margin-top:8px;"><i class="fas fa-image"></i> ตัวอย่างแผ่นพับที่ใช้ฝึก OCR และปรับปรุงเนื้อหา</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 7: การสร้างวิดีโอ AI -->
+        <div id="section7" class="section-container">
+            <h2>7. การสร้างวิดีโอด้วย AI</h2>
+
+            <div class="box infobox">
+                <div class="box-title"><i class="fas fa-video"></i> การสร้างวิดีโอด้วย AI ในปี 2026</div>
+                <p>เทคโนโลยี AI สร้างวิดีโอ (Text-to-Video) กำลังพัฒนาอย่างรวดเร็ว Google นำเสนอเครื่องมือ 2 ตัวสำคัญ:
+                    <strong>Google Veo</strong> สำหรับสร้างวิดีโอสั้น และ <strong>Google Flow</strong>
+                    สำหรับสร้างวิดีโอยาวแบบมืออาชีพ
+                    ทั้งสองเครื่องมือมีศักยภาพสูงในการสร้างสื่อวิดีโอสุขภาพ
+                </p>
+            </div>
+
+            <div id="sec7-veo">
+                <h3>7.1 Google Veo</h3>
+                <div class="box infobox">
+                    <div class="box-title"><i class="fas fa-film"></i> Google Veo คืออะไร</div>
+                    <p>Veo เป็น AI สร้างวิดีโอจากข้อความ (Text-to-Video) พัฒนาโดย Google DeepMind
+                        สามารถสร้างวิดีโอความละเอียดสูงจาก prompt ที่เราพิมพ์</p>
+                </div>
+
+                <h4>ความสามารถของ Veo</h4>
+                <ul>
+                    <li><strong>ความละเอียดสูง:</strong> รองรับ 1080p และ 4K (Veo 2)</li>
+                    <li><strong>ความยาว:</strong> สร้างวิดีโอได้หลายนาที</li>
+                    <li><strong>Cinematic Control:</strong> กำหนดมุมกล้อง, แสง, สไตล์ได้</li>
+                    <li><strong>Physics Understanding:</strong> เข้าใจการเคลื่อนไหวจริง</li>
+                </ul>
+
+
+            </div>
+
+            <div id="sec7-flow">
+                <h3>7.2 Google Flow</h3>
+                <div class="box infobox">
+                    <div class="box-title"><i class="fas fa-magic"></i> แพลตฟอร์มสร้างวิดีโอครบวงจร</div>
+                    <p>Google Flow รวมเทคโนโลยี AI หลายตัวเข้าด้วยกัน เหมาะสำหรับสร้างวิดีโอแบบมืออาชีพ</p>
+                </div>
+
+                <h4>เทคโนโลยีใน Flow</h4>
+                <ul>
+                    <li><strong>Veo 3.1:</strong> สร้างวิดีโอ 4K พร้อมเสียง</li>
+                    <li><strong>Imagen 4:</strong> สร้างภาพและตัวละครคงที่</li>
+                    <li><strong>Gemini AI:</strong> เข้าใจบริบทและสร้างเรื่องราว</li>
+                </ul>
+
+                <h4>เหมาะกับใคร</h4>
+                <ul>
+                    <li>Content Creators สำหรับ Social Media</li>
+                    <li>นักการตลาดสร้างโฆษณา</li>
+                    <li>ครู-อาจารย์สร้างสื่อการสอน</li>
+                    <li>บุคลากรสาธารณสุขสร้างสื่อให้ความรู้</li>
+                </ul>
+            </div>
+
+            <div id="sec7-prompts">
+                <h3>7.3 เทคนิค Prompt สำหรับวิดีโอ</h3>
+                <div class="box tipbox">
+                    <div class="box-title"><i class="fas fa-check-circle"></i> องค์ประกอบ Prompt วิดีโอ 5 ประการ</div>
+                    <ul>
+                        <li><strong>Subject (ตัวละคร):</strong> ใคร/อะไร — ระบุรายละเอียดชัดเจน เช่น
+                            "พยาบาลหญิงในชุดสีฟ้า"</li>
+                        <li><strong>Action (การกระทำ):</strong> เคลื่อนไหวอย่างไร — ใช้คำกริยาที่ชัดเจนและเฉพาะเจาะจง
+                        </li>
+                        <li><strong>Environment (สภาพแวดล้อม):</strong> ที่ไหน เวลาอะไร — ระบุสถานที่ แสง และบรรยากาศ
+                        </li>
+                        <li><strong>Camera (เทคนิคกล้อง):</strong> มุมมอง การเคลื่อนไหวกล้อง — close-up, tracking,
+                            drone, etc.</li>
+                        <li><strong>Style (สไตล์):</strong> โทนและอารมณ์ — cinematic, documentary, warm, encouraging
+                        </li>
+                    </ul>
+                </div>
+
+                <h4>เทคนิคการอธิบายการเคลื่อนไหวมนุษย์</h4>
+                <div class="box tipbox">
+                    <div class="box-title"><i class="fas fa-walking"></i> คำอธิบายท่าทางสำหรับ Prompt วิดีโอ</div>
+                    <ul>
+                        <li><strong>ท่าทางทั่วไป:</strong> "gently smiling", "nodding reassuringly", "speaking warmly"
+                        </li>
+                        <li><strong>มือ/แขน:</strong> "demonstrating handwashing technique", "pointing at chart",
+                            "holding patient's hand"</li>
+                        <li><strong>การเคลื่อนที่:</strong> "walking through hospital corridor", "leaning towards
+                            patient"</li>
+                        <li><strong>ปฏิสัมพันธ์:</strong> "teaching a group of nurses", "examining elderly patient"</li>
+                    </ul>
+                </div>
+
+                <h4>Camera Movements ที่ใช้บ่อย</h4>
+                <ul>
+                    <li><strong>Dolly shot:</strong> กล้องเคลื่อนเข้า/ออก — เพิ่มความดราม่า</li>
+                    <li><strong>Pan:</strong> กล้องหมุนซ้าย/ขวา — เผยสถานที่</li>
+                    <li><strong>Tilt:</strong> กล้องเงยขึ้น/ก้มลง — แสดงขนาด</li>
+                    <li><strong>Tracking shot:</strong> ติดตามวัตถุ — สร้างความต่อเนื่อง</li>
+                    <li><strong>Close-up:</strong> ถ่ายใกล้ — เน้นรายละเอียดและอารมณ์</li>
+                    <li><strong>Slow motion:</strong> เคลื่อนไหวช้า — เน้นความสำคัญของจังหวะ</li>
+                    <li><strong>Time-lapse:</strong> วิดีโอเร่งเวลา — แสดงกระบวนการ</li>
+                </ul>
+            </div>
+
+            <div id="sec7-workshop">
+                <h3>Workshop: สร้างวิดีโอสุขภาพ</h3>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt 1: คลิปสาธิตล้างมือ</div>
+                    <div class="prompt-content">[EN] Close-up shot of a healthcare worker demonstrating proper
+                        handwashing technique. Camera starts at eye level showing the person's calm, focused expression,
+                        then slowly tilts down to a close-up of hands being lathered with soap under running water. Soft
+                        clinical lighting, clean white background. Slow motion water droplets. Style: Educational
+                        medical video, reassuring and professional. Duration: 10 seconds.
+
+                        [TH] ภาพ Close-up ของบุคลากรทางการแพทย์สาธิตเทคนิคล้างมือที่ถูกต้อง
+                        กล้องเริ่มที่ระดับสายตาแสดงใบหน้าสงบและจดจ่อ จากนั้นค่อยๆ เอียงลงมาที่มือที่กำลังถูสบู่ใต้น้ำไหล
+                        แสงสว่างสะอาดแบบคลินิก พื้นหลังขาว น้ำเคลื่อนไหวช้า สไตล์: วิดีโอการแพทย์เพื่อการศึกษา</div>
+                    <p class="prompt-note">💡 ใช้สร้างคลิปสอนล้างมือแบบมืออาชีพ</p>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt 2: Intro Video โรงพยาบาล</div>
+                    <div class="prompt-content">[EN] A modern hospital building with glass windows reflecting warm
+                        sunset light. Camera starts with an aerial establishing shot, then slowly dollies in through the
+                        entrance. Golden hour lighting creates long shadows. Subtle lens flare. Style: Cinematic,
+                        professional, welcoming. Text overlay space at bottom third. Duration: 5 seconds.
+
+                        [TH] อาคารโรงพยาบาลทันสมัยกระจกสะท้อนแสงอุ่นยามเย็น กล้องเริ่มด้วยมุมสูง Aerial shot
+                        จากนั้นค่อยๆ Dolly เข้าไปทางประตูหน้า แสง Golden hour สร้างเงาสวย สไตล์: Cinematic มืออาชีพ
+                        อบอุ่น มีพื้นที่ใส่ข้อความด้านล่าง</div>
+                    <p class="prompt-note">💡 ใช้เป็น intro สำหรับนำเสนองาน</p>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt 3: ดูแลผู้สูงอายุด้วยความอบอุ่น</div>
+                    <div class="prompt-content">[EN] A warm, intimate scene of a young Thai nurse in light blue uniform
+                        gently helping an elderly grandmother in a cozy living room. The nurse is measuring blood
+                        pressure while chatting warmly. Soft morning light coming through the window. Tracking shot
+                        slowly circling the two. Style: Documentary, heartwarming, compassionate. Duration: 15 seconds.
+
+                        [TH] ฉากอบอุ่นของพยาบาลสาวชุดฟ้าอ่อนกำลังดูแลคุณยายในห้องนั่งเล่นที่แสนสบาย
+                        พยาบาลวัดความดันขณะพูดคุยอย่างเป็นกันเอง แสงอ่อนๆ ยามเช้าส่องผ่านหน้าต่าง กล้อง Tracking shot
+                        วนรอบทั้งสองคน สไตล์: สารคดี อบอุ่น เปี่ยมความเมตตา</div>
+                    <p class="prompt-note">💡 ใช้สร้างคลิปส่งเสริมงานเยี่ยมบ้านผู้ป่วย</p>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt 4: Animation อธิบายโรค</div>
+                    <div class="prompt-content">[EN] A 2D animation showing how a virus enters a human cell. Clean white
+                        background with soft blue accents. The virus is depicted as a simple, clear geometric shape
+                        approaching the cell membrane. Camera slowly zooms in as the virus attaches. Step-by-step
+                        process with clear labels appearing at each stage. Style: Educational infographic animation,
+                        modern and clean.
+
+                        [TH] แอนิเมชัน 2 มิติ แสดงการเข้าสู่เซลล์มนุษย์ของไวรัส พื้นหลังขาวสะอาดกับสีฟ้าอ่อน
+                        ไวรัสเป็นรูปทรงเรขาคณิตที่เข้าใจง่าย เข้าใกล้เยื่อหุ้มเซลล์ กล้องค่อยๆ ซูมเข้าขณะไวรัสเกาะ
+                        มีป้ายอธิบายปรากฏแต่ละขั้นตอน สไตล์: แอนิเมชัน Infographic เพื่อการศึกษา</div>
+                    <p class="prompt-note">💡 ใช้สร้าง animation อธิบายกระบวนการทางการแพทย์</p>
+                </div>
+
+                <div class="box exercisebox">
+                    <div class="box-title"><i class="fas fa-flask"></i> แบบฝึกหัด: สร้าง TikTok คลิปสุขภาพ (20 นาที)
+                    </div>
+                    <p><strong>โจทย์:</strong> สร้าง Prompt สำหรับวิดีโอ TikTok เรื่อง "กินสะอาด อาหารปลอดภัย" ความยาว
+                        15 วินาที</p>
+                    <p><strong>เนื้อหาที่ต้องมี:</strong></p>
+                    <ul>
+                        <li>ภาพอาหารสะอาดหลากหลายสีสัน</li>
+                        <li>การเคลื่อนไหวที่น่าสนใจ (การจัดจาน, การล้างผัก)</li>
+                        <li>บรรยากาศสดใส ร่าเริง</li>
+                        <li>สไตล์ทันสมัยดึงดูดวัยรุ่น</li>
+                    </ul>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> ตัวอย่าง Prompt เฉลย: TikTok คลิปกินสะอาด
+                    </div>
+                    <div class="prompt-content">[EN] Vibrant overhead shot of colorful fresh vegetables and fruits being
+                        arranged on a white plate in stop-motion style. Quick cuts between washing vegetables under
+                        crystal-clear water, chopping on a wooden cutting board, and the final beautifully plated dish.
+                        Upbeat, energetic pacing. Bright natural lighting. Style: Modern food content, TikTok-style fast
+                        cuts, visually satisfying. Duration: 15 seconds.
+
+                        [TH] มุมมอง Overhead สีสันสดใสของผักผลไม้สดถูกจัดลงจาน สไตล์ stop-motion
+                        ตัดสลับระหว่างล้างผักใต้น้ำใส สับบนเขียง และจานอาหารสำเร็จ จังหวะรวดเร็วมีชีวิตชีวา
+                        แสงธรรมชาติสดใส สไตล์: คอนเทนต์อาหารทันสมัย ตัดฉับแบบ TikTok น่าพอใจทางสายตา</div>
+                    <p class="prompt-note">💡 ตัวอย่าง Prompt เฉลยสำหรับแบบฝึกหัด TikTok</p>
+                </div>
+
+                <div class="box warningbox">
+                    <div class="box-title"><i class="fas fa-exclamation-triangle"></i> ข้อจำกัดของ AI สร้างวิดีโอ</div>
+                    <ul>
+                        <li><strong>ข้อจำกัดทั่วไป:</strong> AI
+                            ยังไม่สามารถสร้างวิดีโอที่มีรายละเอียดซับซ้อนหรือข้อความภาษาไทยในวิดีโอได้ดีเท่ากับการถ่ายจริง
+                        </li>
+                        <li><strong>ความถูกต้อง:</strong> ตรวจสอบความถูกต้องทางการแพทย์ก่อนนำไปใช้</li>
+                        <li><strong>ลิขสิทธิ์:</strong> ระบุเสมอว่าวิดีโอสร้างจาก AI</li>
+                        <li><strong>ข้อจำกัดเชิงเทคนิค:</strong> ไม่ควรใช้เป็นวิดีโอฝึกทักษะทางการแพทย์โดยตรง
+                            ควรเป็นสื่อเสริมเท่านั้น</li>
+                    </ul>
+                </div>
+
+                <h4>Case Studies: สถานการณ์จริงในการสร้างวิดีโอ</h4>
+                <div class="box exercisebox">
+                    <div class="box-title"><i class="fas fa-briefcase"></i> ตัวอย่าง Prompt สำหรับสถานการณ์สร้างวิดีโอต่างๆ</div>
+                    <p>5-6 ตัวอย่างสถานการณ์การสร้างวิดีโอสุขภาพ พร้อม Prompt ที่พร้อมใช้งาน</p>
+                </div>
+
+                <h5><i class="fas fa-hand-holding-medical"></i> Case Study 1: วิดีโอสาธิตทักษะการพยาบาล</h5>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: สาธิตการพลิกตัวผู้ป่วยติดเตียง</div>
+                    <div class="prompt-content">[Task] สร้างวิดีโอสาธิตการพลิกตัวผู้ป่วยติดเตียงเพื่อป้องกันแผลกดทับ
+
+[Context]
+- กลุ่มเป้าหมาย: ผู้ดูแลผู้ป่วยที่บ้าน
+- ความยาว: 30 วินาที
+- ต้องเห็นท่าทางชัดเจน
+
+[Prompt Details]
+- Subject: พยาบาลหญิงในชุดสีฟ้า กำลังสาธิตการพลิกตัวผู้สูงอายุ
+- Action: การเคลื่อนย้ายอย่างระมัดระวัง ใช้หมอนค้ำรอง
+- Environment: ห้องพักผู้ป่วยที่บ้าน แสงธรรมชาติสว่าง
+- Camera: มุมข้างเตียง (Side view) ให้เห็นท่าทางชัดเจน
+- Style: สารคดีการศึกษา ชัดเจน มืออาชีพ อบอุ่น
+- Details: เน้นจุดยึดพยุงที่ถูกต้อง</div>
+                    <p class="prompt-note">วิดีโอสอนทักษะต้องเห็นท่าทางชัดเจน</p>
+                </div>
+
+                <h5><i class="fas fa-bullhorn"></i> Case Study 2: วิดีโอรณรงค์สั้น Social Media</h5>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: คลิปรณรงค์กินผักผลไม้ 15 วินาที</div>
+                    <div class="prompt-content">[Task] สร้างวิดีโอ TikTok/Reels รณรงค์กินผักผลไม้
+
+[Context]
+- กลุ่มเป้าหมาย: วัยรุ่นและวัยทำงาน
+- ความยาว: 15 วินาที
+- สไตล์: สดใส ดึงดูด น่าแชร์
+
+[Prompt Details]
+- Subject: มือหลากหลายสีสันกำลังหยิบผักผลไม้สดใส
+- Action: การเคลื่อนไหวเร็วแบบ Stop-motion
+- Environment: โต๊ะครัวสีขาวสะอาดตา แสงธรรมชาติสดใส
+- Camera: มุมมองจากด้านบน (Overhead shot)
+- Style: Modern food content สีสันสดใส จังหวะเร็ว
+- Details: ข้อความ "5 สี 5 กลุ่ม" แบบกราฟิก</div>
+                    <p class="prompt-note">วิดีโอ Social Media ต้องจับตาในเวลาสั้น</p>
+                </div>
+
+                <h5><i class="fas fa-hospital-user"></i> Case Study 3: วิดีโอแนะนำบริการโรงพยาบาล</h5>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: แนะนำแผนกผู้ป่วยนอกใหม่</div>
+                    <div class="prompt-content">[Task] สร้างวิดีโอแนะนำแผนก OPD ที่รีโนเวทใหม่
+
+[Context]
+- กลุ่มเป้าหมาย: ผู้ป่วยและญาติ
+- ความยาว: 45 วินาที
+- อารมณ์: อบอุ่น น่าเชื่อถือ
+
+[Prompt Details]
+- Subject: บรรยากาศภายในแผนก OPD ที่ทันสมัย พนักงานยิ้มแย้ม
+- Action: กล้องเคลื่อนผ่านพื้นที่รอคอยที่กว้างขวาง
+- Environment: โรงพยาบาลสมัยใหม่ แสงธรรมชาติ สีขาว-ฟ้า
+- Camera: Dolly shot เคลื่อนช้าจากประตูทางเข้า
+- Style: Cinematic documentary มืออาชีพ อบอุ่น
+- Details: เน้นความสะอาด ความเป็นระเบียบ</div>
+                    <p class="prompt-note">วิดีโอแนะนำบริการต้องสร้างความมั่นใจ</p>
+                </div>
+
+                <h5><i class="fas fa-graduation-cap"></i> Case Study 4: วิดีโออธิบายกระบวนการทางการแพทย์</h5>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: อธิบายการผ่าตัดตาแบบ Phaco</div>
+                    <div class="prompt-content">[Task] สร้าง 3D Animation อธิบายการผ่าตัดตา
+
+[Context]
+- กลุ่มเป้าหมาย: ผู้ป่วยและญาติ
+- ความยาว: 60 วินาที
+- ลดความกลัวโดยให้เข้าใจกระบวนการ
+
+[Prompt Details]
+- Subject: Animation 3D ตา แสดงเลนส์ตา การสลายเลนส์คลาวด์
+- Action: กระบวนการทีละขั้นตอนแบบ Slow motion
+- Environment: พื้นหลังสีฟ้าอ่อน สะอาด คล้ายห้องผ่าตัด
+- Camera: Macro close-up ซูมเข้าไปในกระจกตา
+- Style: Medical educational animation สมจริงแต่ไม่น่ากลัว
+- Details: แสดงขั้นตอนที่ 1-5 พร้อม Label</div>
+                    <p class="prompt-note">Animation ทางการแพทย์ต้องสมจริงแต่ไม่ทำให้กลัว</p>
+                </div>
+
+                <h5><i class="fas fa-heartbeat"></i> Case Study 5: วิดีโอส่งเสริมสุขภาพ</h5>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: คลิปเชียร์ชวนออกกำลังกาย</div>
+                    <div class="prompt-content">[Task] สร้างวิดีโอส่งเสริมการออกกำลังกายสำหรับผู้สูงอายุ
+
+[Context]
+- กลุ่มเป้าหมาย: ผู้สูงอายุ 60+
+- ความยาว: 30 วินาที
+- สร้างแรงบันดาลใจ
+
+[Prompt Details]
+- Subject: คุณตาคุณยายยิ้มแย้มออกกำลังกายร่วมกันในสวน
+- Action: ท่าทางช้าๆ นุ่มนวล แต่ดูมีพลัง
+- Environment: สวนสาธารณะยามเช้า แสงอ่อนๆ อากาศบริสุทธิ์
+- Camera: Wide shot แสดงกลุ่มคน จากนั้น Tracking shot
+- Style: Lifestyle documentary อบอุ่น เป็นกำลังใจ
+- Details: เน้นว่าอายุเป็นเพียงตัวเลข</div>
+                    <p class="prompt-note">วิดีโอส่งเสริมสุขภาพต้องสร้างแรงบันดาลใจ</p>
+                </div>
+
+                <h5><i class="fas fa-shield-virus"></i> Case Study 6: วิดีโอให้ความรู้เรื่องโรค</h5>
+                <div class="prompt-card">
+                    <div class="prompt-title"><i class="fas fa-star"></i> Prompt: อธิบายการแพร่เชื้อไข้หวัด</div>
+                    <div class="prompt-content">[Task] สร้างวิดีโอสั้นอธิบายการแพร่กระจายของเชื้อไข้หวัด
+
+[Context]
+- กลุ่มเป้าหมาย: ประชาชนทั่วไป
+- ความยาว: 20 วินาที
+- เข้าใจง่าย จำได้
+
+[Prompt Details]
+- Subject: Animation 2D แสดงอนุภาคไวรัสสีแดง
+- Action: ไวรัสเคลื่อนที่ผ่านการจาม การสัมผัส การหายใจ
+- Environment: พื้นหลังสีขาวสะอาด
+- Camera: Mid shot ติดตามการเคลื่อนที่
+- Style: Motion graphics infographic สีสันชัดเจน
+- Details: จบด้วย "ป้องกันได้" และ 3 วิธีป้องกัน</div>
+                    <p class="prompt-note">วิดีโอให้ความรู้ต้องกระชับ เข้าใจง่าย</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 8: สรุป -->
+        <div id="section8" class="section-container">
+            <h2>8. สรุปและแหล่งเรียนรู้เพิ่มเติม</h2>
+
+            <div class="box tipbox">
+                <div class="box-title"><i class="fas fa-check-double"></i> สิ่งที่ได้เรียนรู้</div>
+                <ul>
+                    <li>ทำความรู้จัก Google Gemini และความสามารถ</li>
+                    <li>การใช้งานพื้นฐานและ Gem Manager</li>
+                    <li>เทคนิค Prompt Engineering</li>
+                    <li>การประยุกต์ใช้งานจริง</li>
+                    <li>การสร้างภาพด้วย AI (16+ Prompt)</li>
+                    <li>เทคนิค Image-to-Prompt (Vision)</li>
+                    <li>การสร้างวิดีโอด้วย Google Veo และ Flow</li>
+                </ul>
+            </div>
+
+            <h3>แหล่งเรียนรู้เพิ่มเติม</h3>
+            <ul>
+                <li><a href="https://gemini.google.com" target="_blank">gemini.google.com</a> -
+                    เข้าใช้งาน Gemini</li>
+                <li><a href="https://ai.google.dev" target="_blank">ai.google.dev</a> -
+                    เอกสารสำหรับนักพัฒนา</li>
+                <li><a href="https://labs.google/fx/tools/video-fx" target="_blank">Google VideoFX</a> -
+                    ทดลองสร้างวิดีโอด้วย Veo</li>
+            </ul>
+
+            <div class="box infobox">
+                <div class="box-title"><i class="fas fa-rocket"></i> ขั้นตอนต่อไป</div>
+                <p>ลองนำความรู้ที่ได้ไปใช้ในงานประจำวัน เริ่มจากงานง่ายๆ แล้วค่อยๆ พัฒนา!</p>
+            </div>
+        </div>
+
+        <!-- Section 9: Gem Workshop -->
+        <div id="section9" class="section-container">
+            <h2>9. Gem Workshop - ทดลองใช้ Gem</h2>
+
+            <div class="box infobox">
+                <div class="box-title"><i class="fas fa-gem"></i> Gem คืออะไร</div>
+                <p>Gem (อัญมณี) คือผู้ช่วย AI ที่ปรับแต่งได้ตามความต้องการของคุณ โดย Gem จะจดจำบริบท 
+                และบทบาทที่คุณกำหนดไว้ ทำให้ไม่ต้องพิมพ์ Prompt ยาวๆ ซ้ำๆ ทุกครั้ง</p>
+            </div>
+
+            <h3>ทดลองใช้ Gem ตัวอย่าง</h3>
+            <p>คลิกที่ลิงก์ด้านล่างเพื่อทดลองใช้ Gem ที่สร้างไว้ล่วงหน้า:</p>
+
+            <div class="gem-card" style="background: #e8f0fe; border-left: 5px solid #1565c0; border-radius: 12px; padding: 20px; margin: 15px 0; color: #1a1a2e;">
+                <h4 style="margin-top: 0; color: #0d47a1;"><i class="fas fa-user-nurse"></i> Gem 1: Nurse PR Prompt - ผู้ช่วยงานประชาสัมพันธ์พยาบาล</h4>
+                <p style="margin-bottom: 10px;"><strong>ความสามารถ:</strong></p>
+                <ul style="margin-bottom: 15px; padding-left: 20px;">
+                    <li>เขียนข่าวและบทความประชาสัมพันธ์งานพยาบาล</li>
+                    <li>สร้างเนื้อหาโซเชียลมีเดียวสำหรับโรงพยาบาล/คลินิก</li>
+                    <li>ออกแบบโปสเตอร์รณรงค์สุขภาพ</li>
+                    <li>เขียนสคริปต์วิดีโอสั้นสำหรับให้ความรู้ผู้ป่วย</li>
+                </ul>
+                <p style="margin-bottom: 15px;"><strong>ตัวอย่างการใช้:</strong> "ช่วยเขียนโพสต์ Facebook รณรงค์วันงดสูบบุหรี่โลก สำหรับโรงพยาบาล"</p>
+                <a href="https://gemini.google.com/gem/11Njvht8YEsXcnAHjEH7DNpWtM-Gq1WWL?usp=sharing" target="_blank" style="display: inline-block; background: #1565c0; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 10px;">
+                    <i class="fas fa-external-link-alt"></i> เปิด Gem
+                </a>
+            </div>
+
+            <div class="gem-card" style="background: #e0f2f1; border-left: 5px solid #00796b; border-radius: 12px; padding: 20px; margin: 15px 0; color: #1a1a2e;">
+                <h4 style="margin-top: 0; color: #004d40;"><i class="fas fa-heartbeat"></i> Gem 2: Medical Infographic Creator - ระบบสร้าง Infographic เครื่องมือแพทย์</h4>
+                <p style="margin-bottom: 10px;"><strong>ความสามารถ:</strong></p>
+                <ul style="margin-bottom: 15px; padding-left: 20px;">
+                    <li>สร้างคำอธิบายสำหรับสร้างภาพ Infographic เครื่องมือแพทย์</li>
+                    <li>อธิบายขั้นตอนการใช้อุปกรณ์ทางการแพทย์แบบ step-by-step</li>
+                    <li>ออกแบบสื่อให้ความรู้สำหรับผู้ป่วยและญาติ</li>
+                    <li>สร้างคู่มือการดูแลตนเองสำหรับผู้ป่วย</li>
+                </ul>
+                <p style="margin-bottom: 15px;"><strong>ตัวอย่างการใช้:</strong> "ช่วยสร้าง Infographic อธิบายวิธีใช้เครื่องวัดความดันโลหิตแบบดิจิตอล"</p>
+                <a href="https://gemini.google.com/gem/1tUibbxw3fIZPBaFKTsg-T-TghKui2d1Q?usp=sharing" target="_blank" style="display: inline-block; background: #00796b; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 10px;">
+                    <i class="fas fa-external-link-alt"></i> เปิด Gem
+                </a>
+            </div>
+
+            <div class="gem-card" style="background: #e8f5e9; border-left: 5px solid #2e7d32; border-radius: 12px; padding: 20px; margin: 15px 0; color: #1a1a2e;">
+                <h4 style="margin-top: 0; color: #1b5e20;"><i class="fas fa-seedling"></i> Gem 3: Herbal Storyteller - ผู้เล่าเรื่องสมุนไพรไทย</h4>
+                <p style="margin-bottom: 10px;"><strong>ความสามารถ:</strong></p>
+                <ul style="margin-bottom: 15px; padding-left: 20px;">
+                    <li>เล่าเรื่องสมุนไพรไทยแบบน่าสนใจ พร้อมสร้าง Prompt ภาพ 3D</li>
+                    <li>อธิบายสรรพคุณและประโยชน์ของสมุนไพร</li>
+                    <li>ให้คำแนะนำการใช้สมุนไพรอย่างปลอดภัย</li>
+                    <li>สร้างเนื้อหาสื่อสารสมุนไพรสำหรับชุมชน</li>
+                </ul>
+                <p style="margin-bottom: 15px;"><strong>ตัวอย่างการใช้:</strong> "เล่าเรื่องขิงและสร้าง Prompt ภาพ 3D น่ารักของขิงเป็นตัวละคร"</p>
+                <a href="https://gemini.google.com/gem/1nnHZOcM9kVJR2QFhxlAPQRruBCF8OMdl?usp=sharing" target="_blank" style="display: inline-block; background: #2e7d32; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 10px;">
+                    <i class="fas fa-external-link-alt"></i> เปิด Gem
+                </a>
+            </div>
+
+            <div class="box exercisebox">
+                <div class="box-title"><i class="fas fa-flask"></i> Workshop: ทดลองใช้ Gem</div>
+                <p><strong>วัตถุประสงค์:</strong> ทดลองใช้ Gem ที่สร้างไว้ล่วงหน้าและสังเกตผลลัพธ์</p>
+                <p><strong>ระยะเวลา:</strong> 20 นาที</p>
+                <ol>
+                    <li>เลือก Gem หนึ่งตัวจาก 3 ตัวด้านบน</li>
+                    <li>ทดลองพิมพ์คำถามหรือคำสั่งที่เกี่ยวข้องกับงานของคุณ</li>
+                    <li>สังเกตว่า Gem ตอบสนองแตกต่างจาก Gemini ทั่วไปอย่างไร</li>
+                    <li>ลองใช้อีก 2 Gem ที่เหลือและเปรียบเทียบผลลัพธ์</li>
+                    <li>คิดว่า Gem ใดเหมาะกับงานของคุณมากที่สุด</li>
+                </ol>
+            </div>
+
+            <div class="box tipbox">
+                <div class="box-title"><i class="fas fa-lightbulb"></i> เคล็ดลับการใช้ Gem</div>
+                <ul>
+                    <li>Gem จะจดจำบริบทที่กำหนดไว้ ทำให้ได้ผลลัพธ์ที่ตรงกับความต้องการมากขึ้น</li>
+                    <li>สามารถสนทนาต่อเนื่องกับ Gem ได้เหมือนกับ Gemini ทั่วไป</li>
+                    <li>หากต้องการสร้าง Gem ของตนเอง ไปที่ gemini.google.com > Gem Manager</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 10: ส่งงาน -->
+        <div id="section10" class="section-container">
+            <h2><i class="fas fa-paper-plane"></i> ส่งงาน</h2>
+            <p>กรุณากรอกแบบฟอร์มส่งงานเพื่อบันทึกผลการเข้าร่วมอบรม</p>
+
+            <div class="box infobox">
+                <div class="box-title"><i class="fas fa-clipboard-check"></i> แบบฟอร์มส่งงานอบรม</div>
+                <p>คลิกปุ่มด้านล่างเพื่อเปิดแบบฟอร์มส่งงานในหน้าต่างใหม่ กรุณากรอกข้อมูลให้ครบถ้วน</p>
+            </div>
+
+            <div style="text-align: center; margin: 40px 0;">
+                <a href="https://script.google.com/macros/s/AKfycbx2mk4F5C-J8m-kH308pwvmvSv2mwYUZgHc9l3IDnRmK_6fwQZUYE4B-Vtmrr9nXLqO/exec"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   style="display: inline-block; background: linear-gradient(135deg, #1565c0, #0d47a1); color: white; padding: 18px 40px; border-radius: 12px; text-decoration: none; font-size: 1.2em; font-weight: bold; box-shadow: 0 4px 15px rgba(21,101,192,0.4); transition: transform 0.2s;"
+                   onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    <i class="fas fa-external-link-alt"></i>&nbsp; เปิดแบบฟอร์มส่งงาน
+                </a>
+            </div>
+
+            <div class="box tipbox">
+                <div class="box-title"><i class="fas fa-lightbulb"></i> หมายเหตุ</div>
+                <ul>
+                    <li>แบบฟอร์มจะเปิดในหน้าต่างหรือแท็บใหม่โดยอัตโนมัติ</li>
+                    <li>กรุณากรอกข้อมูลให้ครบถ้วนก่อนกดส่ง</li>
+                    <li>หากมีปัญหาในการเข้าถึงแบบฟอร์ม กรุณาติดต่อวิทยากร</li>
+                </ul>
+            </div>
+        </div>
+
+    </div><!-- End main-content -->
+
+    <!-- ===================================
+         JAVASCRIPT
+         =================================== -->
+    <script>
+        // Show Section
+        function showSection(id) {
+            // Hide all sections
+            document.querySelectorAll('.section-container').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-parent').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-child').forEach(el => el.classList.remove('active'));
+
+            // Show target section
+            const targetSection = document.getElementById(id);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+
+            // Update nav active states
+            if (id === 'dashboard') {
+                document.querySelector('.nav-item[onclick*="dashboard"]').classList.add('active');
+            } else if (id === 'section8') {
+                document.querySelector('.nav-item[onclick*="section8"]').classList.add('active');
+            } else if (id === 'section9') {
+                document.querySelector('.nav-item[onclick*="section9"]').classList.add('active');
+            } else if (id === 'section10') {
+                document.querySelector('.nav-item[onclick*="section10"]').classList.add('active');
+            } else {
+                const navParent = document.querySelector(`.nav-parent[onclick*="${id}"]`);
+                if (navParent) {
+                    navParent.classList.add('active');
+                    navParent.classList.add('expanded');
+                    const navChildren = navParent.closest('.nav-group').querySelector('.nav-children');
+                    if (navChildren) navChildren.classList.add('show');
+                }
+            }
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Toggle Accordion Navigation
+        function toggleNav(parentElement, sectionId) {
+            const navGroup = parentElement.closest('.nav-group');
+            const navChildren = navGroup.querySelector('.nav-children');
+            const isExpanded = parentElement.classList.contains('expanded');
+
+            // Close all other nav groups
+            document.querySelectorAll('.nav-parent.expanded').forEach(el => {
+                if (el !== parentElement) {
+                    el.classList.remove('expanded');
+                    el.closest('.nav-group').querySelector('.nav-children').classList.remove('show');
+                }
+            });
+
+            // Toggle current
+            if (isExpanded) {
+                parentElement.classList.remove('expanded');
+                navChildren.classList.remove('show');
+            } else {
+                parentElement.classList.add('expanded');
+                navChildren.classList.add('show');
+            }
+
+            // Show section
+            showSection(sectionId);
+
+            // Update nav-parent active state
+            document.querySelectorAll('.nav-parent').forEach(np => np.classList.remove('active'));
+            parentElement.classList.add('active');
+        }
+
+        // Scroll to Element
+        function scrollToElement(elementId, event) {
+            if (event) event.stopPropagation();
+
+            // Find which section contains this element
+            const element = document.getElementById(elementId);
+            if (element) {
+                const section = element.closest('.section-container');
+                if (section) {
+                    showSection(section.id);
+
+                    // Scroll to element after a short delay
+                    setTimeout(() => {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                }
+            }
+
+            // Update nav-child active state
+            document.querySelectorAll('.nav-child').forEach(nc => nc.classList.remove('active'));
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            }
+        }
+
+        // Copy text to clipboard with visual feedback
+        function copyLangText(button, text) {
+            navigator.clipboard.writeText(text.trim()).then(() => {
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> คัดลอกแล้ว!';
+                button.classList.add('copied');
+
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Copy Prompt to Clipboard (for non-bilingual cards)
+        function copyPrompt(button) {
+            const card = button.closest('.prompt-card');
+            const content = card.querySelector('.prompt-content').textContent;
+
+            navigator.clipboard.writeText(content).then(() => {
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> คัดลอกแล้ว';
+                button.style.background = '#34a853';
+
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.style.background = '';
+                }, 2000);
+            });
+        }
+
+        // Auto-transform bilingual prompt cards on load
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.prompt-card').forEach(card => {
+                const contentEl = card.querySelector('.prompt-content');
+                if (!contentEl) return;
+
+                const raw = contentEl.textContent;
+
+                // Check if contains [TH] and [EN] markers
+                const hasTH = raw.includes('[TH]');
+                const hasEN = raw.includes('[EN]');
+
+                if (hasTH && hasEN) {
+                    // --- Bilingual card: split into two language sections ---
+                    let thText = '';
+                    let enText = '';
+
+                    // Parse: find [TH] and [EN] blocks (order-agnostic)
+                    const thMatch = raw.match(/\[TH\]\s*([\s\S]*?)(?=\[EN\]|$)/);
+                    const enMatch = raw.match(/\[EN\]\s*([\s\S]*?)(?=\[TH\]|$)/);
+
+                    // Collapse whitespace: replace multiple spaces/newlines with a single space
+                    if (thMatch) thText = thMatch[1].replace(/\s+/g, ' ').trim();
+                    if (enMatch) enText = enMatch[1].replace(/\s+/g, ' ').trim();
+
+                    // Build bilingual HTML
+                    const langsDiv = document.createElement('div');
+                    langsDiv.className = 'prompt-langs';
+
+                    // Thai section
+                    const thSection = document.createElement('div');
+                    thSection.className = 'prompt-lang lang-th';
+                    thSection.innerHTML = `
+                        <div class="prompt-lang-header">
+                            <div class="prompt-lang-badge">
+                                <span class="flag">🇹🇭</span> ภาษาไทย
+                            </div>
+                            <button class="copy-lang-btn" onclick="copyLangText(this, this.closest('.prompt-lang').querySelector('.prompt-lang-text').textContent)">
+                                <i class="fas fa-copy"></i> คัดลอก
+                            </button>
+                        </div>
+                        <div class="prompt-lang-text">${escapeHTML(thText)}</div>
+                    `;
+                    langsDiv.appendChild(thSection);
+
+                    // English section
+                    const enSection = document.createElement('div');
+                    enSection.className = 'prompt-lang lang-en';
+                    enSection.innerHTML = `
+                        <div class="prompt-lang-header">
+                            <div class="prompt-lang-badge">
+                                <span class="flag">🇺🇸</span> English
+                            </div>
+                            <button class="copy-lang-btn" onclick="copyLangText(this, this.closest('.prompt-lang').querySelector('.prompt-lang-text').textContent)">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <div class="prompt-lang-text">${escapeHTML(enText)}</div>
+                    `;
+                    langsDiv.appendChild(enSection);
+
+                    // Replace old content with bilingual layout
+                    contentEl.replaceWith(langsDiv);
+
+                } else {
+                    // --- Single-language card: clean whitespace and add single copy button ---
+                    contentEl.textContent = raw.replace(/\s+/g, ' ').trim();
+                    const copyBtn = document.createElement('button');
+                    copyBtn.className = 'copy-btn';
+                    copyBtn.innerHTML = '<i class="fas fa-copy"></i> คัดลอก';
+                    copyBtn.onclick = function () { copyPrompt(this); };
+                    card.appendChild(copyBtn);
+                }
+            });
+        });
+
+        // Helper: escape HTML to prevent XSS
+        function escapeHTML(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+
+</html>
