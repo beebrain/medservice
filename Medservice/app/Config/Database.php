@@ -27,10 +27,10 @@ class Database extends Config
 
     public array $default = [
         'DSN'          => '',
-        'hostname'     => (ENVIRONMENT !== 'production')  ? '' : '',
-        'username'     => (ENVIRONMENT !== 'production') ? 'root' : 'root',
-        'password'     => (ENVIRONMENT !== 'production') ? '1234554321' : '1234554321',
-        'database'     => (ENVIRONMENT !== 'production') ? 'amenia' : 'amenia',
+        'hostname'     => '',
+        'username'     => '',
+        'password'     => '',
+        'database'     => '',
         'DBDriver'     => 'MySQLi',
         'DBPrefix'     => '',
         'pConnect'     => false,
