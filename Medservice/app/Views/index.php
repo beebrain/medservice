@@ -320,7 +320,7 @@
 
                 <!-- Modal Body -->
                 <div class="p-6">
-                    <div class="grid lg:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 gap-6">
                         <!-- Result Card 1 -->
                         <div id="resultdisplay" class="bg-gradient-to-br from-sky-50 to-white rounded-2xl p-6 shadow-lg border border-sky-100" style="display:none;">
                             <h3 class="text-lg font-bold text-sky-600 mb-5 text-center flex items-center justify-center gap-2">
@@ -395,15 +395,33 @@
 
                         <!-- Result Card 2 -->
                         <div id="resultdisplay2" class="bg-gradient-to-br from-purple-50 to-white rounded-2xl p-6 shadow-lg border border-purple-100" style="display:none;">
-                            <h3 class="text-lg font-bold text-purple-600 mb-5 text-center flex items-center justify-center gap-2">
+                            <h3 class="text-lg font-bold text-purple-600 mb-1 text-center flex items-center justify-center gap-2">
                                 <span class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white text-sm">2</span>
-                                <span data-lang-th="การประเมินคัดกรอง Thalassemia Trait (TT), Thalassemia Disease (TD), Iron Deficiency Anemia (IDA)" data-lang-en="Screening for Thalassemia Trait (TT), Thalassemia Disease (TD), Iron Deficiency Anemia (IDA)">การประเมินคัดกรอง Thalassemia Trait (TT), Thalassemia Disease (TD), Iron Deficiency Anemia (IDA)</span>
+                                <span data-lang-th="ตำแหน่งค่าเลือดเทียบช่วงอ้างอิง" data-lang-en="Values vs. Reference Ranges">ตำแหน่งค่าเลือดเทียบช่วงอ้างอิง</span>
                             </h3>
-                            <div class="text-center py-8">
-                                <div class="text-5xl mb-3">🔬</div>
-                                <h4 class="text-lg font-bold text-gray-700" data-lang-th="อยู่ในช่วงพัฒนา Model" data-lang-en="Model Under Development">อยู่ในช่วงพัฒนา Model</h4>
-                                <p class="text-gray-500 text-sm" data-lang-th="เร็วๆ นี้..." data-lang-en="Coming Soon...">เร็วๆ นี้...</p>
+                            <p class="text-center text-xs text-gray-500 mb-3" data-lang-th="ประกอบการคัดกรอง Thalassemia (TT / TD) และ Iron Deficiency Anemia (IDA)" data-lang-en="Supporting screening for Thalassemia (TT / TD) and Iron Deficiency Anemia (IDA)">ประกอบการคัดกรอง Thalassemia (TT / TD) และ Iron Deficiency Anemia (IDA)</p>
+
+                            <!-- Age group -->
+                            <div class="flex items-center justify-center gap-2 mb-3">
+                                <span class="text-xs text-gray-500" data-lang-th="กลุ่มอายุ" data-lang-en="Age group">กลุ่มอายุ</span>
+                                <span id="ageGroupBadge" class="inline-flex items-center gap-1 bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-semibold">-</span>
                             </div>
+
+                            <!-- Legend -->
+                            <div class="flex items-center justify-center flex-wrap gap-x-4 gap-y-1 mb-2 text-[11px] text-gray-600">
+                                <span class="inline-flex items-center gap-1"><span class="w-4 h-3 rounded-sm bg-purple-200 border border-purple-300"></span><span data-lang-th="ช่วงปกติ" data-lang-en="Normal range">ช่วงปกติ</span></span>
+                                <span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-emerald-500"></span><span data-lang-th="ค่าคนไข้ (ปกติ)" data-lang-en="Value (normal)">ค่าคนไข้ (ปกติ)</span></span>
+                                <span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-amber-500"></span><span data-lang-th="ต่ำกว่าช่วง" data-lang-en="Below range">ต่ำกว่าช่วง</span></span>
+                                <span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-rose-500"></span><span data-lang-th="สูงกว่าช่วง" data-lang-en="Above range">สูงกว่าช่วง</span></span>
+                            </div>
+
+                            <!-- Range bar chart (ApexCharts, rendered by JS) -->
+                            <div id="refRangeChart" class="-ml-1"></div>
+
+                            <!-- Screening summary -->
+                            <div id="refRangeSummary" class="mt-4 space-y-2" style="display:none;"></div>
+
+                            <p class="text-[10px] text-gray-400 mt-3 text-center leading-relaxed" data-lang-th="* ช่วงอ้างอิงสำหรับคัดกรองเบื้องต้นเท่านั้น ไม่ใช่การวินิจฉัย โปรดพิจารณาร่วมกับดุลยพินิจของแพทย์" data-lang-en="* Reference ranges are for preliminary screening only, not a diagnosis. Use alongside clinical judgment.">* ช่วงอ้างอิงสำหรับคัดกรองเบื้องต้นเท่านั้น ไม่ใช่การวินิจฉัย โปรดพิจารณาร่วมกับดุลยพินิจของแพทย์</p>
                         </div>
                     </div>
                 </div>
@@ -717,6 +735,151 @@
         function getLangText(th, en) {
             var lang = localStorage.getItem('language') || 'th';
             return lang === 'en' ? en : th;
+        }
+
+        // ===== Result Card 2: ตำแหน่งค่าเลือดเทียบช่วงอ้างอิง (ApexCharts range bar) =====
+        // ช่วงอ้างอิงแยกตามกลุ่มอายุ: g1 = อายุ ≤ 6 ปี (≤ 72 เดือน), g2 = อายุ > 6 ปี
+        var REF_RANGES = [
+            { key: 'Hb',   label: 'Hb',   unit: 'g/dL',   g1: [11.0, 13.9], g2: [11.3, 14.3] },
+            { key: 'Hct',  label: 'Hct',  unit: '%',      g1: [32.0, 39.0], g2: [33.0, 41.0] },
+            { key: 'RBC',  label: 'RBC',  unit: '10¹²/L', g1: [3.96, 4.92], g2: [3.98, 5.15] },
+            { key: 'MCV',  label: 'MCV',  unit: 'fL',     g1: [72.0, 86.0], g2: [76.0, 86.0] },
+            { key: 'MCH',  label: 'MCH',  unit: 'pg',     g1: [25.5, 30.6], g2: [25.7, 30.6] },
+            { key: 'MCHC', label: 'MCHC', unit: 'g/dL',   g1: [33.2, 36.0], g2: [33.5, 36.1] },
+            { key: 'RDW',  label: 'RDW',  unit: '%',      g1: [11.9, 14.9], g2: [12.0, 14.1] }
+        ];
+        var STATUS_COLORS = { normal: '#10b981', low: '#f59e0b', high: '#f43f5e', na: '#9ca3af' };
+        var refChartInstance = null;
+        var lastRefData = null;
+
+        function renderReferenceRanges(values, ageMonths) {
+            if (typeof ApexCharts === 'undefined') {
+                console.warn('ApexCharts not available; skip reference range chart.');
+                return;
+            }
+            lastRefData = { values: values, ageMonths: ageMonths };
+
+            var isG1 = ageMonths <= 72; // ≤ 6 ปี
+            var gKey = isG1 ? 'g1' : 'g2';
+            $("#ageGroupBadge").text(isG1
+                ? getLangText('Group 1 (อายุ ≤ 6 ปี)', 'Group 1 (≤ 6 y)')
+                : getLangText('Group 2 (อายุ > 6 ปี)', 'Group 2 (> 6 y)'));
+
+            var barData = [];
+            var annotations = [];
+            var meta = [];
+            var abnormal = [];
+
+            REF_RANGES.forEach(function(p) {
+                var min = p[gKey][0], max = p[gKey][1];
+                var v = values[p.key];
+                var hasV = !isNaN(v);
+                var cat = p.label + ' (' + p.unit + ')';
+
+                var status = 'na';
+                if (hasV) status = (v < min) ? 'low' : (v > max ? 'high' : 'normal');
+                if (status === 'low' || status === 'high') abnormal.push(p.label);
+
+                // normalize ให้แต่ละแถวมี scale ของตัวเอง (bullet style) → ค่าที่ scale เล็ก เช่น RBC ไม่ถูกบีบ
+                var span = (max - min) || 1;
+                var lo = min - span * 0.9, hi = max + span * 0.9;
+                if (hasV) {
+                    if (v < lo) lo = v - span * 0.25;
+                    if (v > hi) hi = v + span * 0.25;
+                }
+                var norm = function(x) { return ((x - lo) / (hi - lo)) * 100; };
+
+                barData.push({ x: cat, y: [ +norm(min).toFixed(2), +norm(max).toFixed(2) ], fillColor: '#ede9fe' });
+                meta.push({ label: p.label, unit: p.unit, min: min, max: max, value: hasV ? v : null, status: status });
+
+                if (hasV) {
+                    var icon = status === 'low' ? '▼' : (status === 'high' ? '▲' : '●');
+                    annotations.push({
+                        x: +norm(v).toFixed(2),
+                        y: cat,
+                        marker: { size: 6, fillColor: STATUS_COLORS[status], strokeColor: '#ffffff', strokeWidth: 2 },
+                        label: {
+                            text: icon + ' ' + v,
+                            borderColor: STATUS_COLORS[status],
+                            offsetY: -2,
+                            style: { background: STATUS_COLORS[status], color: '#fff', fontSize: '10px', fontWeight: 600, padding: { left: 5, right: 5, top: 2, bottom: 2 } }
+                        }
+                    });
+                }
+            });
+
+            var options = {
+                chart: { type: 'rangeBar', height: 360, fontFamily: 'Prompt, Poppins, sans-serif', toolbar: { show: false }, animations: { enabled: true, speed: 400 } },
+                series: [{ name: getLangText('ช่วงปกติ', 'Normal range'), data: barData }],
+                plotOptions: { bar: { horizontal: true, borderRadius: 6, barHeight: '42%' } },
+                colors: ['#ede9fe'],
+                dataLabels: {
+                    enabled: true,
+                    formatter: function(val, opts) {
+                        var m = meta[opts.dataPointIndex];
+                        return m.min + '–' + m.max;
+                    },
+                    style: { fontSize: '10px', colors: ['#7c3aed'], fontWeight: 600 }
+                },
+                xaxis: { min: 0, max: 100, labels: { show: false }, axisBorder: { show: false }, axisTicks: { show: false } },
+                yaxis: { labels: { style: { fontSize: '12px', fontWeight: 600, colors: '#374151' } } },
+                grid: { show: false, padding: { left: 0, right: 10, top: 0, bottom: 0 } },
+                legend: { show: false },
+                annotations: { points: annotations },
+                tooltip: {
+                    custom: function(o) {
+                        var m = meta[o.dataPointIndex];
+                        var stTxt = m.status === 'normal' ? getLangText('ปกติ', 'Normal')
+                            : m.status === 'low' ? getLangText('ต่ำกว่าช่วง', 'Below range')
+                            : m.status === 'high' ? getLangText('สูงกว่าช่วง', 'Above range')
+                            : getLangText('ไม่มีข้อมูล', 'No data');
+                        var valLine = m.value === null ? '' :
+                            '<div style="margin-top:3px"><b>' + getLangText('ค่าคนไข้', 'Value') + ':</b> ' + m.value + ' ' + m.unit + ' · <span style="color:' + STATUS_COLORS[m.status] + ';font-weight:700">' + stTxt + '</span></div>';
+                        return '<div style="padding:8px 10px;font-family:Prompt,sans-serif;font-size:12px;line-height:1.4">'
+                            + '<div style="font-weight:700;margin-bottom:2px">' + m.label + ' (' + m.unit + ')</div>'
+                            + '<div><b>' + getLangText('ช่วงปกติ', 'Normal') + ':</b> ' + m.min + '–' + m.max + ' ' + m.unit + '</div>'
+                            + valLine + '</div>';
+                    }
+                }
+            };
+
+            if (refChartInstance) { refChartInstance.destroy(); refChartInstance = null; }
+            refChartInstance = new ApexCharts(document.querySelector('#refRangeChart'), options);
+            refChartInstance.render();
+
+            renderRefSummary(values, abnormal);
+        }
+
+        // สรุปผลคัดกรอง + Mentzer Index (ตัวช่วยแยก TT จาก IDA)
+        function renderRefSummary(values, abnormal) {
+            var html = '';
+            if (abnormal.length === 0) {
+                html += '<div class="flex items-start gap-2 bg-emerald-50 border border-emerald-100 rounded-xl p-3">'
+                    + '<span class="text-emerald-500 text-lg leading-none">✓</span>'
+                    + '<span class="text-sm text-emerald-800">' + getLangText('ทุกค่าอยู่ในช่วงอ้างอิงของกลุ่มอายุ', 'All values within the age-group reference range') + '</span></div>';
+            } else {
+                html += '<div class="flex items-start gap-2 bg-amber-50 border border-amber-100 rounded-xl p-3">'
+                    + '<span class="text-amber-500 text-lg leading-none font-bold">!</span>'
+                    + '<span class="text-sm text-amber-800">' + getLangText('ค่าที่อยู่นอกช่วง', 'Out of range') + ': <b>' + abnormal.join(', ') + '</b></span></div>';
+            }
+
+            var mcv = values.MCV, rbc = values.RBC;
+            if (!isNaN(mcv) && !isNaN(rbc) && rbc > 0) {
+                var mentzer = mcv / rbc;
+                var suggestTT = mentzer < 13;
+                var suggestTxt = suggestTT
+                    ? getLangText('โน้มเอียงไปทาง Thalassemia trait (TT)', 'Suggestive of Thalassemia trait (TT)')
+                    : getLangText('โน้มเอียงไปทาง Iron Deficiency Anemia (IDA)', 'Suggestive of Iron Deficiency Anemia (IDA)');
+                var accent = suggestTT ? 'sky' : 'orange';
+                html += '<div class="bg-' + accent + '-50 border border-' + accent + '-100 rounded-xl p-3">'
+                    + '<div class="flex items-center justify-between">'
+                    + '<span class="text-sm font-semibold text-gray-700">Mentzer Index <span class="text-xs font-normal text-gray-400">(MCV/RBC)</span></span>'
+                    + '<span class="text-base font-bold text-' + accent + '-600">' + mentzer.toFixed(1) + '</span></div>'
+                    + '<div class="text-xs text-gray-600 mt-1">' + suggestTxt
+                    + ' <span class="text-gray-400">(&lt; 13 → TT, &gt; 13 → IDA)</span></div></div>';
+            }
+
+            $("#refRangeSummary").html(html).show();
         }
 
         // Debug: ตรวจสอบว่า script ทำงาน
@@ -1325,6 +1488,12 @@
                             $("#responseAgree").hide();
                             openModal(); // Show the modal popup
                             updateRequestCount(); // Update count after new prediction
+
+                            // Result Card 2: แสดงตำแหน่งค่าเลือดเทียบช่วงอ้างอิง (เรียกหลังเปิด modal ให้ container มีความกว้าง)
+                            renderReferenceRanges({
+                                RBC: RBC, Hb: Hb, Hct: Hct, MCV: MCV,
+                                MCH: MCH, MCHC: MCHC, RDW: RDW
+                            }, Ages_mo_all);
                         },
                         error: function(e) {
                             console.error("=== Error จาก AiController/predict ===");
@@ -1397,6 +1566,11 @@
 
                 // Update HTML lang attribute
                 document.documentElement.lang = lang;
+
+                // Re-render reference range chart with new language (if it has been shown)
+                if (typeof lastRefData !== 'undefined' && lastRefData && document.getElementById('refRangeChart')) {
+                    renderReferenceRanges(lastRefData.values, lastRefData.ageMonths);
+                }
             }
         })();
     </script>
