@@ -403,25 +403,38 @@
 
                             <!-- Age group -->
                             <div class="flex items-center justify-center gap-2 mb-3">
-                                <span class="text-xs text-gray-500" data-lang-th="กลุ่มอายุ" data-lang-en="Age group">กลุ่มอายุ</span>
-                                <span id="ageGroupBadge" class="inline-flex items-center gap-1 bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-semibold">-</span>
+                                <span class="text-sm text-gray-600" data-lang-th="กลุ่มอายุ" data-lang-en="Age group">กลุ่มอายุ</span>
+                                <span id="ageGroupBadge" class="inline-flex items-center gap-1 bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-semibold">-</span>
                             </div>
 
-                            <!-- Legend -->
-                            <div class="flex items-center justify-center flex-wrap gap-x-4 gap-y-1 mb-2 text-[11px] text-gray-600">
-                                <span class="inline-flex items-center gap-1"><span class="w-4 h-3 rounded-sm bg-purple-200 border border-purple-300"></span><span data-lang-th="ช่วงปกติ" data-lang-en="Normal range">ช่วงปกติ</span></span>
-                                <span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-emerald-500"></span><span data-lang-th="ค่าคนไข้ (ปกติ)" data-lang-en="Value (normal)">ค่าคนไข้ (ปกติ)</span></span>
-                                <span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-amber-500"></span><span data-lang-th="ต่ำกว่าช่วง" data-lang-en="Below range">ต่ำกว่าช่วง</span></span>
-                                <span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-rose-500"></span><span data-lang-th="สูงกว่าช่วง" data-lang-en="Above range">สูงกว่าช่วง</span></span>
+                            <!-- Legend (shown with chart view) -->
+                            <div id="refRangeLegend" class="hidden sm:flex items-center justify-center flex-wrap gap-x-4 gap-y-1 mb-3 text-sm text-gray-700">
+                                <span class="inline-flex items-center gap-1.5"><span class="w-5 h-3 rounded-sm bg-emerald-200 border border-emerald-500"></span><span data-lang-th="ช่วงปกติ" data-lang-en="Normal range">ช่วงปกติ</span></span>
+                                <span class="inline-flex items-center gap-1.5"><span class="w-3.5 h-3.5 rounded-full bg-emerald-600"></span><span data-lang-th="ค่าคนไข้ (ปกติ)" data-lang-en="Value (normal)">ค่าคนไข้ (ปกติ)</span></span>
+                                <span class="inline-flex items-center gap-1.5"><span class="w-3.5 h-3.5 rounded-full bg-amber-600"></span><span data-lang-th="ต่ำกว่าช่วง" data-lang-en="Below range">ต่ำกว่าช่วง</span></span>
+                                <span class="inline-flex items-center gap-1.5"><span class="w-3.5 h-3.5 rounded-full bg-rose-600"></span><span data-lang-th="สูงกว่าช่วง" data-lang-en="Above range">สูงกว่าช่วง</span></span>
                             </div>
 
-                            <!-- Range bar chart (ApexCharts, rendered by JS) -->
-                            <div id="refRangeChart" class="-ml-1"></div>
+                            <!-- Range table + chart (rendered by JS) -->
+                            <div id="refRangeChart"></div>
+
+                            <!-- MCV-RDW Scatter Plot: กราฟแยก TT / IDA -->
+                            <div class="mt-6 bg-white rounded-xl border border-purple-100 p-4">
+                                <h4 class="text-sm font-bold text-purple-700 mb-1 text-center flex items-center justify-center gap-2">
+                                    <span class="text-base">&#127919;</span>
+                                    <span data-lang-th="กราฟ MCV vs RDW แยกโรค TT / IDA" data-lang-en="MCV vs RDW Scatter Plot for TT / IDA">กราฟ MCV vs RDW แยกโรค TT / IDA</span>
+                                </h4>
+                                <p class="text-center text-xs text-gray-600 mb-2" data-lang-th="MCV ต่ำ + RDW สูง → IDA | MCV ต่ำ + RDW ปกติ → TT · เส้นประ: MCV &lt; 80, RDW &gt; 14.5" data-lang-en="Low MCV + High RDW → IDA | Low MCV + Normal RDW → TT · Dashed lines: MCV &lt; 80, RDW &gt; 14.5">MCV ต่ำ + RDW สูง → IDA | MCV ต่ำ + RDW ปกติ → TT · เส้นประ: MCV &lt; 80, RDW &gt; 14.5</p>
+                                <div id="mcvRdwScatter" class="w-full" role="img" aria-label="MCV vs RDW scatter plot"></div>
+                            </div>
+
+                            <!-- Screening Indices: ดัชนีคัดกรอง 3 ตัว (Mentzer, Shine & Lal, Green & King) -->
+                            <div id="screeningIndices" class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3" style="display:none;"></div>
 
                             <!-- Screening summary -->
                             <div id="refRangeSummary" class="mt-4 space-y-2" style="display:none;"></div>
 
-                            <p class="text-[10px] text-gray-400 mt-3 text-center leading-relaxed" data-lang-th="* ช่วงอ้างอิงสำหรับคัดกรองเบื้องต้นเท่านั้น ไม่ใช่การวินิจฉัย โปรดพิจารณาร่วมกับดุลยพินิจของแพทย์" data-lang-en="* Reference ranges are for preliminary screening only, not a diagnosis. Use alongside clinical judgment.">* ช่วงอ้างอิงสำหรับคัดกรองเบื้องต้นเท่านั้น ไม่ใช่การวินิจฉัย โปรดพิจารณาร่วมกับดุลยพินิจของแพทย์</p>
+                            <p class="text-xs text-gray-600 mt-3 text-center leading-relaxed" data-lang-th="* ช่วงอ้างอิงสำหรับคัดกรองเบื้องต้นเท่านั้น ไม่ใช่การวินิจฉัย โปรดพิจารณาร่วมกับดุลยพินิจของแพทย์" data-lang-en="* Reference ranges are for preliminary screening only, not a diagnosis. Use alongside clinical judgment.">* ช่วงอ้างอิงสำหรับคัดกรองเบื้องต้นเท่านั้น ไม่ใช่การวินิจฉัย โปรดพิจารณาร่วมกับดุลยพินิจของแพทย์</p>
                         </div>
                     </div>
                 </div>
@@ -737,8 +750,10 @@
             return lang === 'en' ? en : th;
         }
 
-        // ===== Result Card 2: ตำแหน่งค่าเลือดเทียบช่วงอ้างอิง (ApexCharts range bar) =====
+        // ===== Result Card 2: ตำแหน่งค่าเลือดเทียบช่วงอ้างอิง =====
         // ช่วงอ้างอิงแยกตามกลุ่มอายุ: g1 = อายุ ≤ 6 ปี (≤ 72 เดือน), g2 = อายุ > 6 ปี
+        // Mobile: ตาราง 3 คอลัมน์เป็นค่าเริ่มต้น + toggle ดูแผนภาพ
+        // Desktop (sm+): ตาราง + แถบตำแหน่งเสมอ
         var REF_RANGES = [
             { key: 'Hb',   label: 'Hb',   unit: 'g/dL',   g1: [11.0, 13.9], g2: [11.3, 14.3] },
             { key: 'Hct',  label: 'Hct',  unit: '%',      g1: [32.0, 39.0], g2: [33.0, 41.0] },
@@ -748,15 +763,11 @@
             { key: 'MCHC', label: 'MCHC', unit: 'g/dL',   g1: [33.2, 36.0], g2: [33.5, 36.1] },
             { key: 'RDW',  label: 'RDW',  unit: '%',      g1: [11.9, 14.9], g2: [12.0, 14.1] }
         ];
-        var STATUS_COLORS = { normal: '#10b981', low: '#f59e0b', high: '#f43f5e', na: '#9ca3af' };
-        var refChartInstance = null;
+        var STATUS_COLORS = { normal: '#059669', low: '#b45309', high: '#e11d48', na: '#6b7280' };
         var lastRefData = null;
+        var showRefChartBars = false; // mobile toggle: false = table only
 
         function renderReferenceRanges(values, ageMonths) {
-            if (typeof ApexCharts === 'undefined') {
-                console.warn('ApexCharts not available; skip reference range chart.');
-                return;
-            }
             lastRefData = { values: values, ageMonths: ageMonths };
 
             var isG1 = ageMonths <= 72; // ≤ 6 ปี
@@ -765,89 +776,220 @@
                 ? getLangText('Group 1 (อายุ ≤ 6 ปี)', 'Group 1 (≤ 6 y)')
                 : getLangText('Group 2 (อายุ > 6 ปี)', 'Group 2 (> 6 y)'));
 
-            var barData = [];
-            var annotations = [];
-            var meta = [];
+            // Contrast-safe status colors (WCAG AA on white)
+            var STATUS_TEXT = { normal: 'text-emerald-800', low: 'text-amber-800', high: 'text-rose-700', na: 'text-gray-500' };
+            var STATUS_LABEL = {
+                normal: getLangText('ปกติ', 'Normal'),
+                low: getLangText('ต่ำกว่า', 'Low'),
+                high: getLangText('สูงกว่า', 'High'),
+                na: '–'
+            };
             var abnormal = [];
+            var tableRows = '';
+            var chartRows = '';
 
             REF_RANGES.forEach(function(p) {
                 var min = p[gKey][0], max = p[gKey][1];
                 var v = values[p.key];
                 var hasV = !isNaN(v);
-                var cat = p.label + ' (' + p.unit + ')';
 
                 var status = 'na';
                 if (hasV) status = (v < min) ? 'low' : (v > max ? 'high' : 'normal');
                 if (status === 'low' || status === 'high') abnormal.push(p.label);
 
-                // normalize ให้แต่ละแถวมี scale ของตัวเอง (bullet style) → ค่าที่ scale เล็ก เช่น RBC ไม่ถูกบีบ
+                var statusIcon = status === 'low' ? '▼ ' : status === 'high' ? '▲ ' : status === 'normal' ? '● ' : '';
+                var srSummary = hasV
+                    ? (p.label + ' ' + v + ' ' + p.unit + ', ' + STATUS_LABEL[status] + getLangText('ช่วงปกติ ', ' normal range ') + min + '–' + max)
+                    : (p.label + getLangText(' ไม่มีค่า', ' no value'));
+
+                // --- Table row (mobile default + a11y) ---
+                tableRows += '<tr class="border-b border-gray-100 last:border-0">'
+                    + '<th scope="row" class="py-3 pl-3 pr-2 text-left align-middle">'
+                    + '<span class="block text-base font-bold text-gray-900">' + p.label + '</span>'
+                    + '<span class="block text-sm text-gray-600">' + p.unit + '</span>'
+                    + '<span class="sr-only">' + srSummary + '</span>'
+                    + '</th>'
+                    + '<td class="py-3 px-1 align-middle">'
+                    + '<span class="inline-block text-sm font-bold text-emerald-900 bg-emerald-50 border border-emerald-400 rounded-md px-2.5 py-1 whitespace-nowrap">'
+                    + min + '–' + max + '</span>'
+                    + '</td>'
+                    + '<td class="py-3 pr-3 pl-2 text-right align-middle">'
+                    + (hasV
+                        ? '<span class="block text-lg font-bold ' + STATUS_TEXT[status] + '">' + v + '</span>'
+                          + '<span class="block text-sm font-semibold ' + STATUS_TEXT[status] + '">' + statusIcon + STATUS_LABEL[status] + '</span>'
+                        : '<span class="text-gray-500 text-base">–</span>')
+                    + '</td></tr>';
+
+                // --- Chart bar row: ตัวเลขอยู่ในกราฟ (ช่วงปกติบนแถบเขียว · ค่าคนไข้เหนือจุด) ---
                 var span = (max - min) || 1;
                 var lo = min - span * 0.9, hi = max + span * 0.9;
+                // ขยายสเกลให้ค่าคนไข้ไม่ถูกดันไปกองขอบ
                 if (hasV) {
-                    if (v < lo) lo = v - span * 0.25;
-                    if (v > hi) hi = v + span * 0.25;
+                    if (v < lo) lo = v - Math.max(span * 0.2, Math.abs(min - v) * 0.1);
+                    if (v > hi) hi = v + Math.max(span * 0.2, Math.abs(v - max) * 0.1);
                 }
-                var norm = function(x) { return ((x - lo) / (hi - lo)) * 100; };
-
-                barData.push({ x: cat, y: [ +norm(min).toFixed(2), +norm(max).toFixed(2) ], fillColor: '#ede9fe' });
-                meta.push({ label: p.label, unit: p.unit, min: min, max: max, value: hasV ? v : null, status: status });
-
+                var pct = function(x) { return Math.max(0, Math.min(100, ((x - lo) / (hi - lo)) * 100)); };
+                var bandL = pct(min), bandR = pct(max);
+                var color = STATUS_COLORS[status];
+                var marker = '';
                 if (hasV) {
-                    var icon = status === 'low' ? '▼' : (status === 'high' ? '▲' : '●');
-                    annotations.push({
-                        x: +norm(v).toFixed(2),
-                        y: cat,
-                        marker: { size: 6, fillColor: STATUS_COLORS[status], strokeColor: '#ffffff', strokeWidth: 2 },
-                        label: {
-                            text: icon + ' ' + v,
-                            borderColor: STATUS_COLORS[status],
-                            offsetY: -2,
-                            style: { background: STATUS_COLORS[status], color: '#fff', fontSize: '10px', fontWeight: 600, padding: { left: 5, right: 5, top: 2, bottom: 2 } }
-                        }
-                    });
+                    var px = pct(v);
+                    px = Math.max(4, Math.min(96, px));
+                    marker = '<div class="absolute z-20" style="left:' + px.toFixed(1) + '%;top:50%;transform:translate(-50%,-50%)" aria-hidden="true">'
+                        + '<div class="absolute left-1/2 -translate-x-1/2 whitespace-nowrap text-sm font-bold px-2 py-0.5 rounded-md" style="bottom:calc(100% + 4px);color:' + color + ';background:rgba(255,255,255,.96);box-shadow:0 1px 2px rgba(0,0,0,.1)">'
+                        + statusIcon + v
+                        + '</div>'
+                        + '<div style="width:16px;height:16px;border-radius:9999px;background:' + color + ';border:2.5px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.3)"></div>'
+                        + '</div>';
                 }
+
+                chartRows += '<div class="grid grid-cols-[64px_1fr] gap-x-3 items-center py-3.5 px-1 even:bg-emerald-50/40" aria-hidden="true">'
+                    + '<div class="leading-tight"><div class="text-base font-bold text-gray-900">' + p.label + '</div>'
+                    + '<div class="text-sm text-gray-600">' + p.unit + '</div></div>'
+                    + '<div class="relative h-14 pt-6">'
+                    + '<div class="absolute inset-x-0 bottom-2 h-5 rounded-full bg-gray-200"></div>'
+                    + '<div class="absolute bottom-2 h-5 rounded-full bg-emerald-200 border border-emerald-500 flex items-center justify-center overflow-hidden" style="left:' + bandL.toFixed(1) + '%;right:' + (100 - bandR).toFixed(1) + '%">'
+                    + '<span class="text-sm font-bold text-emerald-900 whitespace-nowrap px-1.5">' + min + '–' + max + '</span>'
+                    + '</div>'
+                    + '<div class="absolute inset-x-0 bottom-2 h-5">' + marker + '</div>'
+                    + '</div></div>';
             });
 
-            var options = {
-                chart: { type: 'rangeBar', height: 360, fontFamily: 'Prompt, Poppins, sans-serif', toolbar: { show: false }, animations: { enabled: true, speed: 400 } },
-                series: [{ name: getLangText('ช่วงปกติ', 'Normal range'), data: barData }],
-                plotOptions: { bar: { horizontal: true, borderRadius: 6, barHeight: '42%' } },
-                colors: ['#ede9fe'],
-                dataLabels: {
-                    enabled: true,
-                    formatter: function(val, opts) {
-                        var m = meta[opts.dataPointIndex];
-                        return m.min + '–' + m.max;
-                    },
-                    style: { fontSize: '10px', colors: ['#7c3aed'], fontWeight: 600 }
-                },
-                xaxis: { min: 0, max: 100, labels: { show: false }, axisBorder: { show: false }, axisTicks: { show: false } },
-                yaxis: { labels: { style: { fontSize: '12px', fontWeight: 600, colors: '#374151' } } },
-                grid: { show: false, padding: { left: 0, right: 10, top: 0, bottom: 0 } },
-                legend: { show: false },
-                annotations: { points: annotations },
-                tooltip: {
-                    custom: function(o) {
-                        var m = meta[o.dataPointIndex];
-                        var stTxt = m.status === 'normal' ? getLangText('ปกติ', 'Normal')
-                            : m.status === 'low' ? getLangText('ต่ำกว่าช่วง', 'Below range')
-                            : m.status === 'high' ? getLangText('สูงกว่าช่วง', 'Above range')
-                            : getLangText('ไม่มีข้อมูล', 'No data');
-                        var valLine = m.value === null ? '' :
-                            '<div style="margin-top:3px"><b>' + getLangText('ค่าคนไข้', 'Value') + ':</b> ' + m.value + ' ' + m.unit + ' · <span style="color:' + STATUS_COLORS[m.status] + ';font-weight:700">' + stTxt + '</span></div>';
-                        return '<div style="padding:8px 10px;font-family:Prompt,sans-serif;font-size:12px;line-height:1.4">'
-                            + '<div style="font-weight:700;margin-bottom:2px">' + m.label + ' (' + m.unit + ')</div>'
-                            + '<div><b>' + getLangText('ช่วงปกติ', 'Normal') + ':</b> ' + m.min + '–' + m.max + ' ' + m.unit + '</div>'
-                            + valLine + '</div>';
-                    }
-                }
-            };
+            var chartPanelClass = showRefChartBars ? 'block sm:block' : 'hidden sm:block';
+            var toggleLabel = showRefChartBars
+                ? getLangText('ซ่อนแผนภาพ', 'Hide chart')
+                : getLangText('ดูแผนภาพ', 'Show chart');
 
-            if (refChartInstance) { refChartInstance.destroy(); refChartInstance = null; }
-            refChartInstance = new ApexCharts(document.querySelector('#refRangeChart'), options);
-            refChartInstance.render();
+            var html = '<div class="bg-white rounded-xl border border-emerald-200 overflow-hidden">'
+                // ตาราง: หลักบน mobile · desktop เก็บไว้สำหรับ screen reader (ตัวเลขอยู่ในกราฟแล้ว)
+                + '<table class="w-full text-base sm:sr-only">'
+                + '<caption class="sr-only">' + getLangText('ค่าเลือดเทียบช่วงอ้างอิงของกลุ่มอายุ', 'Blood values vs age-group reference ranges') + '</caption>'
+                + '<thead><tr class="bg-emerald-50 border-b border-emerald-200 text-sm font-semibold text-gray-700">'
+                + '<th scope="col" class="py-3 pl-3 pr-2 text-left">' + getLangText('ตัวชี้วัด', 'Test') + '</th>'
+                + '<th scope="col" class="py-3 px-1 text-left">' + getLangText('ช่วงปกติ', 'Normal') + '</th>'
+                + '<th scope="col" class="py-3 pr-3 pl-2 text-right">' + getLangText('ค่าคนไข้', 'Value') + '</th>'
+                + '</tr></thead>'
+                + '<tbody>' + tableRows + '</tbody>'
+                + '</table>'
+                + '<div class="sm:hidden border-t border-emerald-100 px-3 py-2">'
+                + '<button type="button" id="toggleRefChartBtn" class="w-full min-h-[44px] text-base font-semibold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 rounded-xl px-4 py-2.5 transition" aria-expanded="' + (showRefChartBars ? 'true' : 'false') + '" aria-controls="refChartBars">'
+                + toggleLabel + '</button></div>'
+                + '<div id="refChartBars" class="' + chartPanelClass + ' border-t border-emerald-100 sm:border-t-0 p-2 sm:p-3" aria-hidden="true">'
+                + '<p class="text-sm text-gray-600 mb-3">' + getLangText('แถบเขียว = ช่วงปกติ (ตัวเลขในแถบ) · จุด = ค่าคนไข้', 'Green bar = normal range (numbers on bar) · Dot = patient value') + '</p>'
+                + chartRows
+                + '</div></div>';
+
+            $("#refRangeChart").html(html);
+
+            // Legend: desktop always (sm:flex); mobile only when chart toggled on
+            var $legend = $("#refRangeLegend");
+            if (showRefChartBars) {
+                $legend.removeClass("hidden").addClass("flex sm:flex");
+            } else {
+                $legend.removeClass("flex").addClass("hidden sm:flex");
+            }
+
+            $("#toggleRefChartBtn").off("click").on("click", function() {
+                showRefChartBars = !showRefChartBars;
+                if (lastRefData) renderReferenceRanges(lastRefData.values, lastRefData.ageMonths);
+            });
 
             renderRefSummary(values, abnormal);
+            renderScreeningIndices(values);
+            renderMcvRdwScatter(values);
+        }
+
+        // ดัชนีคัดกรอง 3 ตัว แยก Thalassemia trait (TT) จาก Iron Deficiency Anemia (IDA)
+        // ทุกดัชนี: ค่าต่ำกว่าเกณฑ์ → โน้มไป TT, สูงกว่าเกณฑ์ → โน้มไป IDA
+        function renderScreeningIndices(values) {
+            var mcv = values.MCV, rbc = values.RBC, mch = values.MCH, rdw = values.RDW, hb = values.Hb;
+            var list = [];
+
+            // Mentzer = MCV / RBC  (< 13 → TT)
+            if (!isNaN(mcv) && !isNaN(rbc) && rbc > 0) {
+                var m = mcv / rbc;
+                list.push({ name: 'Mentzer', formula: 'MCV / RBC', value: m.toFixed(1), tt: m < 13, cutoff: '13' });
+            }
+            // Shine & Lal = MCV² × MCH / 100  (< 1530 → TT)
+            if (!isNaN(mcv) && !isNaN(mch)) {
+                var s = (mcv * mcv * mch) / 100;
+                list.push({ name: 'Shine & Lal', formula: 'MCV² × MCH / 100', value: s.toFixed(0), tt: s < 1530, cutoff: '1530' });
+            }
+            // Green & King = MCV² × RDW / (Hb × 100)  (< 65 → TT)
+            if (!isNaN(mcv) && !isNaN(rdw) && !isNaN(hb) && hb > 0) {
+                var g = (mcv * mcv * rdw) / (hb * 100);
+                list.push({ name: 'Green & King', formula: 'MCV² × RDW / (Hb × 100)', value: g.toFixed(1), tt: g < 65, cutoff: '65' });
+            }
+
+            if (list.length === 0) { $("#screeningIndices").hide().empty(); return; }
+
+            var html = list.map(function(ix) {
+                var accent = ix.tt ? 'sky' : 'orange';
+                var dx = ix.tt ? 'TT' : 'IDA';
+                return '<div class="bg-' + accent + '-50 border border-' + accent + '-100 rounded-xl p-3 text-center">'
+                    + '<div class="text-xs font-semibold text-gray-700">' + ix.name + '</div>'
+                    + '<div class="text-[10px] text-gray-400 mb-1">' + ix.formula + '</div>'
+                    + '<div class="text-xl font-bold text-' + accent + '-600">' + ix.value + '</div>'
+                    + '<div class="text-[11px] font-semibold text-' + accent + '-700 mt-1">→ ' + dx + '</div>'
+                    + '<div class="text-[10px] text-gray-400">' + getLangText('เกณฑ์', 'cutoff') + ' ' + ix.cutoff + '</div>'
+                    + '</div>';
+            }).join('');
+
+            $("#screeningIndices").html(html).show();
+        }
+
+        // กราฟ scatter MCV (แกน x) vs RDW (แกน y) พร้อมเส้นเกณฑ์แบ่งโซน TT / IDA — HTML/CSS ล้วน
+        function renderMcvRdwScatter(values) {
+            var el = document.querySelector('#mcvRdwScatter');
+            if (!el) return;
+            var wrap = el.parentElement;
+            var mcv = values.MCV, rdw = values.RDW;
+
+            if (isNaN(mcv) || isNaN(rdw)) { if (wrap) wrap.style.display = 'none'; return; }
+            if (wrap) wrap.style.display = '';
+
+            // ขอบเขตแกน
+            var X_MIN = 50, X_MAX = 110;   // MCV
+            var Y_MIN = 10, Y_MAX = 24;    // RDW
+            var MCV_CUT = 80, RDW_CUT = 14.5;
+            var fx = function(x) { return Math.max(0, Math.min(100, (x - X_MIN) / (X_MAX - X_MIN) * 100)); };
+            var fy = function(y) { return Math.max(0, Math.min(100, (y - Y_MIN) / (Y_MAX - Y_MIN) * 100)); };
+            var cutX = fx(MCV_CUT), cutY = fy(RDW_CUT);
+
+            var likelyIDA = (mcv < MCV_CUT) && (rdw > RDW_CUT);
+            var ptColor = likelyIDA ? '#c2410c' : '#0369a1';
+            var badgeBg = likelyIDA ? '#9a3412' : '#075985';
+            var px = fx(mcv), py = fy(rdw);
+
+            var zoneHint = likelyIDA
+                ? getLangText('โน้มไปทาง IDA (ขาดธาตุเหล็ก)', 'Suggestive of IDA (iron deficiency)')
+                : getLangText('โน้มไปทาง TT (ธาลัสซีเมีย trait)', 'Suggestive of TT (thalassemia trait)');
+
+            // โซน: ซ้ายบน (MCV ต่ำ, RDW สูง) = IDA, ซ้ายล่าง (MCV ต่ำ, RDW ปกติ) = TT
+            var html =
+                '<div class="relative w-full" style="height:260px;font-family:Prompt,sans-serif" role="img" aria-label="MCV ' + mcv + ', RDW ' + rdw + '. ' + zoneHint + '">'
+                + '<div class="absolute" style="left:40px;right:10px;top:8px;bottom:36px">'
+                +   '<div class="absolute inset-0 rounded-lg" style="background:#fafafa;border:1px solid #e5e7eb"></div>'
+                +   '<div class="absolute" style="left:0;top:0;width:' + cutX + '%;height:' + (100 - cutY) + '%;background:rgba(194,65,12,.08)"></div>'
+                +   '<div class="absolute" style="left:0;bottom:0;width:' + cutX + '%;height:' + cutY + '%;background:rgba(3,105,161,.08)"></div>'
+                +   '<div class="absolute" style="left:' + cutX + '%;top:0;bottom:0;border-left:1.5px dashed #6b7280"></div>'
+                +   '<div class="absolute" style="bottom:' + cutY + '%;left:0;right:0;border-top:1.5px dashed #6b7280"></div>'
+                +   '<div class="absolute text-sm font-bold" style="left:6px;top:6px;color:#9a3412">IDA</div>'
+                +   '<div class="absolute text-sm font-bold" style="left:6px;bottom:6px;color:#075985">TT</div>'
+                +   '<div class="absolute" style="left:' + px.toFixed(1) + '%;bottom:' + py.toFixed(1) + '%;transform:translate(-50%,50%)">'
+                +     '<div style="width:18px;height:18px;border-radius:9999px;background:' + ptColor + ';border:3px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.3)"></div>'
+                +     '<div class="absolute whitespace-nowrap text-sm font-bold px-2 py-0.5 rounded" style="left:50%;bottom:24px;transform:translateX(-50%);background:' + badgeBg + ';color:#fff">' + (likelyIDA ? 'IDA?' : 'TT?') + '</div>'
+                +   '</div>'
+                + '</div>'
+                + '<div class="absolute text-sm text-gray-600" style="left:2px;top:4px">RDW ' + Y_MAX + '</div>'
+                + '<div class="absolute text-sm text-gray-600" style="left:2px;bottom:38px">RDW ' + Y_MIN + '</div>'
+                + '<div class="absolute text-sm text-gray-600" style="left:40px;bottom:14px">MCV ' + X_MIN + '</div>'
+                + '<div class="absolute text-sm text-gray-600" style="right:10px;bottom:14px">MCV ' + X_MAX + '</div>'
+                + '<div class="absolute text-sm font-semibold text-gray-700" style="left:50%;bottom:12px;transform:translateX(-50%)">MCV (fL)</div>'
+                + '</div>'
+                + '<p class="text-sm text-gray-700 mt-2 text-center">' + zoneHint + ' · MCV ' + mcv + ', RDW ' + rdw + '</p>';
+
+            el.innerHTML = html;
         }
 
         // สรุปผลคัดกรอง + Mentzer Index (ตัวช่วยแยก TT จาก IDA)
