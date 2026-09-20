@@ -699,7 +699,7 @@
                         <span class="text-3xl">👎</span>
                     </div>
                     <h3 class="text-2xl font-bold text-gray-800 mb-2" data-lang-th="คุณไม่เห็นด้วยกับผลการประเมิน" data-lang-en="You disagree with the assessment">คุณไม่เห็นด้วยกับผลการประเมิน</h3>
-                    <p class="text-gray-600 text-sm" data-lang-th="กรุณาเลือกผลการประเมินที่คุณคิดว่าถูกต้อง" data-lang-en="Please select the assessment result you believe is correct">กรุณาเลือกผลการประเมินที่คุณคิดว่าถูกต้อง</p>
+                    <p id="rejectModalHint" class="text-gray-600 text-sm" data-lang-th="กรุณาเลือกผลการประเมินที่คุณคิดว่าถูกต้อง" data-lang-en="Please select the assessment result you believe is correct">กรุณาเลือกผลการประเมินที่คุณคิดว่าถูกต้อง</p>
                 </div>
                 <div id="rejectOptionsList" class="space-y-3 mb-6">
                     <!-- Options will be dynamically inserted here -->
@@ -744,6 +744,9 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="<?= base_url('assets/js/backend-bundle.min.js') ?>"></script>
     <script>
+        // ขอบเขตค่า CBC ดึงจาก AiConfig ตัวเดียวกับที่ฝั่ง server ใช้ตรวจ
+        var CBC_LIMITS = <?= json_encode((new \Config\AiConfig())->cbcLimits, JSON_UNESCAPED_UNICODE) ?>;
+
         // Language-aware text helper
         function getLangText(th, en) {
             var lang = localStorage.getItem('language') || 'th';
@@ -1335,6 +1338,10 @@
                     if (e.key === "Escape") closeModal();
                 });
 
+                function setRejectHint(th, en) {
+                    $("#rejectModalHint").attr('data-lang-th', th).attr('data-lang-en', en).text(getLangText(th, en));
+                }
+
                 // ฟังก์ชันสำหรับแสดง modal reject options
                 function showRejectOptionsModal() {
                     var options = window.rejectOptions || [];
@@ -1351,22 +1358,37 @@
                     } else {
                         // Option labels with language support
                         var optionLabels = {
-                            'normal': getLangText('ปกติ (Normal)', 'Normal'),
-                            'abnormal': getLangText('ผิดปกติ (Abnormal)', 'Abnormal'),
-                            'TT': 'Thalassemia Trait (TT)',
-                            'TD': 'Thalassemia Disease (TD)',
-                            'IDA': 'Iron Deficiency Anemia (IDA)',
-                            'other': getLangText('อื่นๆ (Other)', 'Other')
+                            'Normal': getLangText('ปกติ (Normal)', 'Normal'),
+                            'Abnormal': getLangText('ผิดปกติ (Abnormal)', 'Abnormal'),
+                            'Thalassemia Trait (TT)': getLangText('ธาลัสซีเมียแฝง (TT)', 'Thalassemia Trait (TT)'),
+                            'Thalassemia Disease (TD)': getLangText('โรคธาลัสซีเมีย (TD)', 'Thalassemia Disease (TD)'),
+                            'Iron Deficiency Anemia (IDA)': getLangText('โลหิตจางจากขาดธาตุเหล็ก (IDA)', 'Iron Deficiency Anemia (IDA)'),
+                            'Other': getLangText('อื่น ๆ (Other)', 'Other')
                         };
+
+                        // ตัวเลือกเดียว = ผลที่ถูกต้องมีทางเดียวอยู่แล้ว ไม่ต้องให้เลือก ให้ยืนยันอย่างเดียว
+                        var single = options.length === 1;
+                        var singleLabel = single ? (optionLabels[options[0]] || options[0]) : '';
+                        setRejectHint(
+                            single ? 'ผลที่ถูกต้องมีทางเดียวคือ ' + singleLabel + ' กดยืนยันเพื่อบันทึก'
+                                   : 'กรุณาเลือกผลการประเมินที่คุณคิดว่าถูกต้อง',
+                            single ? 'The only possible correction is ' + singleLabel + '. Press confirm to save.'
+                                   : 'Please select the assessment result you believe is correct'
+                        );
 
                         options.forEach(function(option, index) {
                             var label = optionLabels[option] || option;
                             console.log("Option " + (index + 1) + ":", option, "->", label);
 
                             var button = $('<button>')
-                                .addClass('w-full bg-white hover:bg-red-50 border-2 border-red-200 text-red-700 py-3 px-6 rounded-xl font-semibold transition text-left mb-2')
+                                .addClass(single
+                                    ? 'w-full bg-white hover:bg-emerald-50 border-2 border-emerald-300 text-emerald-800 py-3 px-6 rounded-xl font-semibold transition text-left mb-2'
+                                    : 'w-full bg-white hover:bg-red-50 border-2 border-red-200 text-red-700 py-3 px-6 rounded-xl font-semibold transition text-left mb-2')
                                 .attr('data-option', option)
-                                .html('<span class="flex items-center justify-between"><span>' + label + '</span><span class="text-red-400">→</span></span>');
+                                .html('<span class="flex items-center justify-between"><span>'
+                                    + (single ? getLangText('ยืนยัน', 'Confirm') + ': ' + label : label)
+                                    + '</span><span class="' + (single ? 'text-emerald-500' : 'text-red-400') + '">'
+                                    + (single ? '&#10003;' : '&#8594;') + '</span></span>');
 
                             button.on('click', function() {
                                 var selectedOption = $(this).attr('data-option');
@@ -1420,20 +1442,10 @@
                             closeRejectOptionsModal();
                             $("#confirmform").hide();
 
-                            // แสดงข้อความตาม response
-                            if (response.message) {
-                                $("#responseAgree").html(
-                                    '<span class="text-2xl">✓</span>' +
-                                    '<div class="font-bold">' + response.message + '</div>'
-                                );
-                            } else {
-                                $("#responseAgree").html(
-                                    '<span class="text-2xl">✓</span>' +
-                                    '<div class="font-bold">' + getLangText('ขอบคุณสำหรับความคิดเห็น!', 'Thank you for your feedback!') + '</div>'
-                                );
-                            }
-
-                            $("#responseAgree").fadeIn();
+                            $("#responseAgree").html(
+                                '<span class="text-2xl">✓</span>' +
+                                '<div class="font-bold">' + getLangText('ขอบคุณสำหรับความคิดเห็น!', 'Thank you for your feedback!') + '</div>'
+                            ).fadeIn();
                         },
                         error: function(e) {
                             console.error("=== Error จาก AiController/confirm ===");
@@ -1442,6 +1454,11 @@
                             console.error("Status Text:", e.statusText);
                             console.error("Response Text:", e.responseText);
                             console.error("=====================================");
+                            $("#confirmform").hide();
+                            $("#responseAgree").html(
+                                '<span class="text-2xl">!</span>' +
+                                '<div class="font-bold">' + getLangText('บันทึกความคิดเห็นไม่สำเร็จ', 'Could not record your feedback') + '</div>'
+                            ).fadeIn();
                         }
                     });
                 }
@@ -1473,20 +1490,10 @@
 
                             $("#confirmform").hide();
 
-                            // แสดงข้อความตาม response
-                            if (response.message) {
-                                $("#responseAgree").html(
-                                    '<span class="text-2xl">✓</span>' +
-                                    '<div class="font-bold">' + response.message + '</div>'
-                                );
-                            } else {
-                                $("#responseAgree").html(
-                                    '<span class="text-2xl">✓</span>' +
-                                    '<div class="font-bold">' + getLangText('ขอบคุณสำหรับความคิดเห็น!', 'Thank you for your feedback!') + '</div>'
-                                );
-                            }
-
-                            $("#responseAgree").fadeIn();
+                            $("#responseAgree").html(
+                                '<span class="text-2xl">✓</span>' +
+                                '<div class="font-bold">' + getLangText('ขอบคุณสำหรับความคิดเห็น!', 'Thank you for your feedback!') + '</div>'
+                            ).fadeIn();
                         },
                         error: function(e) {
                             console.error("=== Error จาก AiController/confirm ===");
@@ -1495,6 +1502,11 @@
                             console.error("Status Text:", e.statusText);
                             console.error("Response Text:", e.responseText);
                             console.error("=====================================");
+                            $("#confirmform").hide();
+                            $("#responseAgree").html(
+                                '<span class="text-2xl">!</span>' +
+                                '<div class="font-bold">' + getLangText('บันทึกความคิดเห็นไม่สำเร็จ', 'Could not record your feedback') + '</div>'
+                            ).fadeIn();
                         }
                     });
                 });
@@ -1564,13 +1576,13 @@
 
                     // ตรวจสอบค่า CBC - ไม่ให้เกิน 100 และไม่ให้ติดลบ
                     var cbcFields = [
-                        {name: "RBC", value: RBC, label: "RBC"},
-                        {name: "Hb", value: Hb, label: "Hb"},
-                        {name: "Hct", value: Hct, label: "Hct"},
-                        {name: "MCV", value: MCV, label: "MCV"},
-                        {name: "MCH", value: MCH, label: "MCH"},
-                        {name: "MCHC", value: MCHC, label: "MCHC"},
-                        {name: "RDW", value: RDW, label: "RDW"}
+                        {name: "RBC",  value: RBC,  label: "RBC",  key: "RBC"},
+                        {name: "Hb",   value: Hb,   label: "Hb",   key: "HB"},
+                        {name: "Hct",  value: Hct,  label: "Hct",  key: "HCT"},
+                        {name: "MCV",  value: MCV,  label: "MCV",  key: "MCV"},
+                        {name: "MCH",  value: MCH,  label: "MCH",  key: "MCH"},
+                        {name: "MCHC", value: MCHC, label: "MCHC", key: "MCHC"},
+                        {name: "RDW",  value: RDW,  label: "RDW",  key: "RDW"}
                     ];
 
                     for (var i = 0; i < cbcFields.length; i++) {
@@ -1582,15 +1594,12 @@
                             return false;
                         }
 
-                        // ตรวจสอบค่าติดลบ
-                        if (field.value < 0) {
-                            showError(field.name, field.label + getLangText(" ไม่สามารถติดลบได้", " cannot be negative"));
-                            return false;
-                        }
-
-                        // ตรวจสอบค่าเกิน 100
-                        if (field.value > 100) {
-                            showError(field.name, field.label + getLangText(" ไม่ควรเกิน 100", " should not exceed 100"));
+                        // ช่วงที่เป็นไปได้ต่างกันในแต่ละตัวชี้วัด ใช้เพดานเดียวไม่ได้
+                        var lim = CBC_LIMITS[field.key];
+                        if (lim && (field.value < lim[0] || field.value > lim[1])) {
+                            showError(field.name, field.label
+                                + getLangText(" ต้องอยู่ระหว่าง ", " must be between ")
+                                + lim[0] + "–" + lim[1] + " " + lim[2]);
                             return false;
                         }
                     }

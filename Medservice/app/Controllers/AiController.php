@@ -46,6 +46,14 @@ class AiController extends Controller
                 ->setJSON(['error' => 'No input data provided']);
         }
 
+        // ตรวจค่าก่อนยิงหาโมเดล ฝั่ง browser ข้ามได้ ฝั่งนี้ข้ามไม่ได้
+        if ($invalid = $this->validateCbcInput($inputdata)) {
+            log_message('warning', 'Predict rejected - ' . $invalid . ' | Data: ' . json_encode($inputdata));
+            return $this->response
+                ->setStatusCode(400)
+                ->setJSON(['error' => $invalid]);
+        }
+
         // API Configuration — required from .env (n8n.predictURL)
         $apiURL = env('n8n.predictURL') ?: throw new \RuntimeException('n8n.predictURL not set in .env');
 
@@ -75,6 +83,36 @@ class AiController extends Controller
         header('Content-Type: application/json; charset=utf-8');
         echo json_encode($processedData, JSON_UNESCAPED_UNICODE);
         exit;
+    }
+
+    /**
+     * ตรวจว่าค่าที่ส่งมาเป็นไปได้ทางสรีรวิทยา
+     *
+     * @return string|null ข้อความบอกสิ่งที่ผิด หรือ null ถ้าผ่าน
+     */
+    private function validateCbcInput(array $data): ?string
+    {
+        $config = new AiConfig();
+
+        $age = $data['Ages_mo_all'] ?? null;
+        [$ageMin, $ageMax] = $config->ageLimitMonths;
+
+        if (!is_numeric($age) || (float) $age < $ageMin || (float) $age > $ageMax) {
+            return sprintf('Ages_mo_all must be a number between %d and %d months', $ageMin, $ageMax);
+        }
+
+        foreach ($config->cbcLimits as $field => [$min, $max, $unit]) {
+            if (!isset($data[$field]) || !is_numeric($data[$field])) {
+                return $field . ' is required and must be a number';
+            }
+
+            $value = (float) $data[$field];
+            if ($value < $min || $value > $max) {
+                return sprintf('%s must be between %s and %s %s', $field, $min, $max, $unit);
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -225,23 +263,45 @@ class AiController extends Controller
                     ->setJSON(['error' => 'RejectOption is required']);
             }
 
+            // รับเฉพาะค่าที่เป็นตัวเลือกจริงที่ส่งให้ผู้ใช้ ไม่งั้น label ที่จะเอาไปเทรนเชื่อไม่ได้
+            $config  = new AiConfig();
+            $allowed = array_merge(
+                ['confirm'],
+                $config->rejectOptionsNormal,
+                $config->rejectOptionsAbnormal
+            );
+
+            if (!in_array($rejectOption, $allowed, true)) {
+                log_message('warning', 'Confirm rejected - invalid option: ' . $rejectOption);
+                return $this->response->setStatusCode(400)
+                    ->setJSON(['error' => 'Invalid RejectOption']);
+            }
+
             $anemiaModel = new Amenemiamodel();
+            $row = $anemiaModel->find($id);
 
-            // Prepare update data
-            $updateData = ['Rejectoption' => $rejectOption];
+            if ($row === null) {
+                return $this->response->setStatusCode(404)
+                    ->setJSON(['error' => 'Record not found']);
+            }
 
-            // If user disagrees, update both Rejectoption and Predict with the selected option
+            // ตอบได้ครั้งเดียวต่อ record แก้คำตอบไม่ได้
+            $existing = $row['rejectoption'] ?? ($row['Rejectoption'] ?? null);
+            if ($existing !== null && $existing !== '') {
+                log_message('info', 'Confirm ignored - already answered. ID: ' . $id);
+                return $this->response->setStatusCode(409)
+                    ->setJSON(['error' => 'Feedback already recorded']);
+            }
 
-            $anemiaModel->update($id, $updateData);
+            $anemiaModel->update($id, ['Rejectoption' => $rejectOption]);
+
+            log_message('info', 'Feedback saved - ID: ' . $id . ' | Option: ' . $rejectOption);
 
             $response = [
                 "info" => "updated",
                 "success" => true,
                 "id" => $id,
-                "rejectOption" => $rejectOption,
-                "message" => ($rejectOption === 'confirm')
-                    ? "ผู้ใช้เห็นด้วยกับผลการประเมิน"
-                    : "ผู้ใช้ไม่เห็นด้วย - ควรเป็น: " . $rejectOption
+                "rejectOption" => $rejectOption
             ];
 
             return $this->response
@@ -256,37 +316,6 @@ class AiController extends Controller
                     'message' => $e->getMessage()
                 ]);
         }
-    }
-
-    /**
-     * Map reject option to prediction label
-     *
-     * @param string $rejectOption Selected reject option
-     * @return string Prediction label
-     */
-    private function mapRejectOptionToLabel(string $rejectOption): string
-    {
-        $option = strtolower(trim($rejectOption));
-
-        // Map options to proper labels (รองรับทั้งชื่อย่อและชื่อเต็ม)
-        $labelMap = [
-            'normal' => 'Normal',
-            'abnormal' => 'Abnormal',
-            'thalassemia trait (tt)' => 'Thalassemia Trait (TT)',
-            'thalassemia disease (td)' => 'Thalassemia Disease (TD)',
-            'iron deficiency anemia (ida)' => 'Iron Deficiency Anemia (IDA)',
-            'other' => 'Other',
-            // รองรับชื่อย่อแบบเดิมด้วย
-            'tt' => 'Thalassemia Trait (TT)',
-            'td' => 'Thalassemia Disease (TD)',
-            'ida' => 'Iron Deficiency Anemia (IDA)',
-            // รองรับชื่อเต็มแบบไม่มีวงเล็บ
-            'thalassemia trait' => 'Thalassemia Trait (TT)',
-            'thalassemia disease' => 'Thalassemia Disease (TD)',
-            'iron deficiency anemia' => 'Iron Deficiency Anemia (IDA)'
-        ];
-
-        return $labelMap[$option] ?? ucfirst($option);
     }
 
     /**
