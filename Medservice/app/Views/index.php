@@ -1,3 +1,12 @@
+<?php
+// asset_v(): ต่อ ?v=<เวลาแก้ไขไฟล์> ท้าย URL รูป
+// เปลี่ยนไฟล์รูปเมื่อไหร่ URL เปลี่ยนเอง Cloudflare จึงไม่จ่ายรูปเก่าค้างไว้
+$asset_v = static function (string $path): string {
+    $file = FCPATH . ltrim($path, '/');
+
+    return base_url($path) . '?v=' . (is_file($file) ? filemtime($file) : 1);
+};
+?>
 <!DOCTYPE html>
 <html lang="th">
 
@@ -533,7 +542,7 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="glass rounded-3xl p-6 text-center card-hover shadow-lg border-t-4 border-yellow-400">
                     <div class="w-64 h-64 rounded-full overflow-hidden mx-auto mb-4 border-4 border-yellow-100 bg-yellow-50 flex items-center justify-center">
-                        <img src="<?= base_url('/img/team/patcharanapa.png') ?>" alt="พญ.พัชรนภา จงอัจฉริยกุล" class="w-full h-full object-cover" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-4xl\'>👩‍⚕️</span>'">
+                        <img src="<?= $asset_v('/img/team/patcharanapa.png') ?>" alt="พญ.พัชรนภา จงอัจฉริยกุล" class="w-full h-full object-cover" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-4xl\'>👩‍⚕️</span>'">
                     </div>
                     <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-semibold" data-lang-th="ที่ปรึกษาโครงการ" data-lang-en="Project Advisor">ที่ปรึกษาโครงการ</span>
                     <h3 class="text-lg font-bold text-gray-800 mt-3" data-lang-th="พญ.พัชรนภา จงอัจฉริยกุล" data-lang-en="Dr. Patcharanapa Chongachariyakul">พญ.พัชรนภา จงอัจฉริยกุล</h3>
@@ -541,7 +550,7 @@
                 </div>
                 <div class="glass rounded-3xl p-6 text-center card-hover shadow-lg border-t-4 border-sky-400">
                     <div class="w-64 h-64 rounded-full overflow-hidden mx-auto mb-4 border-4 border-sky-100 bg-sky-50 flex items-center justify-center">
-                        <img src="<?= base_url('/img/team/patcharee.png') ?>" alt="ผศ.ดร.พัชรี มณีรัตน์" class="w-full h-full object-cover" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-4xl\'>👩‍🔬</span>'">
+                        <img src="<?= $asset_v('/img/team/patcharee.png') ?>" alt="ผศ.ดร.พัชรี มณีรัตน์" class="w-full h-full object-cover" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-4xl\'>👩‍🔬</span>'">
                     </div>
                     <span class="bg-sky-100 text-sky-700 px-3 py-1 rounded-full text-xs font-semibold" data-lang-th="หัวหน้าโครงการ" data-lang-en="Project Leader">หัวหน้าโครงการ</span>
                     <h3 class="text-lg font-bold text-gray-800 mt-3" data-lang-th="ผศ.ดร.พัชรี มณีรัตน์" data-lang-en="Asst. Prof. Dr. Patcharee Maneerat">ผศ.ดร.พัชรี มณีรัตน์</h3>
@@ -550,7 +559,7 @@
                 <div class="glass rounded-3xl p-6 text-center card-hover shadow-lg border-t-4 border-purple-400">
                     <a href="<?= base_url('download/workshop.html') ?>">
 					<div class="w-64 h-64 rounded-full overflow-hidden mx-auto mb-4 border-4 border-purple-100 bg-purple-50 flex items-center justify-center">
-                        <img src="<?= base_url('/img/team/pisit.png') ?>" alt="ผศ.ดร.พิศิษฐ์ นาคใจ" class="w-full h-full object-cover" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-4xl\'>👨‍💻</span>'">
+                        <img src="<?= $asset_v('/img/team/pisit.png') ?>" alt="ผศ.ดร.พิศิษฐ์ นาคใจ" class="w-full h-full object-cover" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-4xl\'>👨‍💻</span>'">
                     </div>
                     <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-semibold" data-lang-th="ผู้ร่วมวิจัย" data-lang-en="Co-Researcher">ผู้ร่วมวิจัย </span>
                     <h3 class="text-lg font-bold text-gray-800 mt-3" data-lang-th="ผศ.ดร.พิศิษฐ์ นาคใจ" data-lang-en="Asst. Prof. Dr. Pisit Nakjai">ผศ.ดร.พิศิษฐ์ นาคใจ</h3>
@@ -559,7 +568,7 @@
 				</div>
                 <div class="glass rounded-3xl p-6 text-center card-hover shadow-lg border-t-4 border-green-400">
                     <div class="w-64 h-64 rounded-full overflow-hidden mx-auto mb-4 border-4 border-green-100 bg-green-50 flex items-center justify-center">
-                        <img src="<?= base_url('/img/team/niyada.jpg') ?>" alt="อาจารย์ ดร.นิยดา รักวงษ์" class="w-full h-full object-cover" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-4xl\'>👩‍🏫</span>'">
+                        <img src="<?= $asset_v('/img/team/niyada.jpg') ?>" alt="อาจารย์ ดร.นิยดา รักวงษ์" class="w-full h-full object-cover" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-4xl\'>👩‍🏫</span>'">
                     </div>
                     <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold" data-lang-th="ผู้ร่วมวิจัย" data-lang-en="Co-Researcher">ผู้ร่วมวิจัย</span>
                     <h3 class="text-lg font-bold text-gray-800 mt-3" data-lang-th="อาจารย์ ดร.นิยดา รักวงษ์" data-lang-en="Dr. Niyada Rakwong">อาจารย์ ดร.นิยดา รักวงษ์</h3>
@@ -567,7 +576,7 @@
                 </div>
                 <div class="glass rounded-3xl p-6 text-center card-hover shadow-lg border-t-4 border-orange-400">
                     <div class="w-64 h-64 rounded-full overflow-hidden mx-auto mb-4 border-4 border-orange-100 bg-orange-50 flex items-center justify-center">
-                        <img src="<?= base_url('/img/team/suthipod.jpg') ?>" alt="อาจารย์ ดร.สุทธิพจน์ พีรณวงษ์" class="w-full h-full object-cover" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-4xl\'>👨‍🎓</span>'">
+                        <img src="<?= $asset_v('/img/team/suthipod.jpg') ?>" alt="อาจารย์ ดร.สุทธิพจน์ พีรณวงษ์" class="w-full h-full object-cover" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-4xl\'>👨‍🎓</span>'">
                     </div>
                     <span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-semibold" data-lang-th="ผู้ร่วมวิจัย" data-lang-en="Co-Researcher">ผู้ร่วมวิจัย</span>
                     <h3 class="text-lg font-bold text-gray-800 mt-3" data-lang-th="อาจารย์ ดร.สุทธิพจน์ พีรณวงษ์" data-lang-en="Dr. Sutthiphod Phiranawong">อาจารย์ ดร.สุทธิพจน์ พีรณวงษ์</h3>
@@ -575,7 +584,7 @@
                 </div>
                 <div class="glass rounded-3xl p-6 text-center card-hover shadow-lg border-t-4 border-purple-400">
                     <div class="w-64 h-64 rounded-full overflow-hidden mx-auto mb-4 border-4 border-purple-100 bg-purple-50 flex items-center justify-center">
-                        <img src="<?= base_url('/img/team/tadchai.jpg') ?>" alt="ผศ.ดร. ธัชชัย อยู่ยิ่ง" class="w-full h-full object-cover" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-4xl\'>👨‍🎓</span>'">
+                        <img src="<?= $asset_v('/img/team/tadchai.jpg') ?>" alt="ผศ.ดร. ธัชชัย อยู่ยิ่ง" class="w-full h-full object-cover" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-4xl\'>👨‍🎓</span>'">
                     </div>
                     <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-semibold" data-lang-th="ผู้ร่วมวิจัย" data-lang-en="Co-Researcher">ผู้ร่วมวิจัย</span>
                     <h3 class="text-lg font-bold text-gray-800 mt-3" data-lang-th="ผศ.ดร.ธัชชัย อยู่ยิ่ง" data-lang-en="Asst. Prof. Dr. Tadchai Yuying">ผศ.ดร.ธัชชัย อยู่ยิ่ง</h3>
