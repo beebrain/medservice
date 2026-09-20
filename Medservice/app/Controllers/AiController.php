@@ -271,11 +271,23 @@ class AiController extends Controller
                 $config->rejectOptionsAbnormal
             );
 
-            if (!in_array($rejectOption, $allowed, true)) {
+            // แอป Android ส่ง 'Confirm' ตัวใหญ่ เว็บส่ง 'confirm' ตัวเล็ก
+            // เทียบแบบไม่สนตัวพิมพ์ แล้วเก็บรูปแบบมาตรฐานลง DB ให้เหมือนกันหมด
+            $canonical = null;
+            foreach ($allowed as $option) {
+                if (strcasecmp($rejectOption, $option) === 0) {
+                    $canonical = $option;
+                    break;
+                }
+            }
+
+            if ($canonical === null) {
                 log_message('warning', 'Confirm rejected - invalid option: ' . $rejectOption);
                 return $this->response->setStatusCode(400)
                     ->setJSON(['error' => 'Invalid RejectOption']);
             }
+
+            $rejectOption = $canonical;
 
             $anemiaModel = new Amenemiamodel();
             $row = $anemiaModel->find($id);
