@@ -418,7 +418,9 @@
                             <!-- Range table + chart (rendered by JS) -->
                             <div id="refRangeChart"></div>
 
-                            <!-- MCV-RDW Scatter Plot: กราฟแยก TT / IDA -->
+                            <!-- TT / IDA screening: comment ไว้ก่อน รอโมเดลรองรับชนิดย่อย
+                                 โมเดลตอนนี้คืนแค่ Normal / Abnormal แยก TT / IDA ไม่ได้
+                                 เกณฑ์ที่ใช้ในบล็อกนี้ยังไม่มีอ้างอิงกำกับ ต้องหาที่มาก่อนเปิดกลับ
                             <div class="mt-6 bg-white rounded-xl border border-purple-100 p-4">
                                 <h4 class="text-sm font-bold text-purple-700 mb-1 text-center flex items-center justify-center gap-2">
                                     <span class="text-base">&#127919;</span>
@@ -428,8 +430,8 @@
                                 <div id="mcvRdwScatter" class="w-full" role="img" aria-label="MCV vs RDW scatter plot"></div>
                             </div>
 
-                            <!-- Screening Indices: ดัชนีคัดกรอง 3 ตัว (Mentzer, Shine & Lal, Green & King) -->
                             <div id="screeningIndices" class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3" style="display:none;"></div>
+                            -->
 
                             <!-- Screening summary -->
                             <div id="refRangeSummary" class="mt-4 space-y-2" style="display:none;"></div>
@@ -770,19 +772,6 @@
         var lastRefData = null;
         var showRefChartBars = false; // mobile toggle: false = table only
 
-        // โมเดลปัจจุบันคืนค่าแค่ Normal / Abnormal ยังไม่แยกชนิด (TT / IDA)
-        // ส่วนที่ยังไม่มีผลจากโมเดลรองรับ ให้ขึ้น "กำลังพัฒนา" แทนการแสดงผลจากสูตรฝั่ง client
-        // ponytail: flag เดียว เปลี่ยนเป็น true เมื่อ n8n ส่งชนิดย่อยกลับมาใน response แล้ว
-        var MODEL_PROVIDES_SUBTYPE = false;
-
-        function devNoticeHtml(th, en) {
-            return '<div class="bg-gray-50 border border-dashed border-gray-300 rounded-xl p-4 text-center">'
-                + '<div class="inline-flex items-center gap-2 text-sm font-semibold text-gray-600">'
-                + '<span class="w-2 h-2 rounded-full bg-amber-400"></span>'
-                + getLangText('กำลังพัฒนา ยังไม่พร้อมใช้งาน', 'Under development, not ready for use') + '</div>'
-                + '<p class="text-xs text-gray-500 mt-1">' + getLangText(th, en) + '</p></div>';
-        }
-
         function renderReferenceRanges(values, ageMonths) {
             lastRefData = { values: values, ageMonths: ageMonths };
 
@@ -911,10 +900,13 @@
             });
 
             renderRefSummary(values, abnormal);
-            renderScreeningIndices(values);
-            renderMcvRdwScatter(values);
+            // renderScreeningIndices(values);   // ปิดไว้ รอโมเดลแยกชนิดย่อยได้
+            // renderMcvRdwScatter(values);   // ปิดไว้ รอโมเดลแยกชนิดย่อยได้
         }
 
+        /* TT / IDA screening: comment ไว้ก่อน รอโมเดลรองรับชนิดย่อย
+           โมเดลตอนนี้คืนแค่ Normal / Abnormal แยก TT / IDA ไม่ได้
+           เปิดกลับเมื่อโมเดล multi-class พร้อม และใส่อ้างอิงของทุก cutoff แล้ว
         // ดัชนีคัดกรอง 3 ตัว แยก Thalassemia trait (TT) จาก Iron Deficiency Anemia (IDA)
         // ทุกดัชนี: ค่าต่ำกว่าเกณฑ์ → โน้มไป TT, สูงกว่าเกณฑ์ → โน้มไป IDA
         function renderScreeningIndices(values) {
@@ -1025,6 +1017,7 @@
             el.innerHTML = html;
         }
 
+        */
         // สรุปผลคัดกรอง + Mentzer Index (ตัวช่วยแยก TT จาก IDA)
         function renderRefSummary(values, abnormal) {
             var html = '';
@@ -1039,6 +1032,7 @@
             }
 
             var mcv = values.MCV, rbc = values.RBC;
+            /* Mentzer hint: ปิดไว้ รอโมเดลแยกชนิดย่อยได้
             if (MODEL_PROVIDES_SUBTYPE && !isNaN(mcv) && !isNaN(rbc) && rbc > 0) {
                 var mentzer = mcv / rbc;
                 var suggestTT = mentzer < 13;
@@ -1053,6 +1047,7 @@
                     + '<div class="text-xs text-gray-600 mt-1">' + suggestTxt
                     + ' <span class="text-gray-400">(&lt; 13 → TT, &gt; 13 → IDA)</span></div></div>';
             }
+            */
 
             $("#refRangeSummary").html(html).show();
         }
