@@ -399,7 +399,7 @@
                                 <span class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white text-sm">2</span>
                                 <span data-lang-th="ตำแหน่งค่าเลือดเทียบช่วงอ้างอิง" data-lang-en="Values vs. Reference Ranges">ตำแหน่งค่าเลือดเทียบช่วงอ้างอิง</span>
                             </h3>
-                            <p class="text-center text-xs text-gray-500 mb-3" data-lang-th="ประกอบการคัดกรอง Thalassemia (TT / TD) และ Iron Deficiency Anemia (IDA)" data-lang-en="Supporting screening for Thalassemia (TT / TD) and Iron Deficiency Anemia (IDA)">ประกอบการคัดกรอง Thalassemia (TT / TD) และ Iron Deficiency Anemia (IDA)</p>
+                            <p class="text-center text-xs text-gray-500 mb-3" data-lang-th="เทียบค่าที่กรอกกับช่วงอ้างอิงตามกลุ่มอายุ ไม่ใช่ผลจากโมเดล AI" data-lang-en="Entered values compared with age-group reference ranges, not an AI model output">เทียบค่าที่กรอกกับช่วงอ้างอิงตามกลุ่มอายุ ไม่ใช่ผลจากโมเดล AI</p>
 
                             <!-- Age group -->
                             <div class="flex items-center justify-center gap-2 mb-3">
@@ -424,7 +424,7 @@
                                     <span class="text-base">&#127919;</span>
                                     <span data-lang-th="กราฟ MCV vs RDW แยกโรค TT / IDA" data-lang-en="MCV vs RDW Scatter Plot for TT / IDA">กราฟ MCV vs RDW แยกโรค TT / IDA</span>
                                 </h4>
-                                <p class="text-center text-xs text-gray-600 mb-2" data-lang-th="MCV ต่ำ + RDW สูง → IDA | MCV ต่ำ + RDW ปกติ → TT · เส้นประ: MCV &lt; 80, RDW &gt; 14.5" data-lang-en="Low MCV + High RDW → IDA | Low MCV + Normal RDW → TT · Dashed lines: MCV &lt; 80, RDW &gt; 14.5">MCV ต่ำ + RDW สูง → IDA | MCV ต่ำ + RDW ปกติ → TT · เส้นประ: MCV &lt; 80, RDW &gt; 14.5</p>
+                                <p id="mcvRdwDesc" class="text-center text-xs text-gray-600 mb-2" data-lang-th="MCV ต่ำ + RDW สูง → IDA | MCV ต่ำ + RDW ปกติ → TT · เส้นประ: MCV &lt; 80, RDW &gt; 14.5" data-lang-en="Low MCV + High RDW → IDA | Low MCV + Normal RDW → TT · Dashed lines: MCV &lt; 80, RDW &gt; 14.5">MCV ต่ำ + RDW สูง → IDA | MCV ต่ำ + RDW ปกติ → TT · เส้นประ: MCV &lt; 80, RDW &gt; 14.5</p>
                                 <div id="mcvRdwScatter" class="w-full" role="img" aria-label="MCV vs RDW scatter plot"></div>
                             </div>
 
@@ -767,6 +767,19 @@
         var lastRefData = null;
         var showRefChartBars = false; // mobile toggle: false = table only
 
+        // โมเดลปัจจุบันคืนค่าแค่ Normal / Abnormal ยังไม่แยกชนิด (TT / IDA)
+        // ส่วนที่ยังไม่มีผลจากโมเดลรองรับ ให้ขึ้น "กำลังพัฒนา" แทนการแสดงผลจากสูตรฝั่ง client
+        // ponytail: flag เดียว เปลี่ยนเป็น true เมื่อ n8n ส่งชนิดย่อยกลับมาใน response แล้ว
+        var MODEL_PROVIDES_SUBTYPE = false;
+
+        function devNoticeHtml(th, en) {
+            return '<div class="bg-gray-50 border border-dashed border-gray-300 rounded-xl p-4 text-center">'
+                + '<div class="inline-flex items-center gap-2 text-sm font-semibold text-gray-600">'
+                + '<span class="w-2 h-2 rounded-full bg-amber-400"></span>'
+                + getLangText('กำลังพัฒนา ยังไม่พร้อมใช้งาน', 'Under development, not ready for use') + '</div>'
+                + '<p class="text-xs text-gray-500 mt-1">' + getLangText(th, en) + '</p></div>';
+        }
+
         function renderReferenceRanges(values, ageMonths) {
             lastRefData = { values: values, ageMonths: ageMonths };
 
@@ -902,6 +915,13 @@
         // ดัชนีคัดกรอง 3 ตัว แยก Thalassemia trait (TT) จาก Iron Deficiency Anemia (IDA)
         // ทุกดัชนี: ค่าต่ำกว่าเกณฑ์ → โน้มไป TT, สูงกว่าเกณฑ์ → โน้มไป IDA
         function renderScreeningIndices(values) {
+            if (!MODEL_PROVIDES_SUBTYPE) {
+                $("#screeningIndices").removeClass("sm:grid-cols-3").html(devNoticeHtml(
+                    'ดัชนีแยก Thalassemia trait กับ ภาวะขาดธาตุเหล็ก ยังอยู่ระหว่างพัฒนา โมเดลตอนนี้ประเมินเฉพาะ ปกติ / ผิดปกติ',
+                    'Indices separating thalassemia trait from iron deficiency are under development. The current model reports Normal / Abnormal only'
+                )).show();
+                return;
+            }
             var mcv = values.MCV, rbc = values.RBC, mch = values.MCH, rdw = values.RDW, hb = values.Hb;
             var list = [];
 
@@ -942,6 +962,16 @@
         function renderMcvRdwScatter(values) {
             var el = document.querySelector('#mcvRdwScatter');
             if (!el) return;
+            if (!MODEL_PROVIDES_SUBTYPE) {
+                $("#mcvRdwDesc").hide();
+                el.removeAttribute('role');
+                el.removeAttribute('aria-label');
+                el.innerHTML = devNoticeHtml(
+                    'กราฟแบ่งโซน TT / IDA ยังอยู่ระหว่างพัฒนา ห้ามใช้ประกอบการตัดสินผล',
+                    'The TT / IDA zone plot is under development and must not be used for interpretation'
+                );
+                return;
+            }
             var wrap = el.parentElement;
             var mcv = values.MCV, rdw = values.RDW;
 
@@ -1006,7 +1036,7 @@
             }
 
             var mcv = values.MCV, rbc = values.RBC;
-            if (!isNaN(mcv) && !isNaN(rbc) && rbc > 0) {
+            if (MODEL_PROVIDES_SUBTYPE && !isNaN(mcv) && !isNaN(rbc) && rbc > 0) {
                 var mentzer = mcv / rbc;
                 var suggestTT = mentzer < 13;
                 var suggestTxt = suggestTT
