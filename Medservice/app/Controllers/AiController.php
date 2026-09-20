@@ -31,6 +31,12 @@ class AiController extends Controller
         header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
         header("Access-Control-Allow-Headers: Content-Type");
 
+        if ($this->tooManyRequests()) {
+            return $this->response
+                ->setStatusCode(429)
+                ->setJSON(['error' => 'Too many requests. Please try again in a moment.']);
+        }
+
         // Get input data - support both JSON and form POST
         $contentType = $this->request->getHeaderLine('Content-Type');
         if (strpos($contentType, 'application/json') !== false) {
@@ -83,6 +89,24 @@ class AiController extends Controller
         header('Content-Type: application/json; charset=utf-8');
         echo json_encode($processedData, JSON_UNESCAPED_UNICODE);
         exit;
+    }
+
+    /**
+     * จำกัดจำนวนครั้งต่อ IP กันการยิงถล่มและข้อมูลขยะ
+     * ponytail: ใช้ throttler ของ CI4 ที่มีอยู่แล้ว ไม่ต้องเขียนตัวนับเอง
+     * เพดานตั้งสูงพอให้คลินิกที่ออกเน็ตผ่าน IP เดียวกันหลายคนใช้ได้ตามปกติ
+     */
+    private function tooManyRequests(int $perMinute = 60): bool
+    {
+        $throttler = \Config\Services::throttler();
+
+        if ($throttler->check(md5($this->request->getIPAddress()), $perMinute, MINUTE) === false) {
+            log_message('warning', 'Rate limited: ' . $this->request->getIPAddress());
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -248,6 +272,12 @@ class AiController extends Controller
         header("Access-Control-Allow-Origin: *");
         header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
         header("Access-Control-Allow-Headers: Content-Type");
+
+        if ($this->tooManyRequests()) {
+            return $this->response
+                ->setStatusCode(429)
+                ->setJSON(['error' => 'Too many requests. Please try again in a moment.']);
+        }
 
         try {
             $id = $this->request->getPost("id");
