@@ -34,7 +34,10 @@ class AiController extends Controller
         if ($this->tooManyRequests()) {
             return $this->response
                 ->setStatusCode(429)
-                ->setJSON(['error' => 'Too many requests. Please try again in a moment.']);
+                ->setJSON([
+                    'error'   => 'Too many requests. Please try again in a moment.',
+                    'message' => 'ส่งข้อมูลถี่เกินไป กรุณารอสักครู่แล้วลองใหม่'
+                ]);
         }
 
         // Get input data - support both JSON and form POST
@@ -57,7 +60,7 @@ class AiController extends Controller
             log_message('warning', 'Predict rejected - ' . $invalid . ' | Data: ' . json_encode($inputdata));
             return $this->response
                 ->setStatusCode(400)
-                ->setJSON(['error' => $invalid]);
+                ->setJSON(['error' => $invalid, 'message' => 'ค่าที่กรอกอยู่นอกช่วงที่เป็นไปได้']);
         }
 
         // API Configuration — required from .env (n8n.predictURL)
@@ -276,7 +279,10 @@ class AiController extends Controller
         if ($this->tooManyRequests()) {
             return $this->response
                 ->setStatusCode(429)
-                ->setJSON(['error' => 'Too many requests. Please try again in a moment.']);
+                ->setJSON([
+                    'error'   => 'Too many requests. Please try again in a moment.',
+                    'message' => 'ส่งข้อมูลถี่เกินไป กรุณารอสักครู่แล้วลองใหม่'
+                ]);
         }
 
         try {
@@ -285,12 +291,12 @@ class AiController extends Controller
 
             if (empty($id)) {
                 return $this->response->setStatusCode(400)
-                    ->setJSON(['error' => 'ID is required']);
+                    ->setJSON(['error' => 'ID is required', 'message' => 'ไม่พบรหัสรายการ']);
             }
 
             if (empty($rejectOption)) {
                 return $this->response->setStatusCode(400)
-                    ->setJSON(['error' => 'RejectOption is required']);
+                    ->setJSON(['error' => 'RejectOption is required', 'message' => 'ไม่ได้ระบุคำตอบ']);
             }
 
             // รับเฉพาะค่าที่เป็นตัวเลือกจริงที่ส่งให้ผู้ใช้ ไม่งั้น label ที่จะเอาไปเทรนเชื่อไม่ได้
@@ -314,7 +320,7 @@ class AiController extends Controller
             if ($canonical === null) {
                 log_message('warning', 'Confirm rejected - invalid option: ' . $rejectOption);
                 return $this->response->setStatusCode(400)
-                    ->setJSON(['error' => 'Invalid RejectOption']);
+                    ->setJSON(['error' => 'Invalid RejectOption', 'message' => 'คำตอบไม่อยู่ในตัวเลือกที่กำหนด']);
             }
 
             $rejectOption = $canonical;
@@ -324,15 +330,33 @@ class AiController extends Controller
 
             if ($row === null) {
                 return $this->response->setStatusCode(404)
-                    ->setJSON(['error' => 'Record not found']);
+                    ->setJSON(['error' => 'Record not found', 'message' => 'ไม่พบรายการนี้ในระบบ']);
             }
 
             // ตอบได้ครั้งเดียวต่อ record แก้คำตอบไม่ได้
             $existing = $row['rejectoption'] ?? ($row['Rejectoption'] ?? null);
+
             if ($existing !== null && $existing !== '') {
+                // ส่งซ้ำด้วยคำตอบเดิม เช่นแอป retry ตอนเน็ตหลุด ถือว่าสำเร็จ ไม่ใช่ error
+                if (strcasecmp($existing, $rejectOption) === 0) {
+                    log_message('info', 'Confirm repeated with same answer. ID: ' . $id);
+
+                    return $this->response->setJSON([
+                        'info'         => 'unchanged',
+                        'success'      => true,
+                        'id'           => $id,
+                        'rejectOption' => $existing,
+                        'message'      => 'บันทึกความคิดเห็นไว้แล้ว'
+                    ]);
+                }
+
                 log_message('info', 'Confirm ignored - already answered. ID: ' . $id);
+
                 return $this->response->setStatusCode(409)
-                    ->setJSON(['error' => 'Feedback already recorded']);
+                    ->setJSON([
+                        'error'   => 'Feedback already recorded',
+                        'message' => 'รายการนี้ให้ความคิดเห็นไปแล้ว แก้ไขไม่ได้'
+                    ]);
             }
 
             $anemiaModel->update($id, ['Rejectoption' => $rejectOption]);
@@ -343,7 +367,10 @@ class AiController extends Controller
                 "info" => "updated",
                 "success" => true,
                 "id" => $id,
-                "rejectOption" => $rejectOption
+                "rejectOption" => $rejectOption,
+                "message" => ($rejectOption === 'confirm')
+                    ? "ผู้ใช้เห็นด้วยกับผลการประเมิน"
+                    : "ผู้ใช้ไม่เห็นด้วย - ควรเป็น: " . $rejectOption
             ];
 
             return $this->response
