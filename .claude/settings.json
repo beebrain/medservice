@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(perl -i -pe 's/\\\\r?\\\\n/\\\\r\\\\n/' Medservice/app/Views/index.php)",
+      "Bash(php -r ' *)",
+      "Bash(php -l Medservice/app/Views/index.php)",
+      "Bash(node -e ' *)"
+    ]
+  }
+}

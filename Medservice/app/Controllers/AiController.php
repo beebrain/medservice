@@ -87,10 +87,10 @@ class AiController extends Controller
         //   1) แต่ง label='Unknown', confidence=0 ขึ้นมาเอง
         //   2) insert แถวลงฐานข้อมูลด้วย Predict='Unknown' (แถวขยะที่ถูกนับใน get-count)
         //   3) ตกเข้า branch 'normal' เพราะ PHP ตีความ null == 0 เป็น true
-        //      -> suggestion = "ปกติ ไม่จำเป็นต้องตรวจเพิ่มเติม" ทั้งที่ไม่มีผลแปลเลย
+        //      -> suggestion = "ผลคัดกรองอยู่ในเกณฑ์ปกติ" ทั้งที่ไม่มีผลแปลเลย
         // ตอบ 502 ให้ client รู้ว่าเป็นความผิดพลาดของ upstream ไม่ใช่ผลการคัดกรอง
         // isset คืน true ให้ false, "", "abc", [] ด้วย แล้วค่าพวกนั้น (int) cast เป็น 0
-        // จะตกเข้า branch Normal -> "ปกติ ไม่จำเป็นต้องตรวจเพิ่มเติม"
+        // จะตกเข้า branch Normal -> รายงานว่า "อยู่ในเกณฑ์ปกติ" ทั้งที่โมเดลไม่ได้ตอบ
         // จึงต้องตรวจว่าเป็นตัวเลขและเป็น 0 หรือ 1 เท่านั้น
         $rawPrediction = $apiResponse['data']['prediction'] ?? null;
         if (!is_numeric($rawPrediction)
