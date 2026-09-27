@@ -82,6 +82,24 @@ class AiController extends Controller
                 ]);
         }
 
+        // ไม่มี prediction = โมเดลไม่ได้ให้ผลอะไรกลับมา
+        // ต้องหยุดตรงนี้ ห้ามไหลต่อ เพราะ processAPIResponse จะ:
+        //   1) แต่ง label='Unknown', confidence=0 ขึ้นมาเอง
+        //   2) insert แถวลงฐานข้อมูลด้วย Predict='Unknown' (แถวขยะที่ถูกนับใน get-count)
+        //   3) ตกเข้า branch 'normal' เพราะ PHP ตีความ null == 0 เป็น true
+        //      -> suggestion = "ปกติ ไม่จำเป็นต้องตรวจเพิ่มเติม" ทั้งที่ไม่มีผลแปลเลย
+        // ตอบ 502 ให้ client รู้ว่าเป็นความผิดพลาดของ upstream ไม่ใช่ผลการคัดกรอง
+        if (!isset($apiResponse['data']['prediction'])) {
+            log_message('error', 'Upstream returned no prediction: '
+                . json_encode($apiResponse['data']));
+            return $this->response
+                ->setStatusCode(502)
+                ->setJSON([
+                    'error'   => 'no_prediction',
+                    'message' => 'ระบบแปลผลไม่ตอบกลับ กรุณาลองใหม่อีกครั้ง',
+                ]);
+        }
+
         // Initialize model and save data with prediction after API success
         $anemiaModel = new Amenemiamodel();
 
@@ -226,12 +244,14 @@ class AiController extends Controller
         // Get prediction value from API (0 or 1)
         $prediction = $apiData['prediction'] ?? null;
         $label = $apiData['label'] ?? 'Unknown';
-        $confidence = $apiData['confidence'] ?? 0;
+        // null ไม่ใช่ 0 — ให้แอปแยกออกว่า "ไม่มีค่า" กับ "มั่นใจ 0%" คนละเรื่อง
+        $confidence = $apiData['confidence'] ?? null;
 
         log_message('info', 'API Response - Prediction: ' . $prediction . ' | Label: ' . $label . ' | Confidence: ' . $confidence);
 
         // Set reject options from config based on prediction value
-        $rejectOptions = ($prediction == 0)
+        // === แทน == กัน null/"0" หลุดเข้า branch ผิด
+        $rejectOptions = ((int) $prediction === 0)
             ? $config->rejectOptionsNormal
             : $config->rejectOptionsAbnormal;
 
@@ -248,7 +268,7 @@ class AiController extends Controller
         log_message('info', 'Data inserted to database - Record ID: ' . $recordId . ' | Predict: ' . $label);
 
         // Set suggestion from config based on prediction
-        $suggestionKey = ($prediction == 1) ? 'abnormal' : 'normal';
+        $suggestionKey = ((int) $prediction === 1) ? 'abnormal' : 'normal';
         $suggestion = $config->suggestions[$suggestionKey] ?? '';
 
         // Prepare final response with all API data
@@ -390,6 +410,30 @@ class AiController extends Controller
     /**
      * Get the total count of requests
      */
+    /**
+     * GET /ai/reference-ranges
+     *
+     * ส่งช่วงอ้างอิงให้ client ดึงไปใช้ จะได้ไม่ต้องฝังเกณฑ์ไว้ทั้งในเว็บและในแอป
+     * แอปควร cache ไว้แล้วเทียบด้วย version ถ้าดึงไม่ได้ให้ใช้ค่าที่ฝังไว้เป็น fallback
+     * (เกณฑ์เป็นข้อมูลความปลอดภัยทางคลินิก ห้ามปล่อยให้แปลผลไม่ได้เพราะเน็ตล่ม)
+     */
+    public function referenceRanges()
+    {
+        header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Methods: GET, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type");
+
+        $config = new \Config\ReferenceRangeConfig();
+
+        return $this->response
+            ->setContentType('application/json')
+            ->setJSON([
+                'version' => $config->version,
+                'groups'  => $config->groups,
+                'items'   => $config->items,
+            ]);
+    }
+
     public function getCount()
     {
         // Set CORS headers

@@ -40,7 +40,7 @@ class AiConfig extends BaseConfig
      * รูปแบบ: [ต่ำสุด, สูงสุด, หน่วย]
      */
     public array $cbcLimits = [
-        'RBC'  => [1.0, 8.0,   '10¹²/L'],
+        'RBC'  => [1.0, 8.0,   '×10⁶/μL'],
         'HB'   => [2.0, 25.0,  'g/dL'],
         'HCT'  => [5.0, 70.0,  '%'],
         'MCV'  => [40.0, 140.0, 'fL'],

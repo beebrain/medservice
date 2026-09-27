@@ -53,7 +53,12 @@ class Anemiamodel extends Model
     public function countRecord()
     {
 
-        $result = $this->db->table('dataamenia')->countAll();
+        // ไม่นับแถวที่โมเดลไม่ได้ให้ผล (Predict='Unknown')
+        // เก็บแถวไว้เป็นร่องรอยว่าระบบเคยล่ม แต่ไม่ใช่ "เคสที่ประเมินแล้ว"
+        // และไม่ควรปนเข้าชุดข้อมูลวิจัย
+        $result = $this->db->table('dataamenia')
+            ->where('Predict !=', 'Unknown')
+            ->countAllResults();
         return $result;
     }
 

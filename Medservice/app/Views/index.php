@@ -773,16 +773,13 @@ $asset_v = static function (string $path): string {
         // ช่วงอ้างอิงแยกตามกลุ่มอายุ: g1 = อายุ ≤ 6 ปี (≤ 72 เดือน), g2 = อายุ > 6 ปี
         // Mobile: ตาราง 3 คอลัมน์เป็นค่าเริ่มต้น + toggle ดูแผนภาพ
         // Desktop (sm+): ตาราง + แถบตำแหน่งเสมอ
-        var REF_RANGES = [
-            { key: 'Hb',   label: 'Hb',   unit: 'g/dL',   g1: [11.0, 13.9], g2: [11.3, 14.3] },
-            { key: 'Hct',  label: 'Hct',  unit: '%',      g1: [32.0, 39.0], g2: [33.0, 41.0] },
-            { key: 'RBC',  label: 'RBC',  unit: '10¹²/L', g1: [3.96, 4.92], g2: [3.98, 5.15] },
-            { key: 'MCV',  label: 'MCV',  unit: 'fL',     g1: [72.0, 86.0], g2: [76.0, 86.0] },
-            { key: 'MCH',  label: 'MCH',  unit: 'pg',     g1: [25.5, 30.6], g2: [25.7, 30.6] },
-            { key: 'MCHC', label: 'MCHC', unit: 'g/dL',   g1: [33.2, 36.0], g2: [33.5, 36.1] },
-            { key: 'RDW',  label: 'RDW',  unit: '%',      g1: [11.9, 14.9], g2: [12.0, 14.1] }
-        ];
-        var STATUS_COLORS = { normal: '#059669', low: '#b45309', high: '#e11d48', na: '#6b7280' };
+        // เกณฑ์มาจาก app/Config/ReferenceRangeConfig.php ที่เดียว
+        // ห้าม hardcode ที่นี่อีก ไม่งั้นเว็บกับแอปจะหลุดจากกัน
+        var REF_RANGES = <?= json_encode($refRanges, JSON_UNESCAPED_UNICODE) ?>;
+        var REF_VERSION = <?= json_encode($refVersion) ?>;
+        // ตรงกับ BloodValueStatus.color ฝั่งแอป (reference_range_model.dart)
+        // ต่ำกับสูงใช้สีเดียวกัน ทิศทางบอกด้วย ▼▲ ไม่พึ่งสี
+        var STATUS_COLORS = { normal: '#047857', low: '#C2410C', high: '#C2410C', na: '#6b7280' };
         var lastRefData = null;
         var showRefChartBars = false; // mobile toggle: false = table only
 
@@ -796,7 +793,8 @@ $asset_v = static function (string $path): string {
                 : getLangText('Group 2 (อายุ > 6 ปี)', 'Group 2 (> 6 y)'));
 
             // Contrast-safe status colors (WCAG AA on white)
-            var STATUS_TEXT = { normal: 'text-emerald-800', low: 'text-amber-800', high: 'text-rose-700', na: 'text-gray-500' };
+            // ตรงกับ STATUS_COLORS ด้านบน: emerald-700=#047857, orange-700=#C2410C
+            var STATUS_TEXT = { normal: 'text-emerald-700', low: 'text-orange-700', high: 'text-orange-700', na: 'text-gray-500' };
             var STATUS_LABEL = {
                 normal: getLangText('ปกติ', 'Normal'),
                 low: getLangText('ต่ำกว่า', 'Low'),
