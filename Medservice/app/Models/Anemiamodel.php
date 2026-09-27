@@ -55,9 +55,14 @@ class Anemiamodel extends Model
     public function countRecord()
     {
 
-        // ไม่นับแถวที่โมเดลไม่ได้ให้ผล (Predict='Unknown')
+        // ไม่นับแถวที่โมเดลไม่ได้ให้ผล
         // เก็บแถวไว้เป็นร่องรอยว่าระบบเคยล่ม แต่ไม่ใช่ "เคสที่ประเมินแล้ว"
         // และไม่ควรปนเข้าชุดข้อมูลวิจัย
+        //
+        // ตรวจจริงเมื่อ 2026-09-27: ไม่มีแถวไหนเป็น 'Unknown' เลยแม้แถวเดียว
+        // สิ่งที่เงื่อนไขนี้ตัดออกจริงคือแถวที่ Predict IS NULL (SQL ตัด NULL
+        // ให้เองเพราะ NULL != 'Unknown' ได้ผลเป็น NULL ไม่ใช่ true)
+        // คงเงื่อนไข 'Unknown' ไว้เพราะโค้ดยังเขียนค่านั้นได้ถ้า labels ไม่ครบ
         $result = $this->db->table('dataamenia')
             ->where('Predict !=', 'Unknown')
             ->countAllResults();
