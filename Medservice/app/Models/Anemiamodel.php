@@ -22,7 +22,9 @@ class Anemiamodel extends Model
         'MCHC',
         'RDW',
         'Predict',
+        'PredictVerified',
         'Rejectoption',
+        'ConfirmVerified',
         'Agree',
         'created_at' // Assuming you want to handle this in your application
     ];
@@ -60,6 +62,22 @@ class Anemiamodel extends Model
             ->where('Predict !=', 'Unknown')
             ->countAllResults();
         return $result;
+    }
+
+    /**
+     * นับเฉพาะแถวที่คำขอถือคีย์ของแอปมา
+     *
+     * ตัวเลขรวมจาก countRecord() บอกไม่ได้ว่ามาจากไหน เพราะ /predict
+     * เปิดรับโดยไม่ต้องยืนยันตัวตน ใครยิง curl เข้ามาก็ถูกนับ
+     * ตัวนี้คือขอบล่างที่อ้างที่มาได้ ไม่ใช่จำนวนเคสจริง (ดูคำอธิบายขอบเขต
+     * ในไฟล์ migration AddClientVerifiedToDataamenia)
+     */
+    public function countVerified()
+    {
+        return $this->db->table('dataamenia')
+            ->where('Predict !=', 'Unknown')
+            ->where('PredictVerified', 1)
+            ->countAllResults();
     }
 
     public function insertdata($data)

@@ -109,12 +109,40 @@ class AiController extends Controller
         $anemiaModel = new Amenemiamodel();
 
         // Process API response and save to database
-        $processedData = $this->processAPIResponse($apiResponse['data'], $inputdata, $anemiaModel);
+        $processedData = $this->processAPIResponse(
+            $apiResponse['data'],
+            $inputdata,
+            $anemiaModel,
+            $this->clientVerified()
+        );
 
         // Return response
         header('Content-Type: application/json; charset=utf-8');
         echo json_encode($processedData, JSON_UNESCAPED_UNICODE);
         exit;
+    }
+
+    /**
+     * คำขอนี้ถือคีย์ของแอปมาหรือไม่
+     *
+     * ใช้ติดธงที่มาของแถวเท่านั้น ไม่ได้ใช้ปิดกั้นคำขอ
+     * ปิดกั้นทันทีจะทำให้แอปที่ลงเครื่องไปแล้วใช้ไม่ได้ทั้งหมด (ทั้งหมดไม่มีคีย์)
+     *
+     * ยังไม่ได้ตั้งคีย์บน server = ทุกแถวเป็น 0 ไม่ใช่ทุกแถวเป็น 1
+     * ธงที่ตั้งเองเป็น 1 ตอนไม่มีคีย์คือธงที่โกหก ซึ่งแย่กว่าไม่มีธง
+     *
+     * hash_equals กันการเดาคีย์จากเวลาที่ใช้เปรียบเทียบ
+     */
+    private function clientVerified(): bool
+    {
+        $expected = trim((string) env('ai.clientKey', ''));
+        if ($expected === '') {
+            return false;
+        }
+
+        $provided = trim($this->request->getHeaderLine('X-Client-Key'));
+
+        return $provided !== '' && hash_equals($expected, $provided);
     }
 
     /**
@@ -241,8 +269,12 @@ class AiController extends Controller
      * @param Amenemiamodel $model Database model
      * @return array Processed response data
      */
-    private function processAPIResponse(array $apiData, array $inputdata, Amenemiamodel $model): array
-    {
+    private function processAPIResponse(
+        array $apiData,
+        array $inputdata,
+        Amenemiamodel $model,
+        bool $clientVerified = false
+    ): array {
         // Load config
         $config = new AiConfig();
 
@@ -276,8 +308,11 @@ class AiController extends Controller
         log_message('info', 'Reject Options: ' . json_encode($rejectOptions));
 
         // Merge input data with prediction label from API
+        // PredictVerified = ร่องรอยว่าคำขอนี้ถือคีย์ของแอปมาหรือไม่
+        // เก็บตอน insert เพราะย้อนสืบจากภายหลังไม่ได้เลย
         $dataToInsert = array_merge($inputdata, [
-            'Predict' => $label
+            'Predict'         => $label,
+            'PredictVerified' => $clientVerified ? 1 : 0,
         ]);
 
         // Insert to database with prediction
@@ -403,7 +438,12 @@ class AiController extends Controller
                     ]);
             }
 
-            $anemiaModel->update($id, ['Rejectoption' => $rejectOption]);
+            // ความคิดเห็นก็เขียนได้โดยไม่ต้องยืนยันตัวตนเหมือนกัน
+            // ธงนี้แยกจาก PredictVerified เพราะคนละคำขอ อาจมาจากคนละที่
+            $anemiaModel->update($id, [
+                'Rejectoption'    => $rejectOption,
+                'ConfirmVerified' => $this->clientVerified() ? 1 : 0,
+            ]);
 
             log_message('info', 'Feedback saved - ID: ' . $id . ' | Option: ' . $rejectOption);
 
@@ -468,8 +508,13 @@ class AiController extends Controller
         $anemiaModel = new Amenemiamodel();
         $count = $anemiaModel->countRecord();
 
+        // แยก verified ออกมาให้เห็น เพราะ count รวมนับคำขอที่ยืนยันที่มาไม่ได้ด้วย
+        // ตัวเลขเดียวตอบคำถาม "มาจากการคัดกรองจริงกี่เคส" ไม่ได้
         return $this->response
             ->setContentType('application/json')
-            ->setJSON(['count' => $count]);
+            ->setJSON([
+                'count'    => $count,
+                'verified' => $anemiaModel->countVerified(),
+            ]);
     }
 }
