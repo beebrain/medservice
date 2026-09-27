@@ -248,7 +248,20 @@ class AiController extends Controller
 
         // Get prediction value from API (0 or 1)
         $prediction = $apiData['prediction'] ?? null;
-        $label = $apiData['label'] ?? 'Unknown';
+        // label คือสิ่งที่หมออ่านและสิ่งที่ลงฐานข้อมูลวิจัย จึงต้อง derive จาก
+        // prediction ที่ผ่าน guard มาแล้ว ไม่ใช่รับค่าดิบจาก upstream
+        //   - upstream ส่ง prediction:1 + label:"Normal" -> แบนเนอร์สีผิดปกติแต่เขียนว่า Normal
+        //   - upstream ไม่ส่ง label -> ลง DB เป็น 'Unknown' แล้วโดน countRecord() คัดทิ้ง
+        //     ทั้งที่เป็นเคสที่ประเมินสำเร็จ = ตัวนับขาดและข้อมูลวิจัยหายแถว
+        // $config->labels มีอยู่แล้วแต่ไม่เคยถูกใช้ ต่อสายให้เรียบร้อย
+        $label = $config->labels[(int) $prediction] ?? 'Unknown';
+        $upstreamLabel = $apiData['label'] ?? null;
+        if ($upstreamLabel !== null && $upstreamLabel !== $label) {
+            log_message('warning', sprintf(
+                'Label mismatch: upstream="%s" derived="%s" prediction=%s',
+                $upstreamLabel, $label, var_export($prediction, true)
+            ));
+        }
         // null ไม่ใช่ 0 — ให้แอปแยกออกว่า "ไม่มีค่า" กับ "มั่นใจ 0%" คนละเรื่อง
         $confidence = $apiData['confidence'] ?? null;
 

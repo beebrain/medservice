@@ -380,7 +380,7 @@ $asset_v = static function (string $path): string {
                                         <div class="text-xs opacity-80 mb-1" data-lang-th="🏥 ภาวะ" data-lang-en="🏥 Interpretation">🏥 ภาวะ</div>
                                         <div class="text-xl font-bold" id="predictedType">-</div>
                                     </div>
-                                    <div>
+                                    <div id="confidenceblock">
                                         <div class="text-xs opacity-80 mb-1" data-lang-th="📈 ความมั่นใจ" data-lang-en="📈 Confidence">📈 ความมั่นใจ</div>
                                         <div class="text-xl font-bold"><span id="confidencevalue">-</span>%</div>
                                     </div>
@@ -1449,6 +1449,8 @@ $asset_v = static function (string $path): string {
                             closeRejectOptionsModal();
                             $("#confirmform").hide();
 
+                            $("#responseAgree")
+                                .removeClass("bg-orange-700").addClass("bg-green-500");
                             $("#responseAgree").html(
                                 '<span class="text-2xl">✓</span>' +
                                 '<div class="font-bold">' + getLangText('ขอบคุณสำหรับความคิดเห็น!', 'Thank you for your feedback!') + '</div>'
@@ -1461,7 +1463,11 @@ $asset_v = static function (string $path): string {
                             console.error("Status Text:", e.statusText);
                             console.error("Response Text:", e.responseText);
                             console.error("=====================================");
-                            $("#confirmform").hide();
+                            // ไม่ซ่อนฟอร์ม — backend ยังว่างให้ตอบ กดใหม่ได้
+                            // และต้องไม่ใช้กล่องเขียว ไม่งั้นความล้มเหลวหน้าตาเหมือนสำเร็จ
+                            closeRejectOptionsModal();
+                            $("#responseAgree")
+                                .removeClass("bg-green-500").addClass("bg-orange-700");
                             $("#responseAgree").html(
                                 '<span class="text-2xl">!</span>' +
                                 '<div class="font-bold">' + getLangText('บันทึกความคิดเห็นไม่สำเร็จ', 'Could not record your feedback') + '</div>'
@@ -1497,6 +1503,8 @@ $asset_v = static function (string $path): string {
 
                             $("#confirmform").hide();
 
+                            $("#responseAgree")
+                                .removeClass("bg-orange-700").addClass("bg-green-500");
                             $("#responseAgree").html(
                                 '<span class="text-2xl">✓</span>' +
                                 '<div class="font-bold">' + getLangText('ขอบคุณสำหรับความคิดเห็น!', 'Thank you for your feedback!') + '</div>'
@@ -1509,7 +1517,11 @@ $asset_v = static function (string $path): string {
                             console.error("Status Text:", e.statusText);
                             console.error("Response Text:", e.responseText);
                             console.error("=====================================");
-                            $("#confirmform").hide();
+                            // ไม่ซ่อนฟอร์ม — backend ยังว่างให้ตอบ กดใหม่ได้
+                            // และต้องไม่ใช้กล่องเขียว ไม่งั้นความล้มเหลวหน้าตาเหมือนสำเร็จ
+                            closeRejectOptionsModal();
+                            $("#responseAgree")
+                                .removeClass("bg-green-500").addClass("bg-orange-700");
                             $("#responseAgree").html(
                                 '<span class="text-2xl">!</span>' +
                                 '<div class="font-bold">' + getLangText('บันทึกความคิดเห็นไม่สำเร็จ', 'Could not record your feedback') + '</div>'
@@ -1669,10 +1681,25 @@ $asset_v = static function (string $path): string {
                             console.log("เก็บ rejectOptions ไว้ใน window.rejectOptions:", window.rejectOptions);
 
                             $("#predictedType").text(r.label);
-                            $("#confidencevalue").text((r.confidence * 100).toFixed(2));
+
+                            // confidence เป็น null ได้เมื่อโมเดลไม่ให้ค่ามา
+                            // null * 100 = 0 ทำให้ขึ้น "0.00%" ซึ่งเป็นค่าที่ไม่มีอยู่จริง
+                            if (typeof r.confidence === "number" && isFinite(r.confidence)) {
+                                $("#confidencevalue").text((r.confidence * 100).toFixed(2));
+                                $("#confidenceblock").show();
+                            } else {
+                                $("#confidenceblock").hide();
+                            }
+
                             $("#idRecord").val(r.id);
                             $("#resultdisplay, #resultdisplay2").fadeIn(500);
-                            $("#confirmform").show();
+
+                            // ไม่มีรหัสอ้างอิง = ส่งความเห็นไม่ได้ ซ่อนฟอร์มแทนที่จะให้กดแล้วพัง
+                            if (r.id) {
+                                $("#confirmform").show();
+                            } else {
+                                $("#confirmform").hide();
+                            }
                             $("#responseAgree").hide();
                             openModal(); // Show the modal popup
                             updateRequestCount(); // Update count after new prediction
@@ -1690,7 +1717,27 @@ $asset_v = static function (string $path): string {
                             console.error("Status Text:", e.statusText);
                             console.error("Response Text:", e.responseText);
                             console.error("=====================================");
-                            alert(getLangText("Error: กรุณาตรวจสอบข้อมูล", "Error: Please check your input"));
+                            // backend ตอบข้อความแยกตามเหตุมาแล้ว (502 โมเดลไม่ตอบ /
+                            // 429 ส่งถี่เกิน / 400 ค่านอกช่วง) ต้องแสดงตามนั้น
+                            // ของเดิม alert เดียวกันหมดว่า "กรุณาตรวจสอบข้อมูล"
+                            // = โมเดลล่มแต่ระบบโทษว่าหมอกรอกผิด ซึ่งชี้ไปผิดทาง
+                            var msg = null;
+                            try {
+                                var body = e.responseJSON
+                                    || (e.responseText ? JSON.parse(e.responseText) : null);
+                                if (body && body.message) { msg = body.message; }
+                            } catch (parseErr) { msg = null; }
+
+                            if (!msg) {
+                                msg = e.status
+                                    ? getLangText(
+                                        "เกิดข้อผิดพลาด (สถานะ " + e.status + ") กรุณาลองใหม่",
+                                        "Request failed (status " + e.status + "). Please try again.")
+                                    : getLangText(
+                                        "เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ กรุณาตรวจสอบอินเทอร์เน็ต",
+                                        "Cannot reach the server. Please check your connection.");
+                            }
+                            alert(msg);
                         }
                     });
                 });
