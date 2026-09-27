@@ -777,6 +777,7 @@ $asset_v = static function (string $path): string {
         // ห้าม hardcode ที่นี่อีก ไม่งั้นเว็บกับแอปจะหลุดจากกัน
         var REF_RANGES = <?= json_encode($refRanges, JSON_UNESCAPED_UNICODE) ?>;
         var REF_VERSION = <?= json_encode($refVersion) ?>;
+        var REF_GROUPS = <?= json_encode($refGroups, JSON_UNESCAPED_UNICODE) ?>;
         // ตรงกับ BloodValueStatus.color ฝั่งแอป (reference_range_model.dart)
         // ต่ำกับสูงใช้สีเดียวกัน ทิศทางบอกด้วย ▼▲ ไม่พึ่งสี
         var STATUS_COLORS = { normal: '#047857', low: '#C2410C', high: '#C2410C', na: '#6b7280' };
@@ -786,11 +787,19 @@ $asset_v = static function (string $path): string {
         function renderReferenceRanges(values, ageMonths) {
             lastRefData = { values: values, ageMonths: ageMonths };
 
-            var isG1 = ageMonths <= 72; // ≤ 6 ปี
+            // เส้นแบ่งมาจาก ReferenceRangeConfig ที่เดียว ห้าม hardcode
+            // ของเดิมฝัง 72 ไว้ 11 บรรทัดใต้คอมเมนต์ที่ห้าม hardcode พอดี
+            // ถ้าแพทย์ย้ายเส้นแบ่ง เว็บกับแอปจะตอบคนละอย่างกับเด็กคนเดียวกัน
+            var g1Max = (REF_GROUPS && REF_GROUPS[0] && typeof REF_GROUPS[0].maxAgeMonths === "number")
+                ? REF_GROUPS[0].maxAgeMonths : 72;
+            var isG1 = ageMonths <= g1Max;
             var gKey = isG1 ? 'g1' : 'g2';
-            $("#ageGroupBadge").text(isG1
-                ? getLangText('Group 1 (อายุ ≤ 6 ปี)', 'Group 1 (≤ 6 y)')
-                : getLangText('Group 2 (อายุ > 6 ปี)', 'Group 2 (> 6 y)'));
+            // ชื่อกลุ่มมาจาก config เช่นกัน ไม่งั้นย้ายเส้นแบ่งแล้วป้ายยังเขียน "6 ปี"
+            var grp = REF_GROUPS && REF_GROUPS[isG1 ? 0 : 1];
+            $("#ageGroupBadge").text(
+                grp ? getLangText(grp.labelTh, grp.labelEn)
+                    : (isG1 ? getLangText('Group 1 (อายุ ≤ 6 ปี)', 'Group 1 (≤ 6 y)')
+                            : getLangText('Group 2 (อายุ > 6 ปี)', 'Group 2 (> 6 y)')));
 
             // Contrast-safe status colors (WCAG AA on white)
             // ตรงกับ STATUS_COLORS ด้านบน: emerald-700=#047857, orange-700=#C2410C
@@ -1565,8 +1574,25 @@ $asset_v = static function (string $path): string {
                     clearAllErrors();
 
                     // ดึงค่าจากฟอร์ม
-                    var ageYear = $("#Age_year").val() === "" ? 0 : parseFloat($("#Age_year").val());
-                    var ageMonth = $("#Age_month").val() === "" ? 0 : parseFloat($("#Age_month").val());
+                    // ช่องว่างต้องเป็น error ไม่ใช่แปลงเป็น 0 เงียบ ๆ
+                    // อายุเป็นช่องแรกสุด ข้ามได้ง่ายเวลาคัดค่าจากใบ CBC ทีละช่อง
+                    // แล้ว Ages_mo_all = 0 จะผ่าน backend (ageLimitMonths เริ่มที่ 0)
+                    // ได้ผลจริงของเด็กแรกเกิดโดยที่ไม่มีอะไรบอกว่าอายุถูกเดาให้
+                    var ageYearRaw = $("#Age_year").val();
+                    var ageMonthRaw = $("#Age_month").val();
+                    if (ageYearRaw === "" || ageMonthRaw === "") {
+                        showError(ageYearRaw === "" ? "Age_year" : "Age_month",
+                            getLangText("กรุณากรอกอายุให้ครบทั้งปีและเดือน",
+                                        "Please enter both years and months"));
+                        return false;
+                    }
+                    var ageYear = parseFloat(ageYearRaw);
+                    var ageMonth = parseFloat(ageMonthRaw);
+                    if (isNaN(ageYear) || isNaN(ageMonth)) {
+                        showError("Age_year",
+                            getLangText("อายุต้องเป็นตัวเลข", "Age must be a number"));
+                        return false;
+                    }
                     var RBC = parseFloat($("#RBC").val());
                     var Hb = parseFloat($("#Hb").val());
                     var Hct = parseFloat($("#Hct").val());
@@ -1576,8 +1602,11 @@ $asset_v = static function (string $path): string {
                     var RDW = parseFloat($("#RDW").val());
 
                     // ตรวจสอบค่าอายุ
-                    if (ageYear < 0) {
-                        showError("Age_year", getLangText("อายุ (ปี) ไม่สามารถติดลบได้", "Age (years) cannot be negative"));
+                    // ตรงกับ ClinicalLimitsUtil ฝั่งแอป: ปี 1-15 เดือน 0-11
+                    // แอปกันทารกไว้เพราะเกณฑ์ Group 1 ไม่ครอบ physiologic nadir
+                    // ถ้าเว็บปล่อยผ่าน ด่านนั้นก็เป็นแค่การตกแต่ง
+                    if (ageYear < 1) {
+                        showError("Age_year", getLangText("รองรับอายุ 1-15 ปี", "Supported age is 1-15 years"));
                         return false;
                     }
                     if (ageYear > 15) {
@@ -1588,8 +1617,10 @@ $asset_v = static function (string $path): string {
                         showError("Age_month", getLangText("เดือน ไม่สามารถติดลบได้", "Month cannot be negative"));
                         return false;
                     }
-                    if (ageMonth > 12) {
-                        showError("Age_month", getLangText("เดือน ไม่ควรเกิน 12 เดือน", "Month should not exceed 12"));
+                    // 0-11 ไม่ใช่ 0-12 — "5 ปี 12 เดือน" กับ "6 ปี 0 เดือน" คือคนเดียวกัน
+                    // ถ้ายอมทั้งสองแบบ ข้อมูลวิจัยจะมีอายุเดียวกันเข้ารหัสสองแบบ
+                    if (ageMonth > 11) {
+                        showError("Age_month", getLangText("เดือนต้องอยู่ระหว่าง 0-11", "Month must be 0-11"));
                         return false;
                     }
 
@@ -1653,11 +1684,27 @@ $asset_v = static function (string $path): string {
                     console.log("=== ส่งข้อมูลไปยัง AiController/predict ===");
                     console.log("Request Data:", requestData);
 
+                    // กันกดซ้ำ: curl timeout 30 วิ + เวลา n8n/model ระหว่างนั้นหน้านิ่ง
+                    // หมอกดอีกทีเป็นพฤติกรรมปกติของเว็บที่ไม่ตอบสนอง
+                    // ผลคือ insert 2 แถวสำหรับเด็กคนเดียว แถวหนึ่งค้างเป็น orphan
+                    // ที่ Rejectoption เป็น NULL ตลอดไป และถูกนับใน countRecord()
+                    var $btn = $("#predictButton");
+                    if ($btn.prop("disabled")) { return false; }
+                    var btnHtml = $btn.html();
+                    $btn.prop("disabled", true)
+                        .addClass("opacity-60 cursor-not-allowed")
+                        .html(getLangText("กำลังแปลผล...", "Analysing..."));
+
                     $.ajax({
                         type: "POST",
                         url: "<?= base_url('index.php/AiController/predict') ?>",
                         dataType: "json",
                         data: requestData,
+                        complete: function() {
+                            $btn.prop("disabled", false)
+                                .removeClass("opacity-60 cursor-not-allowed")
+                                .html(btnHtml);
+                        },
                         success: function(r) {
                             console.log("=== รับข้อมูลจาก AiController/predict ===");
                             console.log("Full Response:", r);

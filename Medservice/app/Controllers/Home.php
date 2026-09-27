@@ -10,6 +10,7 @@ class Home extends BaseController
         return view('index', [
             'refRanges'  => (new \Config\ReferenceRangeConfig())->toLegacyJsRows(),
             'refVersion' => (new \Config\ReferenceRangeConfig())->version,
+            'refGroups'  => (new \Config\ReferenceRangeConfig())->groups,
         ]);
     }
 
