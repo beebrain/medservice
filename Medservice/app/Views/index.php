@@ -790,12 +790,19 @@ $asset_v = static function (string $path): string {
             // เส้นแบ่งมาจาก ReferenceRangeConfig ที่เดียว ห้าม hardcode
             // ของเดิมฝัง 72 ไว้ 11 บรรทัดใต้คอมเมนต์ที่ห้าม hardcode พอดี
             // ถ้าแพทย์ย้ายเส้นแบ่ง เว็บกับแอปจะตอบคนละอย่างกับเด็กคนเดียวกัน
-            var g1Max = (REF_GROUPS && REF_GROUPS[0] && typeof REF_GROUPS[0].maxAgeMonths === "number")
-                ? REF_GROUPS[0].maxAgeMonths : 72;
+            // ตรวจช่วงเหมือนที่แอปทำ (reference_range_payload.dart)
+            // typeof === "number" อย่างเดียวไม่พอ — ถ้า config พิมพ์ตก 84 เหลือ 8
+            // เด็กเกิน 8 เดือนทุกคนกลายเป็น Group 2 ทั้งหน้าเว็บโดยไม่มีอะไรเตือน
+            // ขณะที่แอปปฏิเสธและบอกผู้ใช้ว่าใช้ค่าที่ติดมากับแอป
+            var rawG1 = (REF_GROUPS && REF_GROUPS[0]) ? REF_GROUPS[0].maxAgeMonths : null;
+            var g1Valid = typeof rawG1 === "number" && rawG1 >= 12 && rawG1 <= 191;
+            var g1Max = g1Valid ? rawG1 : 72;
             var isG1 = ageMonths <= g1Max;
             var gKey = isG1 ? 'g1' : 'g2';
             // ชื่อกลุ่มมาจาก config เช่นกัน ไม่งั้นย้ายเส้นแบ่งแล้วป้ายยังเขียน "6 ปี"
-            var grp = REF_GROUPS && REF_GROUPS[isG1 ? 0 : 1];
+            // ถ้าเส้นแบ่งไม่ผ่าน ป้ายก็ต้องไม่ใช้ของ config ด้วย
+            // ไม่งั้นได้เส้นแบ่ง 72 คู่กับป้ายที่เขียนตามค่าที่ถูกปฏิเสธ
+            var grp = g1Valid && REF_GROUPS ? REF_GROUPS[isG1 ? 0 : 1] : null;
             $("#ageGroupBadge").text(
                 grp ? getLangText(grp.labelTh, grp.labelEn)
                     : (isG1 ? getLangText('Group 1 (อายุ ≤ 6 ปี)', 'Group 1 (≤ 6 y)')
@@ -1477,9 +1484,21 @@ $asset_v = static function (string $path): string {
                             closeRejectOptionsModal();
                             $("#responseAgree")
                                 .removeClass("bg-green-500").addClass("bg-orange-700");
+                            // อ่านข้อความที่ backend ส่งมา เหมือนที่ handler ของ
+                            // /predict ทำแล้ว — 409 "ให้ความคิดเห็นไปแล้ว" ต้อง
+                            // ซ่อนฟอร์ม ไม่งั้นกดใหม่ได้ 409 อีก วนไม่จบ
+                            var cmsg = null, cstatus = e.status;
+                            try {
+                                var cbody = e.responseJSON
+                                    || (e.responseText ? JSON.parse(e.responseText) : null);
+                                if (cbody && cbody.message) { cmsg = cbody.message; }
+                            } catch (pe) { cmsg = null; }
+                            if (cstatus === 409) {
+                                $("#confirmform").hide();
+                            }
                             $("#responseAgree").html(
                                 '<span class="text-2xl">!</span>' +
-                                '<div class="font-bold">' + getLangText('บันทึกความคิดเห็นไม่สำเร็จ', 'Could not record your feedback') + '</div>'
+                                '<div class="font-bold">' + (cmsg || getLangText('บันทึกความคิดเห็นไม่สำเร็จ กรุณาลองใหม่', 'Could not record your feedback. Please try again.')) + '</div>'
                             ).fadeIn();
                         }
                     });
@@ -1531,9 +1550,21 @@ $asset_v = static function (string $path): string {
                             closeRejectOptionsModal();
                             $("#responseAgree")
                                 .removeClass("bg-green-500").addClass("bg-orange-700");
+                            // อ่านข้อความที่ backend ส่งมา เหมือนที่ handler ของ
+                            // /predict ทำแล้ว — 409 "ให้ความคิดเห็นไปแล้ว" ต้อง
+                            // ซ่อนฟอร์ม ไม่งั้นกดใหม่ได้ 409 อีก วนไม่จบ
+                            var cmsg = null, cstatus = e.status;
+                            try {
+                                var cbody = e.responseJSON
+                                    || (e.responseText ? JSON.parse(e.responseText) : null);
+                                if (cbody && cbody.message) { cmsg = cbody.message; }
+                            } catch (pe) { cmsg = null; }
+                            if (cstatus === 409) {
+                                $("#confirmform").hide();
+                            }
                             $("#responseAgree").html(
                                 '<span class="text-2xl">!</span>' +
-                                '<div class="font-bold">' + getLangText('บันทึกความคิดเห็นไม่สำเร็จ', 'Could not record your feedback') + '</div>'
+                                '<div class="font-bold">' + (cmsg || getLangText('บันทึกความคิดเห็นไม่สำเร็จ กรุณาลองใหม่', 'Could not record your feedback. Please try again.')) + '</div>'
                             ).fadeIn();
                         }
                     });

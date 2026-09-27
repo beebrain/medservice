@@ -292,9 +292,15 @@ class AiController extends Controller
         // Prepare final response with all API data
         $finalResponse = [
             'id' => $recordId,
-            'prediction' => $prediction,
+            // normalize ก่อนส่งออก — guard ใช้ is_numeric ซึ่ง "1" ผ่านได้
+            // ฝั่งแอป (raw['prediction'] as num?) จะโยน TypeError กับสตริง
+            // แล้วข้อความ Dart ดิบ ๆ จะไปโผล่ในกล่อง error ที่หมออ่าน
+            // json_encode ก็คืน false ทั้งก้อนถ้า confidence เป็น Infinity/NaN
+            'prediction' => (int) $prediction,
             'label' => $label,
-            'confidence' => $confidence,
+            'confidence' => (is_numeric($confidence) && is_finite((float) $confidence))
+                ? (float) $confidence
+                : null,
             'rejectOptions' => $rejectOptions,
             'suggestion' => $suggestion
         ];
