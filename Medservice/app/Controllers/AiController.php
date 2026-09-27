@@ -89,8 +89,13 @@ class AiController extends Controller
         //   3) ตกเข้า branch 'normal' เพราะ PHP ตีความ null == 0 เป็น true
         //      -> suggestion = "ปกติ ไม่จำเป็นต้องตรวจเพิ่มเติม" ทั้งที่ไม่มีผลแปลเลย
         // ตอบ 502 ให้ client รู้ว่าเป็นความผิดพลาดของ upstream ไม่ใช่ผลการคัดกรอง
-        if (!isset($apiResponse['data']['prediction'])) {
-            log_message('error', 'Upstream returned no prediction: '
+        // isset คืน true ให้ false, "", "abc", [] ด้วย แล้วค่าพวกนั้น (int) cast เป็น 0
+        // จะตกเข้า branch Normal -> "ปกติ ไม่จำเป็นต้องตรวจเพิ่มเติม"
+        // จึงต้องตรวจว่าเป็นตัวเลขและเป็น 0 หรือ 1 เท่านั้น
+        $rawPrediction = $apiResponse['data']['prediction'] ?? null;
+        if (!is_numeric($rawPrediction)
+            || !in_array((int) $rawPrediction, [0, 1], true)) {
+            log_message('error', 'Upstream returned no usable prediction: '
                 . json_encode($apiResponse['data']));
             return $this->response
                 ->setStatusCode(502)
